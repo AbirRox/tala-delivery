@@ -16,19 +16,8 @@
       --text-muted: #93959f;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg-gray);
-      color: #282c3f;
-      padding-bottom: 50px;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg-gray); color: #282c3f; padding-bottom: 50px; }
 
     .partner-topbar {
       background-color: var(--swiggy-black);
@@ -43,12 +32,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-    .partner-id-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
+    .partner-id-box { display: flex; align-items: center; gap: 10px; }
     .partner-avatar {
       width: 42px;
       height: 42px;
@@ -61,15 +45,8 @@
       color: #fff;
     }
 
-    .partner-details h2 {
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .partner-details p {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
+    .partner-details h2 { font-size: 15px; font-weight: 800; }
+    .partner-details p { font-size: 11px; color: var(--text-muted); }
 
     .duty-pill {
       display: flex;
@@ -82,29 +59,10 @@
       border: 1.5px solid #3d4152;
       transition: all 0.2s ease;
     }
-
-    .duty-indicator {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #7e818c;
-    }
-
-    .duty-pill.active {
-      background: #11361b;
-      border-color: var(--swiggy-green);
-    }
-
-    .duty-pill.active .duty-indicator {
-      background: var(--swiggy-green);
-      box-shadow: 0 0 10px var(--swiggy-green);
-    }
-
-    .duty-pill span {
-      font-size: 12px;
-      font-weight: 800;
-      color: #fff;
-    }
+    .duty-indicator { width: 10px; height: 10px; border-radius: 50%; background: #7e818c; }
+    .duty-pill.active { background: #11361b; border-color: var(--swiggy-green); }
+    .duty-pill.active .duty-indicator { background: var(--swiggy-green); box-shadow: 0 0 10px var(--swiggy-green); }
+    .duty-pill span { font-size: 12px; font-weight: 800; color: #fff; }
 
     .alert-banner {
       display: none;
@@ -116,11 +74,7 @@
       font-size: 13px;
       animation: pulseAlert 0.8s infinite alternate;
     }
-
-    @keyframes pulseAlert {
-      from { background-color: #d63031; }
-      to { background-color: #e17055; }
-    }
+    @keyframes pulseAlert { from { background-color: #d63031; } to { background-color: #e17055; } }
 
     .earning-card {
       margin: 14px 16px;
@@ -132,20 +86,9 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.04);
       position: relative;
     }
-
     .metric-unit { text-align: center; }
-    .metric-unit small {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-    .metric-unit h3 {
-      font-size: 19px;
-      font-weight: 900;
-      color: var(--swiggy-black);
-      margin-top: 2px;
-    }
+    .metric-unit small { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .metric-unit h3 { font-size: 19px; font-weight: 900; color: var(--swiggy-black); margin-top: 2px; }
 
     .order-feed-container { padding: 0 16px; }
     .feed-header {
@@ -166,7 +109,6 @@
       overflow: hidden;
       border: 1px solid #e9e9eb;
     }
-
     .order-ticket.new-incoming {
       border: 2px solid var(--swiggy-orange);
       box-shadow: 0 0 15px rgba(252, 128, 25, 0.4);
@@ -180,7 +122,6 @@
       align-items: center;
       border-bottom: 1px solid #f0f0f2;
     }
-
     .ticket-id { font-size: 14px; font-weight: 900; color: var(--swiggy-black); }
     .ticket-status {
       font-size: 11px;
@@ -189,11 +130,9 @@
       border-radius: 6px;
       text-transform: uppercase;
     }
-
     .status-assigned { background: #fff3e6; color: var(--swiggy-orange); animation: blink 1s infinite; }
     .status-accepted { background: #ebf5fb; color: var(--swiggy-blue); }
     .status-picked { background: #eafaf1; color: var(--swiggy-green); }
-
     @keyframes blink { 50% { opacity: 0.5; } }
 
     .ticket-body { padding: 14px; }
@@ -207,12 +146,7 @@
       border-left: 3px solid var(--swiggy-orange);
     }
 
-    .location-step {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
+    .location-step { display: flex; gap: 12px; margin-bottom: 12px; }
     .step-info strong { display: block; font-size: 13px; color: var(--swiggy-black); }
     .step-info p { font-size: 12px; color: var(--text-muted); }
 
@@ -231,7 +165,6 @@
       background: #f1f2f6;
       color: #2f3542;
     }
-
     .action-flow-btn {
       flex: 2;
       padding: 11px;
@@ -243,16 +176,11 @@
       cursor: pointer;
       text-transform: uppercase;
     }
-
     .flow-accept { background: var(--swiggy-orange); }
     .flow-picked { background: var(--swiggy-blue); }
     .flow-deliver { background: var(--swiggy-green); }
 
-    .offline-placeholder {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
+    .offline-placeholder { text-align: center; padding: 60px 20px; color: var(--text-muted); }
   </style>
 </head>
 <body>
@@ -291,7 +219,7 @@
   <main class="order-feed-container">
     <div class="feed-header">
       <span>LIVE ASSIGNMENTS</span>
-      <span id="liveBadge" style="font-size: 11px; color: var(--swiggy-green); display:none;">● GPS Radar Online</span>
+      <span id="liveBadge" style="font-size: 11px; color: var(--swiggy-green); display:none;">● GPS Active</span>
     </div>
 
     <div id="ordersContainer">
@@ -508,7 +436,7 @@
       }
 
       container.innerHTML = orders.map(order => {
-        const itemsText = (order.items || []).map(i => i.name).join(', ') || 'Food items';
+        const itemsText = (order.items || []).map(i => i.name).join(', ') || 'Package items';
         const mapsUrl = order.mapLocation || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}`;
         
         let actionBtn = '';
@@ -533,7 +461,7 @@
             <div class="ticket-body">
               <div class="items-tag-box">
                 <strong><i class="fa-solid fa-bag-shopping"></i> Items:</strong> ${itemsText}
-                <div style="margin-top: 3px; font-weight: 800;">Cash Collect: ${order.total} BDT</div>
+                <div style="margin-top: 3px; font-weight: 800;">Collect: ${order.total} BDT (${order.paymentMethod || 'COD'})</div>
               </div>
 
               <div class="location-step">
@@ -581,7 +509,7 @@
             localStorage.setItem('kwiky_rider_earnings', pay);
             document.getElementById('tripsCount').innerText = trips;
             document.getElementById('earningsAmount').innerText = `${pay} BDT`;
-            alert("অর্ডার ডেলিভার সম্পন্ন হয়েছে এবং ৪০ টাকা আয় যোগ হয়েছে!");
+            alert("Order delivered successfully! Earned 40 BDT.");
           }
           fetchAssignedOrders();
         }

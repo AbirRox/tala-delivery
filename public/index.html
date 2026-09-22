@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Kwiky | Fast Food & Essentials Delivery</title>
+  <title>Kwiky | Food, Fashion, Medicine & Grocery</title>
   
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#fc8019" />
@@ -13,79 +13,45 @@
     :root {
       --primary: #fc8019;
       --dark: #171a29;
-      --card-bg: #ffffff;
-      --light-gray: #f2f2f6;
+      --light-gray: #f4f5f7;
       --text-muted: #686b78;
-      --green: #60b244;
-      --border: #e9e9eb;
+      --border: #e2e8f0;
+      --green: #2ecc71;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 90px; }
 
-    body {
-      background-color: var(--light-gray);
-      color: var(--dark);
-      padding-bottom: 90px;
-    }
-
+    /* Top Navigation Bar */
     .navbar {
       background: #ffffff;
       position: sticky;
       top: 0;
       z-index: 200;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .brand-box {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      color: inherit;
-    }
-
+    .brand-box { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
     .brand-logo {
       background: var(--primary);
       color: white;
       font-weight: 900;
       font-size: 20px;
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+    .brand-text h1 { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; }
+    .brand-text p { font-size: 10px; color: var(--text-muted); font-weight: 600; }
 
-    .brand-text h1 {
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      color: var(--dark);
-    }
-
-    .brand-text p {
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
     .cart-btn-pill {
       background: var(--primary);
       color: white;
@@ -98,48 +64,72 @@
       align-items: center;
       gap: 6px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(252, 128, 25, 0.3);
     }
 
-    .hero-strip {
-      background: linear-gradient(135deg, #fc8019 0%, #ff5252 100%);
-      color: white;
-      padding: 24px 16px;
-      text-align: center;
-    }
-
-    .hero-strip h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-    .hero-strip p { font-size: 12px; opacity: 0.95; }
-
-    .category-slider {
+    /* 4 Primary Category Tabs */
+    .main-category-bar {
+      background: #ffffff;
       display: flex;
-      gap: 10px;
-      padding: 16px;
+      justify-content: space-around;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      position: sticky;
+      top: 60px;
+      z-index: 150;
+    }
+
+    .main-cat-item {
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .main-cat-item i { font-size: 18px; }
+    .main-cat-item.active {
+      color: var(--primary);
+      transform: scale(1.05);
+    }
+    .main-cat-item.active i { color: var(--primary); }
+
+    /* Subcategory Pills Bar */
+    .subcategory-bar {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #ffffff;
       overflow-x: auto;
-      background: white;
       white-space: nowrap;
       scrollbar-width: none;
+      border-bottom: 1px solid var(--border);
     }
-    .category-slider::-webkit-scrollbar { display: none; }
+    .subcategory-bar::-webkit-scrollbar { display: none; }
 
-    .category-pill {
-      padding: 8px 16px;
-      background: #f8f9fa;
+    .subcat-pill {
+      padding: 6px 14px;
+      background: #f1f5f9;
       border: 1px solid var(--border);
       border-radius: 20px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
-      color: #3d4152;
+      color: #334155;
     }
-
-    .category-pill.active {
+    .subcat-pill.active {
       background: var(--dark);
       color: white;
       border-color: var(--dark);
     }
 
-    .search-box-wrap { padding: 12px 16px; }
+    /* Search Bar */
+    .search-wrap { padding: 12px 16px; }
     .search-input {
       width: 100%;
       padding: 12px 16px;
@@ -150,14 +140,46 @@
       background: white;
     }
 
-    .items-container {
-      padding: 0 16px;
+    .section-title-wrap {
+      padding: 6px 16px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-title-wrap h3 { font-size: 15px; font-weight: 900; }
+
+    /* Swiggy Style Restaurant Grid */
+    .restaurants-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 14px;
+      padding: 0 16px 16px;
     }
 
-    .food-card {
+    .restaurant-card {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: transform 0.2s;
+    }
+    .restaurant-card:hover { transform: translateY(-2px); }
+    .res-banner { width: 100%; height: 130px; object-fit: cover; }
+    .res-details { padding: 12px; }
+    .res-details h4 { font-size: 15px; font-weight: 800; color: var(--dark); }
+    .res-details p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Flipkart Style Products Grid */
+    .items-grid {
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 12px;
+    }
+
+    .product-card {
       background: white;
       border-radius: 12px;
       overflow: hidden;
@@ -165,27 +187,21 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
 
-    .food-img-holder {
+    .prod-img-holder {
       width: 100%;
-      height: 125px;
-      background: #eee;
+      height: 135px;
+      background: #f8fafc;
       position: relative;
     }
-
-    .food-img-holder img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .prod-img-holder img { width: 100%; height: 100%; object-fit: cover; }
 
     .store-badge {
       position: absolute;
-      top: 8px;
-      left: 8px;
-      background: rgba(23, 26, 41, 0.85);
+      top: 6px;
+      left: 6px;
+      background: rgba(15, 23, 42, 0.85);
       color: white;
       font-size: 9px;
       font-weight: 700;
@@ -193,31 +209,13 @@
       border-radius: 4px;
     }
 
-    .card-info {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      justify-content: space-between;
-    }
+    .prod-body { padding: 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+    .prod-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; line-height: 1.3; }
+    .prod-subcat { font-size: 10px; color: var(--text-muted); margin-bottom: 6px; }
+    .prod-price { font-size: 14px; font-weight: 900; color: var(--primary); margin-bottom: 8px; }
 
-    .item-title {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--dark);
-      margin-bottom: 4px;
-      line-height: 1.3;
-    }
-
-    .item-price {
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--primary);
-      margin-bottom: 8px;
-    }
-
-    .btn-add-cart {
-      background: #ffffff;
+    .btn-add {
+      background: white;
       color: var(--primary);
       border: 1.5px solid var(--primary);
       padding: 6px;
@@ -226,14 +224,10 @@
       font-weight: 800;
       cursor: pointer;
       text-transform: uppercase;
-      transition: all 0.2s;
     }
+    .btn-add:active { background: var(--primary); color: white; }
 
-    .btn-add-cart:active {
-      background: var(--primary);
-      color: white;
-    }
-
+    /* Modals & Cart Drawer */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -243,7 +237,6 @@
       justify-content: center;
       align-items: flex-end;
     }
-
     .modal-box {
       background: white;
       width: 100%;
@@ -252,24 +245,17 @@
       padding: 20px;
       max-height: 90vh;
       overflow-y: auto;
-      animation: slideUp 0.25s ease-out;
     }
-
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--border);
       padding-bottom: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
-    .cart-item-row {
+    .cart-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -279,48 +265,24 @@
     }
 
     .form-group { margin-top: 10px; }
-    .form-group label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-      text-transform: uppercase;
-    }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+    .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
 
-    .form-control {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      outline: none;
-    }
-
-    .bill-summary-box {
-      background: #fcfcfd;
-      border: 1px solid var(--border);
+    .bill-box {
+      background: #f8fafc;
       border-radius: 8px;
       padding: 12px;
       margin: 14px 0;
       font-size: 12px;
     }
-
-    .bill-line {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      color: var(--text-muted);
-    }
-
+    .bill-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
     .bill-total {
       display: flex;
       justify-content: space-between;
-      border-top: 1px solid var(--border);
-      padding-top: 8px;
-      font-weight: 900;
+      font-weight: 800;
       font-size: 14px;
-      color: var(--dark);
+      border-top: 1px solid var(--border);
+      padding-top: 6px;
     }
 
     .consent-wrap {
@@ -332,14 +294,9 @@
       color: #555;
       line-height: 1.4;
     }
+    .consent-wrap a { color: var(--primary); text-decoration: underline; cursor: pointer; }
 
-    .consent-wrap a {
-      color: var(--primary);
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .btn-submit-order {
+    .btn-checkout {
       width: 100%;
       background: var(--primary);
       color: white;
@@ -348,11 +305,10 @@
       border-radius: 10px;
       font-size: 14px;
       font-weight: 800;
-      text-transform: uppercase;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(252, 128, 25, 0.35);
     }
 
+    /* Trust Badges & Compliance Footer */
     .payment-trust-bar {
       margin-top: 30px;
       padding: 20px 16px;
@@ -360,59 +316,43 @@
       text-align: center;
       border-top: 1px solid var(--border);
     }
-
     .payment-trust-bar h4 {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       margin-bottom: 12px;
     }
-
     .partner-logos-row {
       display: flex;
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      font-size: 24px;
+      font-size: 22px;
       color: #576574;
     }
 
     .compliance-footer {
       background: var(--dark);
-      color: #93959f;
-      padding: 30px 16px 20px;
+      color: #94a3b8;
+      padding: 24px 16px;
       font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .footer-links-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .footer-links-grid a {
-      color: #cbd5e1;
-      text-decoration: none;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .footer-bottom {
-      border-top: 1px solid #2d3436;
-      padding-top: 16px;
       text-align: center;
-      font-size: 11px;
     }
+    .footer-links-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .footer-links-grid a { color: #cbd5e1; text-decoration: none; cursor: pointer; font-weight: 600; }
 
     .policy-modal-box {
       background: white;
       width: 90%;
-      max-width: 600px;
+      max-width: 550px;
       max-height: 80vh;
       border-radius: 14px;
       padding: 20px;
@@ -425,17 +365,18 @@
 </head>
 <body>
 
+  <!-- Top App Bar -->
   <header class="navbar">
     <a href="/" class="brand-box">
       <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
       <div class="brand-text">
         <h1>Kwiky</h1>
-        <p>30 Mins Instant Delivery</p>
+        <p>Food, Fashion, Meds & Grocery</p>
       </div>
     </a>
     <div class="nav-actions">
       <a href="/rider.html" style="font-size: 11px; color: var(--primary); font-weight: 800; text-decoration: none;">
-        <i class="fa-solid fa-motorcycle"></i> Partner
+        <i class="fa-solid fa-motorcycle"></i> Rider
       </a>
       <button class="cart-btn-pill" onclick="openCartModal()">
         <i class="fa-solid fa-bag-shopping"></i>
@@ -444,30 +385,48 @@
     </div>
   </header>
 
-  <div class="hero-strip">
-    <h2>10+ Partner Kitchens & 200+ Delicacies</h2>
-    <p>Biryani, Crispy Burgers, Bengali Thali, Sweets & Daily Essentials delivered fresh!</p>
+  <!-- 4 Main Categories -->
+  <nav class="main-category-bar">
+    <div class="main-cat-item active" onclick="switchMainCategory('Food', this)">
+      <i class="fa-solid fa-utensils"></i>
+      <span>Food</span>
+    </div>
+    <div class="main-cat-item" onclick="switchMainCategory('Fashion', this)">
+      <i class="fa-solid fa-shirt"></i>
+      <span>Fashion</span>
+    </div>
+    <div class="main-cat-item" onclick="switchMainCategory('Medicine', this)">
+      <i class="fa-solid fa-pills"></i>
+      <span>Medicine</span>
+    </div>
+    <div class="main-cat-item" onclick="switchMainCategory('Grocery', this)">
+      <i class="fa-solid fa-basket-shopping"></i>
+      <span>Grocery</span>
+    </div>
+  </nav>
+
+  <!-- Dynamic Subcategory Pills -->
+  <div class="subcategory-bar" id="subcatBar"></div>
+
+  <!-- Search Box -->
+  <div class="search-wrap">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search delicious dishes, clothes, medicine..." onkeyup="handleSearch()" />
   </div>
 
-  <div class="category-slider">
-    <button class="category-pill active" onclick="filterCategory('All', this)">All Items</button>
-    <button class="category-pill" onclick="filterCategory('Biryani & Kebab', this)">Biryani & Kebab</button>
-    <button class="category-pill" onclick="filterCategory('Fast Food & Burgers', this)">Burgers & Fast Food</button>
-    <button class="category-pill" onclick="filterCategory('Bengali Thali & Rice', this)">Bengali Thali</button>
-    <button class="category-pill" onclick="filterCategory('Desserts & Sweets', this)">Desserts & Sweets</button>
-    <button class="category-pill" onclick="filterCategory('Grocery & Essentials', this)">Grocery & Essentials</button>
-  </div>
+  <!-- Content Section -->
+  <section>
+    <div class="section-title-wrap">
+      <h3 id="sectionHeading">Top Partner Restaurants</h3>
+    </div>
 
-  <div class="search-box-wrap">
-    <input type="text" id="searchInput" class="search-input" placeholder="Search delicious food or groceries..." onkeyup="handleSearch()" />
-  </div>
+    <!-- Swiggy-Style Restaurant Listing -->
+    <div class="restaurants-grid" id="restaurantView"></div>
 
-  <main class="items-container" id="itemsGrid">
-    <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">
-      <i class="fa-solid fa-circle-notch fa-spin"></i> Loading fresh menu catalog...
-    </p>
-  </main>
+    <!-- Flipkart-Style Products Grid -->
+    <main class="items-grid" id="productsView" style="display: none;"></main>
+  </section>
 
+  <!-- Payment Trust Badges -->
   <section class="payment-trust-bar">
     <h4>100% Secure Payments & Compliance</h4>
     <div class="partner-logos-row">
@@ -475,87 +434,71 @@
       <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
       <span style="font-size: 14px; font-weight: 800; color: #e2136e;">bKash</span>
       <span style="font-size: 14px; font-weight: 800; color: #f7941d;">Nagad</span>
-      <i class="fa-solid fa-money-bill-wave" style="color: #60b244;" title="Cash on Delivery"></i>
+      <i class="fa-solid fa-money-bill-wave" style="color: #2ecc71;" title="Cash on Delivery"></i>
     </div>
   </section>
 
+  <!-- Compliance Footer -->
   <footer class="compliance-footer">
     <div class="footer-links-grid">
       <a onclick="showPolicy('terms')">Terms & Conditions</a>
       <a onclick="showPolicy('privacy')">Privacy Policy</a>
       <a onclick="showPolicy('refund')">Refund & Cancellation</a>
-      <a onclick="showPolicy('contact')">Contact Support</a>
+      <a onclick="showPolicy('contact')">Customer Support</a>
     </div>
-    <div class="footer-bottom">
-      <p>© 2026 Kwiky Online Delivery Platform. All rights reserved.</p>
-      <p style="margin-top: 4px; color: #64748b;">Licensed On-Demand Logistics</p>
-    </div>
+    <p>© 2026 Kwiky Online Platform. All rights reserved.</p>
   </footer>
 
+  <!-- Cart Modal -->
   <div class="modal-backdrop" id="cartModal">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 style="font-size: 16px; font-weight: 900;">Your Cart (<span id="cartModalCount">0</span>)</h3>
+        <h3 style="font-size: 16px;">Your Cart (<span id="modalCartCount">0</span>)</h3>
         <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeCartModal()"></i>
       </div>
 
       <div id="cartItemsList"></div>
 
-      <div class="bill-summary-box">
-        <div class="bill-line">
-          <span>Items Subtotal</span>
-          <span id="billSubtotal">0 BDT</span>
-        </div>
-        <div class="bill-line">
-          <span>Delivery Partner Fee</span>
-          <span>40 BDT</span>
-        </div>
-        <div class="bill-line">
-          <span>Platform Fee</span>
-          <span>0 BDT</span>
-        </div>
-        <div class="bill-total">
-          <span>To Pay</span>
-          <span id="billGrandTotal" style="color: var(--primary);">40 BDT</span>
-        </div>
+      <div class="bill-box">
+        <div class="bill-row"><span>Items Subtotal</span><span id="cartSubtotal">0 BDT</span></div>
+        <div class="bill-row"><span>Delivery Fee</span><span>40 BDT</span></div>
+        <div class="bill-total"><span>Total Payable</span><span id="cartGrandTotal" style="color: var(--primary);">40 BDT</span></div>
       </div>
 
       <div class="form-group">
-        <label>Customer Full Name</label>
+        <label>Full Name</label>
         <input type="text" id="custName" class="form-control" placeholder="E.g., Tanvir Ahmed" />
       </div>
-
       <div class="form-group">
         <label>Contact Mobile Number</label>
         <input type="tel" id="custPhone" class="form-control" placeholder="E.g., 01711223344" />
       </div>
-
       <div class="form-group">
-        <label>Delivery Address & Landmark</label>
-        <textarea id="custAddress" class="form-control" rows="2" placeholder="House / Road / Floor / Landmark"></textarea>
+        <label>Delivery Address</label>
+        <textarea id="custAddress" class="form-control" rows="2" placeholder="House, Road, Area, Landmark"></textarea>
       </div>
-
       <div class="form-group">
-        <label>Payment Method</label>
+        <label>Payment Mode</label>
         <select id="custPaymentMethod" class="form-control">
           <option value="COD">Cash on Delivery (COD)</option>
-          <option value="Online">Online Gateway (bKash / Nagad / Cards)</option>
+          <option value="Online">Online Payment (bKash / Nagad / Cards)</option>
         </select>
       </div>
 
       <label class="consent-wrap">
         <input type="checkbox" id="complianceCheck" checked />
-        <span>I have read and agree to Kwiky's <a onclick="showPolicy('terms')">Terms</a>, <a onclick="showPolicy('privacy')">Privacy</a>, and <a onclick="showPolicy('refund')">Refund & Cancellation Policy</a>.</span>
+        <span>I agree to Kwiky's <a onclick="showPolicy('terms')">Terms</a> & <a onclick="showPolicy('refund')">Refund Policy</a>.</span>
       </label>
 
-      <button class="btn-submit-order" onclick="submitFinalOrder()">Confirm & Place Order</button>
+      <button class="btn-checkout" onclick="submitOrder()">Place Order Now</button>
     </div>
   </div>
 
+  <!-- Policy View Modal -->
   <div class="modal-backdrop" id="policyModal" style="align-items: center;">
     <div class="policy-modal-box">
       <div class="modal-header">
-        <h3 id="policyModalTitle" style="font-size: 16px;">Policy Title</h3>
+        <h3 id="policyModalTitle" style="font-size: 16px;">Policy</h3>
         <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closePolicyModal()"></i>
       </div>
       <div id="policyModalBody"></div>
@@ -563,70 +506,177 @@
   </div>
 
   <script>
-    let allCatalog = [];
+    let rawCatalog = [];
+    let currentCategory = 'Food';
+    let currentSubcategory = 'All Restaurants';
+    let selectedRestaurant = null;
     let cart = [];
     const DELIVERY_FEE = 40;
 
-    async function loadCatalog() {
+    const subcategoryMap = {
+      Food: ["All Restaurants", "Biryani & Polao", "Burgers & Fast Food", "Kebabs & Tandoor", "Curry & Gravy", "Drinks & Desserts"],
+      Fashion: ["All", "Men's Wear", "Women's Ethnic", "Women's Western", "Footwear", "Accessories"],
+      Medicine: ["All", "OTC & Daily Care", "First Aid & Devices", "Vitamins & Supplements", "Baby & Mom Care"],
+      Grocery: ["All", "Daily Staples", "Snacks & Drinks"]
+    };
+
+    async function initCatalog() {
       try {
         const res = await fetch('/api/public-menu');
         const data = await res.json();
-        allCatalog = data.catalog || [];
-        renderItems(allCatalog);
+        rawCatalog = data.catalog || [];
+        renderSubcategoryTabs();
+        displayCurrentView();
       } catch (err) {
-        document.getElementById('itemsGrid').innerHTML = `
+        document.getElementById('productsView').innerHTML = `
           <div style="grid-column: 1/-1; text-align: center; padding: 30px;">
-            <p style="color: #e74c3c;">Failed to load items.</p>
-            <a href="/api/seed-now" style="display:inline-block; margin-top:10px; background:var(--primary); color:white; padding:8px 16px; border-radius:6px; text-decoration:none; font-weight:bold;">Load 200 Menu Items</a>
+            <p style="color: #ef4444;">Could not load items.</p>
+            <a href="/api/seed-now" style="display:inline-block; margin-top:10px; background:var(--primary); color:white; padding:8px 16px; border-radius:6px; text-decoration:none;">Seed All Categories Now</a>
           </div>
         `;
       }
     }
 
-    function renderItems(items) {
-      const grid = document.getElementById('itemsGrid');
-      if (items.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 40px 0; color: #888;">No items found matching your filter.</p>`;
-        return;
-      }
+    function switchMainCategory(cat, el) {
+      currentCategory = cat;
+      currentSubcategory = cat === 'Food' ? 'All Restaurants' : 'All';
+      selectedRestaurant = null;
+      document.querySelectorAll('.main-cat-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
 
-      grid.innerHTML = items.map(item => `
-        <div class="food-card">
-          <div class="food-img-holder">
-            <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300'}" alt="${item.name}" loading="lazy" />
-            <span class="store-badge">${item.storeName || 'Kwiky Express'}</span>
-          </div>
-          <div class="card-info">
-            <div>
-              <div class="item-title">${item.name}</div>
-              <div class="item-price">${item.price} BDT</div>
-            </div>
-            <button class="btn-add-cart" onclick="addToCart('${item._id}', '${escape(item.name)}', ${item.price})">+ ADD</button>
+      renderSubcategoryTabs();
+      displayCurrentView();
+    }
+
+    function renderSubcategoryTabs() {
+      const bar = document.getElementById('subcatBar');
+      const list = subcategoryMap[currentCategory] || ["All"];
+      bar.innerHTML = list.map((sc, idx) => `
+        <button class="subcat-pill ${idx === 0 ? 'active' : ''}" onclick="selectSubcategory('${sc}', this)">${sc}</button>
+      `).join('');
+    }
+
+    function selectSubcategory(sc, btn) {
+      currentSubcategory = sc;
+      selectedRestaurant = null;
+      document.querySelectorAll('.subcat-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      displayCurrentView();
+    }
+
+    function displayCurrentView() {
+      const heading = document.getElementById('sectionHeading');
+      const resView = document.getElementById('restaurantView');
+      const prodView = document.getElementById('productsView');
+
+      if (currentCategory === 'Food' && (currentSubcategory === 'All Restaurants' || currentSubcategory === 'All') && !selectedRestaurant) {
+        heading.innerText = "Top Partner Restaurants";
+        resView.style.display = 'grid';
+        prodView.style.display = 'none';
+        renderRestaurants();
+      } else {
+        resView.style.display = 'none';
+        prodView.style.display = 'grid';
+
+        if (selectedRestaurant) {
+          heading.innerText = `${selectedRestaurant} (Dishes)`;
+        } else {
+          heading.innerText = `${currentCategory} - ${currentSubcategory}`;
+        }
+        renderProducts();
+      }
+    }
+
+    function renderRestaurants() {
+      const resView = document.getElementById('restaurantView');
+      const foodItems = rawCatalog.filter(i => i.category === 'Food');
+      const uniqueStores = [...new Set(foodItems.map(i => i.storeName))];
+
+      const storeBanners = {
+        "Sultan's Dine": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500",
+        "Takeout Burgers": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500",
+        "Star Kabab & Restaurant": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=500"
+      };
+
+      resView.innerHTML = uniqueStores.map(store => `
+        <div class="restaurant-card" onclick="openRestaurant('${store}')">
+          <img class="res-banner" src="${storeBanners[store] || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500'}" alt="${store}" />
+          <div class="res-details">
+            <h4>${store}</h4>
+            <p>⭐ 4.6 (500+ ratings) • 30-35 mins</p>
           </div>
         </div>
       `).join('');
     }
 
-    function filterCategory(cat, btn) {
-      document.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    function openRestaurant(store) {
+      selectedRestaurant = store;
+      displayCurrentView();
+    }
 
-      if (cat === 'All') {
-        renderItems(allCatalog);
-      } else {
-        const filtered = allCatalog.filter(i => (i.category || '').toLowerCase() === cat.toLowerCase());
-        renderItems(filtered);
+    function renderProducts() {
+      const prodView = document.getElementById('productsView');
+      let items = rawCatalog.filter(i => i.category === currentCategory);
+
+      if (selectedRestaurant) {
+        items = items.filter(i => i.storeName === selectedRestaurant);
+      } else if (currentSubcategory !== 'All' && currentSubcategory !== 'All Restaurants') {
+        items = items.filter(i => (i.subcategory || '').toLowerCase() === currentSubcategory.toLowerCase());
       }
+
+      if (items.length === 0) {
+        prodView.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No items available in this category.</p>`;
+        return;
+      }
+
+      prodView.innerHTML = items.map(item => `
+        <div class="product-card">
+          <div class="prod-img-holder">
+            <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300'}" alt="${item.name}" loading="lazy" />
+            <span class="store-badge">${item.storeName}</span>
+          </div>
+          <div class="prod-body">
+            <div>
+              <div class="prod-title">${item.name}</div>
+              <div class="prod-subcat">${item.subcategory}</div>
+              <div class="prod-price">${item.price} BDT</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('${item._id}', '${escape(item.name)}', ${item.price})">+ ADD</button>
+          </div>
+        </div>
+      `).join('');
     }
 
     function handleSearch() {
       const query = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = allCatalog.filter(i => 
-        i.name.toLowerCase().includes(query) || 
-        (i.storeName && i.storeName.toLowerCase().includes(query)) ||
-        (i.category && i.category.toLowerCase().includes(query))
+      const filtered = rawCatalog.filter(i => 
+        i.name.toLowerCase().includes(query) ||
+        (i.category && i.category.toLowerCase().includes(query)) ||
+        (i.subcategory && i.subcategory.toLowerCase().includes(query)) ||
+        (i.storeName && i.storeName.toLowerCase().includes(query))
       );
-      renderItems(filtered);
+
+      document.getElementById('restaurantView').style.display = 'none';
+      const prodView = document.getElementById('productsView');
+      prodView.style.display = 'grid';
+      document.getElementById('sectionHeading').innerText = `Search results for "${query}"`;
+
+      prodView.innerHTML = filtered.map(item => `
+        <div class="product-card">
+          <div class="prod-img-holder">
+            <img src="${item.imageUrl}" alt="${item.name}" />
+            <span class="store-badge">${item.storeName}</span>
+          </div>
+          <div class="prod-body">
+            <div>
+              <div class="prod-title">${item.name}</div>
+              <div class="prod-subcat">${item.category} • ${item.subcategory}</div>
+              <div class="prod-price">${item.price} BDT</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('${item._id}', '${escape(item.name)}', ${item.price})">+ ADD</button>
+          </div>
+        </div>
+      `).join('');
     }
 
     function addToCart(id, rawName, price) {
@@ -637,63 +687,47 @@
 
     function updateCartUI() {
       document.getElementById('cartCount').innerText = cart.length;
-      document.getElementById('cartModalCount').innerText = cart.length;
+      document.getElementById('modalCartCount').innerText = cart.length;
 
-      const itemsList = document.getElementById('cartItemsList');
+      const list = document.getElementById('cartItemsList');
       if (cart.length === 0) {
-        itemsList.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 15px 0;">Cart is empty.</p>`;
+        list.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 20px;">Cart is empty</p>`;
       } else {
-        itemsList.innerHTML = cart.map((item, idx) => `
-          <div class="cart-item-row">
+        list.innerHTML = cart.map((item, idx) => `
+          <div class="cart-row">
             <div>
               <strong>${item.name}</strong>
               <div style="font-size: 11px; color: var(--text-muted);">${item.price} BDT</div>
             </div>
-            <i class="fa-solid fa-trash" style="color: #e74c3c; cursor: pointer;" onclick="removeFromCart(${idx})"></i>
+            <i class="fa-solid fa-trash" style="color: #ef4444; cursor: pointer;" onclick="removeFromCart(${idx})"></i>
           </div>
         `).join('');
       }
 
       const subtotal = cart.reduce((sum, i) => sum + i.price, 0);
       const grandTotal = subtotal > 0 ? subtotal + DELIVERY_FEE : 0;
-
-      document.getElementById('billSubtotal').innerText = `${subtotal} BDT`;
-      document.getElementById('billGrandTotal').innerText = `${grandTotal} BDT`;
+      document.getElementById('cartSubtotal').innerText = `${subtotal} BDT`;
+      document.getElementById('cartGrandTotal').innerText = `${grandTotal} BDT`;
     }
 
-    function removeFromCart(index) {
-      cart.splice(index, 1);
+    function removeFromCart(idx) {
+      cart.splice(idx, 1);
       updateCartUI();
     }
 
-    function openCartModal() {
-      document.getElementById('cartModal').style.display = 'flex';
-    }
+    function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
+    function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
-    function closeCartModal() {
-      document.getElementById('cartModal').style.display = 'none';
-    }
-
-    async function submitFinalOrder() {
-      if (cart.length === 0) {
-        alert("Please add at least one item to your cart.");
-        return;
-      }
-
+    async function submitOrder() {
+      if (cart.length === 0) return alert("Your cart is empty!");
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
+      const paymentMethod = document.getElementById('custPaymentMethod').value;
       const compliance = document.getElementById('complianceCheck').checked;
 
-      if (!name || !phone || !address) {
-        alert("Please provide Name, Phone Number, and Delivery Address.");
-        return;
-      }
-
-      if (!compliance) {
-        alert("Please agree to the Terms & Conditions and Refund Policy.");
-        return;
-      }
+      if (!name || !phone || !address) return alert("Please fill Name, Phone and Address.");
+      if (!compliance) return alert("Please agree to our Terms & Conditions to place order.");
 
       const subtotal = cart.reduce((sum, i) => sum + i.price, 0);
       const total = subtotal + DELIVERY_FEE;
@@ -708,11 +742,11 @@
             address,
             items: cart,
             total,
+            paymentMethod,
             storeLat: 22.5726,
             storeLng: 88.3639
           })
         });
-
         const data = await res.json();
         if (data.success) {
           alert(`Order Placed Successfully! Order #${data.order._id.slice(-6)}. A nearby rider is being assigned.`);
@@ -720,43 +754,29 @@
           updateCartUI();
           closeCartModal();
         } else {
-          alert("Order placement failed: " + data.message);
+          alert("Order failed: " + data.message);
         }
       } catch (err) {
-        alert("Error connecting to server. Please try again.");
+        alert("Server connection error. Please try again.");
       }
     }
 
     const policyContent = {
       terms: {
         title: "Terms & Conditions",
-        body: `
-          <p><strong>1. Introduction:</strong> Welcome to Kwiky. By placing an order, you agree to comply with our platform terms.</p>
-          <p><strong>2. Orders & Deliveries:</strong> Delivery timelines are estimates (standard 30-45 minutes). Food preparation and quality are maintained by our verified partner merchants.</p>
-          <p><strong>3. Payment & Pricing:</strong> All prices listed are in Bangladeshi Taka (BDT). Prices include applicable taxes.</p>
-        `
+        body: `<p>1. Orders are processed instantly. Deliveries take standard 30-45 mins.</p><p>2. Pricing includes applicable government taxes.</p>`
       },
       privacy: {
         title: "Privacy Policy",
-        body: `
-          <p><strong>1. Information We Collect:</strong> We collect name, contact number, and delivery location strictly to fulfill orders.</p>
-          <p><strong>2. Security:</strong> All user credentials and payment sessions are handled over secure encrypted HTTPS channels.</p>
-        `
+        body: `<p>1. Customer personal information is strictly encrypted and used only for fulfilling deliveries.</p>`
       },
       refund: {
         title: "Refund & Cancellation Policy",
-        body: `
-          <p><strong>1. Cancellation:</strong> Orders can be cancelled within 5 minutes of placement without fee.</p>
-          <p><strong>2. Refund Settlement:</strong> Verified refunds are processed back to source account within <strong>5 to 7 business days</strong>.</p>
-        `
+        body: `<p>1. Cancellation is allowed within 5 minutes of order placement.</p><p>2. Verified online refund is settled to original payment method within 5 to 7 business days.</p>`
       },
       contact: {
-        title: "Contact & Support",
-        body: `
-          <p><strong>Helpline:</strong> +880 1700-000000</p>
-          <p><strong>Support Email:</strong> support@kwiky-delivery.com</p>
-          <p><strong>Headquarters:</strong> Plot 12, Block C, Banani Commercial Area, Dhaka 1213</p>
-        `
+        title: "Customer Support",
+        body: `<p>Helpline: +880 1700-000000</p><p>Email: support@kwiky-delivery.com</p><p>Address: Dhaka, Bangladesh</p>`
       }
     };
 
@@ -773,7 +793,7 @@
       document.getElementById('policyModal').style.display = 'none';
     }
 
-    window.addEventListener('DOMContentLoaded', loadCatalog);
+    window.addEventListener('DOMContentLoaded', initCatalog);
   </script>
 </body>
 </html>

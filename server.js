@@ -12,44 +12,46 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// MongoDB Connection
+// MongoDB Atlas Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/kwiky';
 mongoose
   .connect(MONGO_URI)
-  .then(() => console.log('✅ Connected to MongoDB Atlas Successfully!'))
-  .catch((err) => console.error('❌ MongoDB Connection Error:', err));
+  .then(() => console.log('Connected to MongoDB Atlas Successfully!'))
+  .catch((err) => console.error('MongoDB Connection Error:', err));
 
 // Database Schemas
 const ItemSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
-  category: { type: String, default: 'Food' },
+  category: { type: String, required: true }, // Food, Fashion, Medicine, Grocery
+  subcategory: { type: String, default: 'General' },
+  storeName: { type: String, default: 'Kwiky Store' },
   description: { type: String, default: '' },
   imageUrl: { type: String, default: '' },
-  storeName: { type: String, default: 'Kwiky Express' },
   isAvailable: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
 
 const RiderSchema = new mongoose.Schema({
   riderId: { type: String, required: true, unique: true },
-  name: { type: String, default: 'Delivery Hero' },
+  name: { type: String, default: 'Delivery Partner' },
   phone: { type: String, default: '' },
   isOnline: { type: Boolean, default: false },
   location: {
-    lat: { type: Number, default: 0 },
-    lng: { type: Number, default: 0 }
+    lat: { type: Number, default: 22.5726 },
+    lng: { type: Number, default: 88.3639 }
   },
   lastActive: { type: Date, default: Date.now }
 });
 
 const OrderSchema = new mongoose.Schema({
-  name: { type: String, default: 'Customer' },
-  phone: { type: String, default: 'N/A' },
-  address: { type: String, default: 'Delivery Location' },
+  name: { type: String, default: 'Valued Customer' },
+  phone: { type: String, default: '01700000000' },
+  address: { type: String, default: 'Delivery Address' },
   mapLocation: { type: String, default: '' },
   items: { type: Array, default: [] },
   total: { type: Number, default: 0 },
+  paymentMethod: { type: String, default: 'COD' },
   status: { 
     type: String, 
     enum: ['Pending', 'Assigned', 'Accepted', 'Picked Up', 'Delivered', 'Cancelled'], 
@@ -88,12 +90,13 @@ function calculateDistanceKM(lat1, lon1, lat2, lon2) {
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
     Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
 const otpStore = {};
 
-// ==================== Customer & Menu APIs ==================== //
+// ==================== Public Catalog APIs ==================== //
 
 app.get('/api/public-menu', async (req, res) => {
   try {
@@ -104,12 +107,13 @@ app.get('/api/public-menu', async (req, res) => {
   }
 });
 
+// Customer OTP APIs
 app.post('/api/auth/send-otp', (req, res) => {
   const { phone } = req.body;
   const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
   if (phone) otpStore[phone] = generatedOtp;
-  console.log(`[KWIKY OTP] For ${phone}: ${generatedOtp}`);
-  res.json({ success: true, message: 'OTP sent', testOtp: generatedOtp });
+  console.log(`[KWIKY OTP] Sent to ${phone}: ${generatedOtp}`);
+  res.json({ success: true, message: 'OTP Sent successfully', testOtp: generatedOtp });
 });
 
 app.post('/api/auth/verify-otp', (req, res) => {
@@ -118,23 +122,29 @@ app.post('/api/auth/verify-otp', (req, res) => {
     delete otpStore[phone];
     return res.json({ success: true, user: { name: name || 'Customer', phone } });
   }
-  res.status(400).json({ success: false, message: 'Invalid OTP' });
+  res.status(400).json({ success: false, message: 'Invalid OTP code' });
 });
 
-// Order Placement API
+// Bulletproof Customer Order Placement API
 app.post(['/api/orders', '/api/order'], async (req, res) => {
   try {
     const body = req.body || {};
     const customerName = body.name || body.customerName || 'Customer';
     const customerPhone = body.phone || body.customerPhone || '01700000000';
-    const customerAddress = body.address || body.deliveryAddress || 'Kwiky Delivery Location';
+    const customerAddress = body.address || body.deliveryAddress || 'Address not specified';
     const customerItems = body.items || body.cart || [];
-    const orderTotal = Number(body.total || body.amount || body.billTotal) || 100;
+    const orderTotal = Number(body.total || body.amount) || 0;
+    const paymentMethod = body.paymentMethod || 'COD';
     const storeLat = Number(body.storeLat) || 22.5726;
     const storeLng = Number(body.storeLng) || 88.3639;
 
-    // নিকটবর্তী সক্রিয় অনলাইন রাইডার নির্বাচন
-    const onlineRiders = await Rider.find({ isOnline: true });
+    // Check online riders within 15 minutes of heartbeat
+    const activeTimeThreshold = new Date(Date.now() - 15 * 60 * 1000);
+    const onlineRiders = await Rider.find({
+      isOnline: true,
+      lastActive: { $gte: activeTimeThreshold }
+    });
+
     let assignedRider = null;
     let minDistance = Infinity;
 
@@ -153,6 +163,7 @@ app.post(['/api/orders', '/api/order'], async (req, res) => {
       mapLocation: body.mapLocation || '',
       items: customerItems,
       total: orderTotal,
+      paymentMethod,
       storeLat,
       storeLng,
       status: assignedRider ? 'Assigned' : 'Pending',
@@ -162,7 +173,7 @@ app.post(['/api/orders', '/api/order'], async (req, res) => {
     });
 
     await newOrder.save();
-    console.log(`[ORDER PLACED] #${newOrder._id} -> Rider: ${assignedRider ? assignedRider.riderId : 'Unassigned'}`);
+    console.log(`[ORDER PLACED] #${newOrder._id} -> Rider assigned: ${assignedRider ? assignedRider.riderId : 'None'}`);
 
     res.json({
       success: true,
@@ -176,7 +187,7 @@ app.post(['/api/orders', '/api/order'], async (req, res) => {
   }
 });
 
-// ==================== Rider GPS & Auto-Assignment APIs ==================== //
+// ==================== Rider GPS & Duty APIs ==================== //
 
 app.post('/api/rider/ping', async (req, res) => {
   try {
@@ -186,10 +197,10 @@ app.post('/api/rider/ping', async (req, res) => {
     const rider = await Rider.findOneAndUpdate(
       { riderId },
       {
-        name: name || 'Delivery Hero',
+        name: name || 'Delivery Partner',
         phone: phone || '',
         isOnline: Boolean(isOnline),
-        location: { lat: Number(lat) || 0, lng: Number(lng) || 0 },
+        location: { lat: Number(lat) || 22.5726, lng: Number(lng) || 88.3639 },
         lastActive: new Date()
       },
       { upsert: true, new: true }
@@ -272,185 +283,86 @@ app.patch(['/api/partners/:id/status', '/api/merchants/:id/status'], async (req,
   }
 });
 
-// ==================== 10 Partners & 200 Items Seeder ==================== //
+// ==================== Multi-Category Database Seeder ==================== //
 
 app.get('/api/seed-now', async (req, res) => {
   try {
-    const partners = [
-      {
-        store: "Sultan's Dine",
-        cat: "Biryani & Kebab",
-        img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Kacchi Biryani (Basmati)", 480], ["Mutton Kacchi Feast", 520], ["Chicken Roast Platter", 220],
-          ["Beef Tehari Special", 380], ["Shahi Morog Polao", 340], ["Mutton Rezala", 310],
-          ["Chicken Tikka Kebab", 190], ["Beef Boti Kebab", 230], ["Jali Kebab (2 pcs)", 120],
-          ["Mutton Shami Kebab", 160], ["Special Borhani (1L)", 220], ["Peshwari Naan", 80],
-          ["Garlic Butter Naan", 90], ["Firni Cup Special", 90], ["Shahi Tukda", 130],
-          ["Zarda with Baby Sweets", 110], ["Plain Polao Box", 150], ["Egg Roast Bowl", 80],
-          ["Salad & Chutney Box", 50], ["Kacchi Platter with Drink", 590]
-        ]
-      },
-      {
-        store: "Kacchi Bhai",
-        cat: "Biryani & Kebab",
-        img: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Basmati Kacchi with Borhani", 499], ["Chinigura Mutton Kacchi", 440], ["Chicken Chaap with Luchi", 260],
-          ["Beef Chaap Masala", 280], ["Mutton Galouti Kebab", 260], ["Chicken Reshmi Kebab", 240],
-          ["Kacchi Bhai Special Platter", 650], ["Spicy Beef Khichuri", 360], ["Achari Chicken Biryani", 390],
-          ["Kashmiri Polao", 280], ["Rumali Roti (4 pcs)", 100], ["Tandoori Butter Roti", 45],
-          ["Badam Shorbot", 120], ["Labang Special", 100], ["Laccha Paratha (2 pcs)", 90],
-          ["Shahi Mutton Dalcha", 210], ["Beef Brain Masala", 310], ["Gulab Jamun (2 pcs)", 80],
-          ["Kulfi Malai Cup", 90], ["Mineral Water & Borhani Combo", 140]
-        ]
-      },
-      {
-        store: "Star Kabab & Restaurant",
-        cat: "Biryani & Kebab",
-        img: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Mutton Kacchi Star Style", 420], ["Chicken Tikka (Full Leg)", 180], ["Star Special Beef Boti", 220],
-          ["Mutton Khichuri Bowl", 340], ["Chicken Biryani Star Pack", 320], ["Mutton Leg Roast", 450],
-          ["Butter Chicken Curry", 280], ["Beef Shik Kebab", 170], ["Special Star Faluda", 160],
-          ["Mutton Brain Fry", 290], ["Chicken Liver Fry", 190], ["Plain Tandoori Naan", 40],
-          ["Special Butter Naan", 80], ["Star Firni Matka", 85], ["Star Milk Tea", 35],
-          ["Chicken Karahi", 380], ["Beef Nihari Special", 260], ["Special Paratha", 35],
-          ["Mixed Vegetable Curry", 110], ["Sweet Lassi Big Glass", 90]
-        ]
-      },
-      {
-        store: "Takeout Burgers",
-        cat: "Fast Food & Burgers",
-        img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Classic Beef Burger", 220], ["Double Patty Beef Supreme", 340], ["Crispy Chicken Zinger", 240],
-          ["BBQ Chicken Bacon Burger", 290], ["Cheesy Mushroom Melt", 270], ["Spicy Naga Monster Burger", 320],
-          ["Crispy Golden French Fries", 120], ["Cheesy Loaded Fries", 190], ["Crispy Chicken Wings (6 pcs)", 230],
-          ["Naga Fire Wings (6 pcs)", 250], ["Garlic Mayo Dipping Sauce", 40], ["Honey Mustard Burger", 260],
-          ["Tower Double Chicken Stack", 360], ["Veggie Delight Burger", 180], ["Crispy Onion Rings", 130],
-          ["Choco Lava Cake", 140], ["Vanilla Cream Shake", 160], ["Chocolate Fudge Shake", 180],
-          ["Cold Mojito Mint", 110], ["Takeout Family Combo", 799]
-        ]
-      },
-      {
-        store: "Chillox",
-        cat: "Fast Food & Burgers",
-        img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Beef with Cheese Burger", 240], ["Chillox Monster Double Beef", 380], ["Chicken Pastrami Burger", 280],
-          ["Naga Chicken Blast Burger", 270], ["Sausage Burst Burger", 260], ["Beef Baconator Extreme", 390],
-          ["Smoky BBQ Tender Strips", 210], ["Spicy Curly Fries", 160], ["Cheesy Meat Box", 280],
-          ["Naga Meat Box Extreme", 310], ["Crispy Chicken Popcorn", 170], ["Fried Calamari Bites", 240],
-          ["Classic Wedges with Dip", 140], ["Mozzarella Cheese Sticks", 220], ["Oreo Thick Shake", 190],
-          ["Salted Caramel Shake", 200], ["Strawberry Fizz Soda", 110], ["Peach Iced Tea", 100],
-          ["Jalapeno Poppers", 170], ["Chillox Buddy Box Combo", 690]
-        ]
-      },
-      {
-        store: "Khanas Fast Food",
-        cat: "Fast Food & Burgers",
-        img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Khanas Smoky Hot Sub", 230], ["Crunchy Chicken Submarine", 250], ["Crispy Strips Platter", 260],
-          ["Cheesy Sausage Roll", 170], ["Crispy Chicken Tender Roll", 210], ["Naga Drums of Heaven", 240],
-          ["Hot Chicken Chowmein", 220], ["Beef Chili Fried Noodles", 260], ["Khanas Signature Platter", 360],
-          ["Crinkle Cut French Fries", 110], ["Potato Cheesy Tornado", 130], ["Fiery Chicken Rice Bowl", 240],
-          ["Sweet Chili Wings", 220], ["Crispy Wonton (6 pcs)", 160], ["Fried Spring Roll (4 pcs)", 140],
-          ["Khanas Special Cold Coffee", 130], ["Mango Pulp Shake", 150], ["Chocolate Brownie Sundae", 170],
-          ["Lemonade Fresh Splash", 80], ["Khanas Duo Meal Platter", 550]
-        ]
-      },
-      {
-        store: "Kasturi Bengali Kitchen",
-        cat: "Bengali Thali & Rice",
-        img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Special Shorshe Ilish", 520], ["Ilish Mach Bhaja with Tel", 440], ["Rui Macher Kalia", 240],
-          ["Chitol Macher Muitha", 310], ["Pabda Macher Jhol", 280], ["Chingri Malai Curry", 480],
-          ["Khashir Mangsho Jhol", 460], ["Deshi Murgi Bhuna", 320], ["Kasturi Master Thali", 590],
-          ["Mochar Ghonto", 140], ["Chingri Diye Kochu Shak", 170], ["Dhokar Dalna", 150],
-          ["Alu Posto Special", 180], ["Cholar Dal with Narkel", 110], ["Basmati Sada Bhaat", 70],
-          ["Ghee Bhat Bowl", 130], ["Tomato Khejur Chutney", 70], ["Papad Bhaja (3 pcs)", 40],
-          ["Aam Chutney Sweet", 80], ["Misti Doi Matka", 85]
-        ]
-      },
-      {
-        store: "Bhorta Bhaat Ghor",
-        cat: "Bengali Thali & Rice",
-        img: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Alu Bhorta Classic", 40], ["Begun Bhorta Smoky", 50], ["Taki Mach Bhorta", 90],
-          ["Chingri Mach Bhorta", 110], ["Ilish Mach Bhorta", 130], ["Kalojeera Bhorta Health", 60],
-          ["Dhonia Pata Bhorta", 50], ["Shorisha Bhorta Deshi", 50], ["Shutki Bhorta Fiery", 80],
-          ["Dal Bhorta Special", 40], ["Gondhoraj Lebu Sada Bhaat", 60], ["Patla Masoor Dal", 50],
-          ["Macher Matha Diye Mung Dal", 160], ["Dim Bhuna Gravy", 70], ["Beef Kala Bhuna", 360],
-          ["Hath Ruti Plate (3 pcs)", 50], ["Potol Posto Bhaji", 90], ["Korola Alu Bhaji", 60],
-          ["Kacha Morich Tok Doi", 60], ["Bhorta 10-Item Super Platter", 380]
-        ]
-      },
-      {
-        store: "Mithai Sweets & Bakery",
-        cat: "Desserts & Sweets",
-        img: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Bograr Shahi Misti Doi (Half Kg)", 240], ["Spongy Rosogolla (4 pcs)", 120], ["Cream Gulab Jamun (4 pcs)", 140],
-          ["Kacha Golla Malai (4 pcs)", 160], ["Motichoor Laddu (500g)", 220], ["Ghee Kaju Barfi Box", 450],
-          ["Chana Mukhi Premium", 260], ["Malai Chop Special (2 pcs)", 150], ["Rasmalai Pure Milk (Bowl)", 210],
-          ["Milk Peda Box (400g)", 290], ["Sweet Boondi (500g)", 170], ["Balushahi Crispy (4 pcs)", 130],
-          ["Kalojam Sweet (4 pcs)", 140], ["Shorbhaja Cream Sweet", 220], ["Black Forest Cake Slice", 150],
-          ["Red Velvet Pastry", 170], ["Butter Cream Doughnut", 90], ["Chicken Curry Puff", 60],
-          ["Beef Keema Samucha (4 pcs)", 100], ["Sweet & Salted Lassi", 120]
-        ]
-      },
-      {
-        store: "Kwiky Daily Grocery",
-        cat: "Grocery & Essentials",
-        img: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&auto=format&fit=crop&q=60",
-        items: [
-          ["Deshi Miniket Rice (5kg)", 420], ["Nazirshail Rice (5kg)", 460], ["Soyabean Oil Fresh (2L)", 370],
-          ["Mustard Oil Pure Radhuni (500ml)", 175], ["Masoor Dal Deshi (1kg)", 140], ["Refined White Sugar (1kg)", 135],
-          ["Iodized Table Salt (1kg)", 42], ["Farm Fresh Brown Eggs (1 Dozen)", 155], ["Aarong Liquid Milk (1L)", 95],
-          ["Deshi Red Onions (1kg)", 75], ["Fresh Potatoes Diamond (1kg)", 35], ["Garlic Deshi Small (500g)", 120],
-          ["Fresh Green Chilis (250g)", 50], ["Radhuni Biryani Masala Box", 65], ["Radhuni Meat Curry Powder", 55],
-          ["Nestle Maggi Noodles (8 Pack)", 190], ["Lipton Yellow Label Tea (400g)", 260], ["Dettol Soap (Pack of 3)", 180],
-          ["Rin Washing Powder (1kg)", 145], ["Kwiky Instant 10-Min Pack", 599]
-        ]
-      }
+    const itemsData = [
+      // 1. FOOD: Sultan's Dine
+      { name: "Kacchi Biryani (Basmati)", price: 480, category: "Food", subcategory: "Biryani & Polao", storeName: "Sultan's Dine", imageUrl: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400" },
+      { name: "Mutton Kacchi Feast Box", price: 540, category: "Food", subcategory: "Biryani & Polao", storeName: "Sultan's Dine", imageUrl: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=400" },
+      { name: "Mutton Rezala", price: 310, category: "Food", subcategory: "Curry & Gravy", storeName: "Sultan's Dine", imageUrl: "https://images.unsplash.com/photo-1545247181-516773ca838b?w=400" },
+      { name: "Shahi Chicken Roast", price: 220, category: "Food", subcategory: "Curry & Gravy", storeName: "Sultan's Dine", imageUrl: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400" },
+      { name: "Shahi Borhani (1 Liter)", price: 220, category: "Food", subcategory: "Drinks & Desserts", storeName: "Sultan's Dine", imageUrl: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400" },
+      { name: "Firni Matka Cup", price: 90, category: "Food", subcategory: "Drinks & Desserts", storeName: "Sultan's Dine", imageUrl: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=400" },
+
+      // 2. FOOD: Takeout Burgers
+      { name: "Classic Beef Burger", price: 220, category: "Food", subcategory: "Burgers & Fast Food", storeName: "Takeout Burgers", imageUrl: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
+      { name: "Crispy Chicken Zinger", price: 240, category: "Food", subcategory: "Burgers & Fast Food", storeName: "Takeout Burgers", imageUrl: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=400" },
+      { name: "BBQ Bacon Cheese Blast", price: 290, category: "Food", subcategory: "Burgers & Fast Food", storeName: "Takeout Burgers", imageUrl: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400" },
+      { name: "Cheesy Loaded Fries", price: 190, category: "Food", subcategory: "Burgers & Fast Food", storeName: "Takeout Burgers", imageUrl: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" },
+      { name: "Crispy Naga Wings (6 pcs)", price: 230, category: "Food", subcategory: "Burgers & Fast Food", storeName: "Takeout Burgers", imageUrl: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400" },
+
+      // 3. FOOD: Star Kabab & Restaurant
+      { name: "Star Special Beef Boti Kebab", price: 220, category: "Food", subcategory: "Kebabs & Tandoor", storeName: "Star Kabab & Restaurant", imageUrl: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=400" },
+      { name: "Chicken Tikka Leg", price: 180, category: "Food", subcategory: "Kebabs & Tandoor", storeName: "Star Kabab & Restaurant", imageUrl: "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?w=400" },
+      { name: "Mutton Khichuri Platter", price: 340, category: "Food", subcategory: "Biryani & Polao", storeName: "Star Kabab & Restaurant", imageUrl: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400" },
+      { name: "Special Garlic Naan", price: 90, category: "Food", subcategory: "Kebabs & Tandoor", storeName: "Star Kabab & Restaurant", imageUrl: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400" },
+
+      // 4. FASHION: Men's Wear
+      { name: "Slim Fit Cotton Casual Shirt", price: 890, category: "Fashion", subcategory: "Men's Wear", storeName: "Apex & Trendz", imageUrl: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400" },
+      { name: "Premium Polo T-Shirt (Navy)", price: 550, category: "Fashion", subcategory: "Men's Wear", storeName: "Apex & Trendz", imageUrl: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=400" },
+      { name: "Stretch Denim Jeans (Blue)", price: 1250, category: "Fashion", subcategory: "Men's Wear", storeName: "Apex & Trendz", imageUrl: "https://images.unsplash.com/photo-1542272604-780c96856592?w=400" },
+
+      // 5. FASHION: Women's Wear
+      { name: "Embroidered Cotton Kurti", price: 1150, category: "Fashion", subcategory: "Women's Ethnic", storeName: "Aarong Boutique", imageUrl: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" },
+      { name: "Silk Chiffon Dupatta", price: 450, category: "Fashion", subcategory: "Women's Ethnic", storeName: "Aarong Boutique", imageUrl: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=400" },
+      { name: "Floral Print Maxi Dress", price: 1350, category: "Fashion", subcategory: "Women's Western", storeName: "Aarong Boutique", imageUrl: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400" },
+
+      // 6. FASHION: Footwear & Accessories
+      { name: "Classic White Court Sneakers", price: 1450, category: "Fashion", subcategory: "Footwear", storeName: "Bata & Urban Steps", imageUrl: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400" },
+      { name: "Genuine Leather Loafers", price: 1950, category: "Fashion", subcategory: "Footwear", storeName: "Bata & Urban Steps", imageUrl: "https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=400" },
+      { name: "Polarized UV Sunglasses", price: 650, category: "Fashion", subcategory: "Accessories", storeName: "Apex & Trendz", imageUrl: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400" },
+      { name: "Leather Men's Wallet", price: 590, category: "Fashion", subcategory: "Accessories", storeName: "Apex & Trendz", imageUrl: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400" },
+
+      // 7. MEDICINE: OTC & Daily Care
+      { name: "Napa Extra 500mg Box (10 Strips)", price: 250, category: "Medicine", subcategory: "OTC & Daily Care", storeName: "Lazz Pharma", imageUrl: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400" },
+      { name: "Gastric Relief Chewable (Strip)", price: 25, category: "Medicine", subcategory: "OTC & Daily Care", storeName: "Lazz Pharma", imageUrl: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=400" },
+      { name: "Digital Body Thermometer", price: 180, category: "Medicine", subcategory: "First Aid & Devices", storeName: "MediQuick Pharmacy", imageUrl: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=400" },
+      { name: "Antiseptic Disinfectant Liquid 250ml", price: 85, category: "Medicine", subcategory: "First Aid & Devices", storeName: "MediQuick Pharmacy", imageUrl: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=400" },
+      { name: "Vitamin C Chewable 500mg (30 Tabs)", price: 120, category: "Medicine", subcategory: "Vitamins & Supplements", storeName: "Lazz Pharma", imageUrl: "https://images.unsplash.com/photo-1550572017-ed200f5e6343?w=400" },
+      { name: "Calcium + Vitamin D3 Bone Care", price: 240, category: "Medicine", subcategory: "Vitamins & Supplements", storeName: "Lazz Pharma", imageUrl: "https://images.unsplash.com/photo-1577401239170-897942555fb3?w=400" },
+      { name: "Gentle Baby Wet Wipes (80 Sheets)", price: 160, category: "Medicine", subcategory: "Baby & Mom Care", storeName: "MediQuick Pharmacy", imageUrl: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=400" },
+      { name: "Baby Diaper Comfort Rash Cream", price: 210, category: "Medicine", subcategory: "Baby & Mom Care", storeName: "MediQuick Pharmacy", imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400" },
+
+      // 8. GROCERY: Daily Staples & Essentials
+      { name: "Miniket Premium Rice (5kg Bag)", price: 420, category: "Grocery", subcategory: "Daily Staples", storeName: "Kwiky SuperMart", imageUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
+      { name: "Pure Soybean Oil (2 Liter Bottle)", price: 370, category: "Grocery", subcategory: "Daily Staples", storeName: "Kwiky SuperMart", imageUrl: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400" },
+      { name: "Farm Fresh Brown Eggs (1 Dozen)", price: 155, category: "Grocery", subcategory: "Daily Staples", storeName: "Kwiky SuperMart", imageUrl: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400" },
+      { name: "Potato Chips - Spicy Chili (100g)", price: 60, category: "Grocery", subcategory: "Snacks & Drinks", storeName: "Kwiky SuperMart", imageUrl: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400" },
+      { name: "Cola Refresh Drink (1.5 Liter)", price: 95, category: "Grocery", subcategory: "Snacks & Drinks", storeName: "Kwiky SuperMart", imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400" }
     ];
 
     await Item.deleteMany({});
-    const bulkItems = [];
-    partners.forEach((p) => {
-      p.items.forEach(([name, price]) => {
-        bulkItems.push({
-          name,
-          price,
-          category: p.cat,
-          description: `Fresh delicious item from ${p.store}. Available on Kwiky Express.`,
-          imageUrl: p.img,
-          storeName: p.store,
-          isAvailable: true
-        });
-      });
-    });
+    await Item.insertMany(itemsData);
 
-    await Item.insertMany(bulkItems);
-    res.send(`<div style="font-family: sans-serif; text-align: center; padding-top: 50px;">
-      <h1 style="color: #27ae60;">✅ SUCCESS!</h1>
-      <h2>${bulkItems.length} items loaded into MongoDB Atlas across 10 partners!</h2>
-      <p><a href="/" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #fc8019; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">Go to Store Front</a></p>
-    </div>`);
+    res.send(`
+      <div style="font-family:sans-serif; text-align:center; padding-top:50px;">
+        <h1 style="color:#27ae60;">Database Seeded Successfully!</h1>
+        <h2>${itemsData.length} items added across Food, Fashion, Medicine & Grocery!</h2>
+        <p><a href="/" style="display:inline-block; margin-top:15px; padding:10px 20px; background:#fc8019; color:white; text-decoration:none; border-radius:8px; font-weight:bold;">Go to Store Front</a></p>
+      </div>
+    `);
   } catch (err) {
     res.status(500).send("Seeding failed: " + err.message);
   }
 });
 
-// Safe Fallback for SPA (কোনো path-to-regexp এরর দেবে না)
+// Safe Fallback Middleware (Missing parameter name at index 1: * error prevent kore)
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Kwiky Server is running on port ${PORT}`);
+  console.log(`Kwiky Server is running on port ${PORT}`);
 });
