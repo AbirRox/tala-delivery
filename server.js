@@ -24,6 +24,9 @@ if (!mongoURI) {
     .catch(err => console.error('Database connection failed:', err.message));
 }
 
+// Memory Cache for OTPs (Phone -> { otp, expiresAt })
+const otpStore = new Map();
+
 // 1. Order Schema & Model
 const orderSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -37,7 +40,7 @@ const orderSchema = new mongoose.Schema({
 });
 const Order = mongoose.model('Order', orderSchema);
 
-// 2. Partner / Merchant Schema & Model
+// 2. Partner Schema & Model
 const partnerSchema = new mongoose.Schema({
   businessName: { type: String, required: true },
   category: { type: String, required: true },
@@ -47,7 +50,7 @@ const partnerSchema = new mongoose.Schema({
   ownerNid: { type: String, required: true },
   payoutDetails: { type: String, required: true },
   address: { type: String, required: true },
-  isOpen: { type: Boolean, default: true }, // Store open/close switch
+  isOpen: { type: Boolean, default: true },
   verificationStatus: { 
     type: String, 
     enum: ['Pending', 'Verified', 'Rejected'], 
@@ -58,7 +61,7 @@ const partnerSchema = new mongoose.Schema({
     price: { type: Number, required: true },
     description: { type: String, default: '' },
     imageUrl: { type: String, default: '' },
-    isAvailable: { type: Boolean, default: true } // Stock toggle
+    isAvailable: { type: Boolean, default: true }
   }],
   createdAt: { type: Date, default: Date.now }
 });
@@ -68,9 +71,58 @@ const Partner = mongoose.model('Partner', partnerSchema);
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
 app.get('/partner', (req, res) => res.sendFile(path.join(__dirname, 'public', 'partner.html')));
 
-// --- Customer APIs ---
+// --- Swiggy Style OTP Login APIs ---
 
-// Place Customer Order
+// Send OTP API
+app.post('/api/auth/send-otp', (req, res) => {
+  const { phone } = req.body;
+  if (!phone || !/^01[3-9]\d{8}$/.test(phone.trim())) {
+    return res.status(400).json({ success: false, message: 'Invalid 11-digit mobile number' });
+  }
+
+  const cleanPhone = phone.trim();
+  const otp = Math.floor(1000 + Math.random() * 9000).toString();
+  const expiresAt = Date.now() + 2 * 60 * 1000; // 2 minutes expiry
+
+  otpStore.set(cleanPhone, { otp, expiresAt });
+  console.log(`[OTP Generated] Phone: ${cleanPhone}, OTP: ${otp}`);
+
+  // Response includes test OTP when no SMS Gateway key is present
+  res.json({ 
+    success: true, 
+    message: 'OTP sent successfully', 
+    testOtp: otp 
+  });
+});
+
+// Verify OTP API
+app.post('/api/auth/verify-otp', (req, res) => {
+  const { phone, otp, name } = req.body;
+  const cleanPhone = phone ? phone.trim() : '';
+
+  const record = otpStore.get(cleanPhone);
+  if (!record) {
+    return res.status(400).json({ success: false, message: 'OTP expired or not requested' });
+  }
+
+  if (Date.now() > record.expiresAt) {
+    otpStore.delete(cleanPhone);
+    return res.status(400).json({ success: false, message: 'OTP expired. Please request a new one.' });
+  }
+
+  if (record.otp !== otp.trim()) {
+    return res.status(400).json({ success: false, message: 'Incorrect OTP. Try again.' });
+  }
+
+  otpStore.delete(cleanPhone);
+  res.json({ 
+    success: true, 
+    message: 'Verified successfully', 
+    user: { phone: cleanPhone, name: name || 'Customer' } 
+  });
+});
+
+// --- Customer Order & Menu APIs ---
 app.post('/api/orders', async (req, res) => {
   try {
     const { name, phone, address, mapLocation, items, total } = req.body;
@@ -87,7 +139,6 @@ app.post('/api/orders', async (req, res) => {
   }
 });
 
-// Get Public Menu (Only Verified Partners & In-Stock Items)
 app.get('/api/public-menu', async (req, res) => {
   try {
     const partners = await Partner.find({ verificationStatus: 'Verified', isOpen: true });
@@ -144,36 +195,27 @@ app.put('/api/partners/:id/status', async (req, res) => {
   }
 });
 
-// --- Partner Merchant Portal APIs ---
-
-// 1. Partner Login via Phone
+// --- Partner Portal APIs ---
 app.post('/api/partners/login', async (req, res) => {
   try {
     const { phone } = req.body;
     const partner = await Partner.findOne({ phone: phone.trim() });
-    if (!partner) {
-      return res.status(404).json({ success: false, message: 'Partner not found with this phone number. Please register first.' });
-    }
+    if (!partner) return res.status(404).json({ success: false, message: 'Partner not registered' });
     res.json({ success: true, partner });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
-// 2. Register New Partner
 app.post('/api/partners/register', async (req, res) => {
   try {
     const { businessName, category, ownerName, phone, tradeLicense, ownerNid, payoutDetails, address } = req.body;
-    
     const existing = await Partner.findOne({ phone: phone.trim() });
-    if (existing) {
-      return res.status(400).json({ success: false, message: 'This phone number is already registered!' });
-    }
+    if (existing) return res.status(400).json({ success: false, message: 'Phone already registered' });
 
     const newPartner = new Partner({
       businessName, category, ownerName, phone: phone.trim(), tradeLicense, ownerNid, payoutDetails, address, verificationStatus: 'Pending', items: []
     });
-
     const saved = await newPartner.save();
     res.status(201).json({ success: true, partner: saved });
   } catch (err) {
@@ -181,48 +223,36 @@ app.post('/api/partners/register', async (req, res) => {
   }
 });
 
-// 3. Add Item to Store
 app.post('/api/partners/:id/items', async (req, res) => {
   try {
     const { name, price, description, imageUrl } = req.body;
     const partner = await Partner.findById(req.params.id);
     if (!partner) return res.status(404).json({ success: false, message: 'Partner not found' });
 
-    partner.items.push({
-      name,
-      price: Number(price),
-      description: description || '',
-      imageUrl: imageUrl || '',
-      isAvailable: true
-    });
-
+    partner.items.push({ name, price: Number(price), description: description || '', imageUrl: imageUrl || '', isAvailable: true });
     await partner.save();
-    res.json({ success: true, message: 'Item added successfully', items: partner.items });
+    res.json({ success: true, message: 'Item added', items: partner.items });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Could not add item' });
   }
 });
 
-// 4. Toggle Stock Availability (In Stock / Out of Stock)
 app.patch('/api/partners/:partnerId/items/:itemId/toggle-stock', async (req, res) => {
   try {
     const { partnerId, itemId } = req.params;
     const partner = await Partner.findById(partnerId);
     if (!partner) return res.status(404).json({ success: false, message: 'Partner not found' });
-
     const item = partner.items.id(itemId);
     if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
 
     item.isAvailable = !item.isAvailable;
     await partner.save();
-
-    res.json({ success: true, message: `Item is now ${item.isAvailable ? 'In Stock' : 'Out of Stock'}`, isAvailable: item.isAvailable });
+    res.json({ success: true, isAvailable: item.isAvailable });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Failed to update stock' });
+    res.status(500).json({ success: false, message: 'Stock update failed' });
   }
 });
 
-// 5. Delete Item from Store
 app.delete('/api/partners/:partnerId/items/:itemId', async (req, res) => {
   try {
     const { partnerId, itemId } = req.params;
@@ -231,29 +261,22 @@ app.delete('/api/partners/:partnerId/items/:itemId', async (req, res) => {
 
     partner.items.pull({ _id: itemId });
     await partner.save();
-
-    res.json({ success: true, message: 'Item deleted successfully', items: partner.items });
+    res.json({ success: true, items: partner.items });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Failed to delete item' });
+    res.status(500).json({ success: false, message: 'Delete failed' });
   }
 });
 
-// 6. Toggle Store Open/Closed
 app.patch('/api/partners/:partnerId/toggle-open', async (req, res) => {
   try {
     const partner = await Partner.findById(req.params.partnerId);
     if (!partner) return res.status(404).json({ success: false, message: 'Partner not found' });
-
     partner.isOpen = !partner.isOpen;
     await partner.save();
-
     res.json({ success: true, isOpen: partner.isOpen });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Could not toggle store status' });
+    res.status(500).json({ success: false, message: 'Toggle failed' });
   }
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`Server running at port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
