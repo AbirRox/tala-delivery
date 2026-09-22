@@ -3,261 +3,561 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tala Express - Fast Local Delivery</title>
+  <title>Tala Express | Food Delivery</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
+    :root {
+      --swiggy-orange: #fc8019;
+      --swiggy-dark: #282c3f;
+      --swiggy-gray: #686b78;
+      --swiggy-light-gray: #f2f2f6;
+      --swiggy-green: #60b244;
+      --border-color: #e9e9eb;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
+
     body {
-      background-color: #f8f9fa;
-      color: #1e272e;
-      padding-bottom: 80px;
+      background-color: #ffffff;
+      color: var(--swiggy-dark);
+      padding-bottom: 120px;
     }
+
+    /* Header */
     header {
-      background: #ffffff;
-      padding: 16px 20px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       position: sticky;
       top: 0;
+      background: #ffffff;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       z-index: 100;
+    }
+
+    .brand-section {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 8px;
     }
-    header h1 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #e67e22;
+
+    .brand-section i {
+      color: var(--swiggy-orange);
+      font-size: 22px;
     }
-    .cart-badge {
-      background: #e67e22;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
+
+    .brand-section h1 {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--swiggy-orange);
     }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
+
+    .location-badge {
+      font-size: 13px;
+      color: var(--swiggy-gray);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    /* Offer Banner Slider */
+    .banner-container {
       padding: 16px;
-    }
-    .menu-title {
-      font-size: 18px;
-      margin: 16px 0 12px;
-      font-weight: 700;
-    }
-    .item-card {
-      background: white;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 12px;
+      overflow-x: auto;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      gap: 12px;
+      scrollbar-width: none;
     }
-    .item-details h3 {
-      font-size: 16px;
+
+    .banner-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .banner-card {
+      min-width: 270px;
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      border-radius: 16px;
+      padding: 16px 20px;
+      color: white;
+      position: relative;
+      flex-shrink: 0;
+      box-shadow: 0 8px 16px rgba(252, 128, 25, 0.15);
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .banner-card h3 {
+      font-size: 18px;
+      font-weight: 800;
       margin-bottom: 4px;
     }
-    .item-details p {
-      font-size: 14px;
-      color: #636e72;
-      font-weight: 600;
+
+    .banner-card p {
+      font-size: 12px;
+      opacity: 0.9;
     }
-    .add-btn {
-      background: #2ed573;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
+
+    /* Category Filter Pills */
+    .category-scroll {
+      display: flex;
+      gap: 8px;
+      padding: 0 16px 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
-    .checkout-modal {
+
+    .category-scroll::-webkit-scrollbar {
       display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 200;
-      align-items: flex-end;
     }
-    .checkout-content {
-      background: white;
-      width: 100%;
-      max-width: 600px;
+
+    .cat-pill {
+      background: var(--swiggy-light-gray);
+      color: var(--swiggy-dark);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .cat-pill.active {
+      background: var(--swiggy-dark);
+      color: #ffffff;
+    }
+
+    /* Food Items Section */
+    .container {
+      max-width: 650px;
       margin: 0 auto;
-      border-radius: 20px 20px 0 0;
-      padding: 24px 20px;
-      max-height: 90vh;
-      overflow-y: auto;
+      padding: 0 16px;
     }
-    .checkout-header {
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: var(--swiggy-dark);
+    }
+
+    .food-card {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-color);
+      transition: transform 0.2s ease;
     }
-    .close-btn {
-      font-size: 24px;
+
+    .food-info {
+      flex: 1;
+      padding-right: 14px;
+    }
+
+    .veg-icon {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #e43b4f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      border-radius: 2px;
+    }
+
+    .veg-icon::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background-color: #e43b4f;
+      border-radius: 50%;
+    }
+
+    .food-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #3e4152;
+      margin-bottom: 4px;
+    }
+
+    .food-price {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--swiggy-dark);
+      margin-bottom: 6px;
+    }
+
+    .food-desc {
+      font-size: 12px;
+      color: var(--swiggy-gray);
+      line-height: 1.4;
+    }
+
+    .food-action {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .add-btn {
+      background: #ffffff;
+      color: var(--swiggy-green);
+      font-weight: 800;
+      font-size: 13px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .add-btn:active {
+      transform: scale(0.92);
+      background-color: #f8f9fa;
+    }
+
+    /* Floating Cart Bar */
+    .cart-bar {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      max-width: 618px;
+      margin: 0 auto;
+      background: var(--swiggy-green);
+      color: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 24px rgba(96, 178, 68, 0.35);
+      cursor: pointer;
+      z-index: 99;
+      animation: slideUp 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .cart-info {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .cart-subtext {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .cart-action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Bottom Sheet Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(40, 44, 63, 0.6);
+      display: none;
+      align-items: flex-end;
+      z-index: 200;
+      backdrop-filter: blur(2px);
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto;
+      border-radius: 24px 24px 0 0;
+      padding: 24px 20px;
+      max-height: 88vh;
+      overflow-y: auto;
+      animation: slideUpModal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .close-icon {
+      font-size: 20px;
+      color: var(--swiggy-gray);
       cursor: pointer;
       border: none;
       background: none;
     }
-    .form-group {
-      margin-bottom: 14px;
+
+    .bill-details {
+      background: var(--swiggy-light-gray);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 20px;
+      font-size: 13px;
     }
+
+    .bill-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      color: var(--swiggy-gray);
+    }
+
+    .bill-total {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #d4d5d9;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--swiggy-dark);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
     .form-group label {
       display: block;
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
       margin-bottom: 6px;
-      color: #2d3436;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--swiggy-gray);
     }
+
     .form-group input, .form-group textarea {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #dfe4ea;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       font-size: 14px;
       outline: none;
+      transition: border 0.2s ease;
     }
+
     .form-group input:focus, .form-group textarea:focus {
-      border-color: #e67e22;
+      border-color: var(--swiggy-orange);
     }
+
     .location-btn {
-      background: #0984e3;
-      color: white;
-      border: none;
-      padding: 10px 14px;
+      background: #ffffff;
+      color: var(--swiggy-orange);
+      border: 1px solid var(--swiggy-orange);
+      padding: 12px;
       border-radius: 8px;
       cursor: pointer;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 6px;
-      margin-top: 4px;
+      gap: 8px;
+      transition: all 0.2s ease;
     }
+
+    .location-btn:active {
+      background: #fff4ec;
+    }
+
     .location-status {
       font-size: 12px;
       margin-top: 6px;
-      min-height: 16px;
+      font-weight: 600;
     }
-    .order-summary {
-      background: #f1f2f6;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-    .submit-btn {
-      background: #e67e22;
+
+    .order-now-btn {
+      background: var(--swiggy-orange);
       color: white;
       border: none;
-      padding: 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 700;
       width: 100%;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 800;
+      border-radius: 10px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 14px rgba(252, 128, 25, 0.3);
+      transition: transform 0.1s ease;
+    }
+
+    .order-now-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Keyframe Animations */
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideUpModal {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Tala Express</h1>
-    <div class="cart-badge" onclick="openCheckout()">
-      Cart (<span id="cartCount">0</span>)
+    <div class="brand-section">
+      <i class="fa-solid fa-utensils"></i>
+      <div>
+        <h1>Tala Express</h1>
+        <div class="location-badge">
+          <i class="fa-solid fa-location-dot"></i> Fast Delivery
+        </div>
+      </div>
     </div>
   </header>
 
-  <div class="container">
-    <h2 class="menu-title">Available Menu</h2>
-    
-    <div class="item-card">
-      <div class="item-details">
-        <h3>Chicken Biryani</h3>
-        <p>180 BDT</p>
-      </div>
-      <button class="add-btn" onclick="addToCart('Chicken Biryani', 180)">+ Add</button>
+  <!-- Promo Banners -->
+  <div class="banner-container">
+    <div class="banner-card">
+      <h3>50% OFF UPTO 100 BDT</h3>
+      <p>Use code TALAEXPRESS on first order</p>
     </div>
-
-    <div class="item-card">
-      <div class="item-details">
-        <h3>Beef Khichuri</h3>
-        <p>160 BDT</p>
-      </div>
-      <button class="add-btn" onclick="addToCart('Beef Khichuri', 160)">+ Add</button>
-    </div>
-
-    <div class="item-card">
-      <div class="item-details">
-        <h3>Egg Fried Rice</h3>
-        <p>120 BDT</p>
-      </div>
-      <button class="add-btn" onclick="addToCart('Egg Fried Rice', 120)">+ Add</button>
+    <div class="banner-card" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
+      <h3>FREE DELIVERY</h3>
+      <p>Instant doorstep delivery across town</p>
     </div>
   </div>
 
-  <!-- Checkout Modal -->
-  <div class="checkout-modal" id="checkoutModal">
-    <div class="checkout-content">
-      <div class="checkout-header">
-        <h2>Complete Order</h2>
-        <button class="close-btn" onclick="closeCheckout()">&times;</button>
+  <!-- Category Filter Pills -->
+  <div class="category-scroll">
+    <div class="cat-pill active">All Items</div>
+    <div class="cat-pill">Biryani & Rice</div>
+    <div class="cat-pill">Combos</div>
+    <div class="cat-pill">Fast Food</div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">Recommended Dishes</h2>
+
+    <div class="food-card">
+      <div class="food-info">
+        <div class="veg-icon"></div>
+        <div class="food-name">Chicken Dum Biryani</div>
+        <div class="food-price">180 BDT</div>
+        <div class="food-desc">Aromatic basmati rice cooked with rich local spices and tender chicken piece.</div>
+      </div>
+      <div class="food-action">
+        <button class="add-btn" onclick="addToCart('Chicken Dum Biryani', 180)">ADD</button>
+      </div>
+    </div>
+
+    <div class="food-card">
+      <div class="food-info">
+        <div class="veg-icon"></div>
+        <div class="food-name">Special Beef Khichuri</div>
+        <div class="food-price">160 BDT</div>
+        <div class="food-desc">Slow-cooked fragrant rice and lentils served with flavorful beef bhuna.</div>
+      </div>
+      <div class="food-action">
+        <button class="add-btn" onclick="addToCart('Special Beef Khichuri', 160)">ADD</button>
+      </div>
+    </div>
+
+    <div class="food-card">
+      <div class="food-info">
+        <div class="veg-icon"></div>
+        <div class="food-name">Egg Fried Rice with Wings</div>
+        <div class="food-price">130 BDT</div>
+        <div class="food-desc">Classic fried rice served with crispy fried chicken wings.</div>
+      </div>
+      <div class="food-action">
+        <button class="add-btn" onclick="addToCart('Egg Fried Rice with Wings', 130)">ADD</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Cart Bar -->
+  <div class="cart-bar" id="cartBar" onclick="openCheckout()">
+    <div>
+      <div class="cart-info"><span id="cartCount">0</span> ITEM(S) | <span id="cartTotal">0</span> BDT</div>
+      <div class="cart-subtext">Extra charges may apply</div>
+    </div>
+    <div class="cart-action">
+      <span>View Cart</span>
+      <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </div>
+
+  <!-- Checkout Bottom Sheet Modal -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Order Confirmation</h2>
+        <button class="close-icon" onclick="closeCheckout()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <div class="order-summary" id="orderSummary">
-        Your cart is empty.
-      </div>
+      <div class="bill-details" id="billSummary"></div>
 
       <form id="orderForm" onsubmit="handleOrderSubmit(event)">
         <div class="form-group">
-          <label for="customerName">Full Name</label>
-          <input type="text" id="customerName" placeholder="Enter your name" required />
+          <label for="name">Your Name</label>
+          <input type="text" id="name" placeholder="e.g. Abir Roy" required />
         </div>
 
         <div class="form-group">
-          <label for="customerPhone">Mobile Number</label>
-          <input 
-            type="tel" 
-            id="customerPhone" 
-            placeholder="11-digit number (e.g. 017XXXXXXXX)" 
-            maxlength="11" 
-            required 
-          />
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="11-digit mobile number" maxlength="11" required />
         </div>
 
         <div class="form-group">
-          <label for="customerAddress">Delivery Address</label>
-          <textarea 
-            id="customerAddress" 
-            rows="3" 
-            placeholder="House/Road no, Area, Village, or Landmark" 
-            required
-          ></textarea>
+          <label for="address">Delivery Address</label>
+          <textarea id="address" rows="3" placeholder="House no, road, village or nearest landmark" required></textarea>
         </div>
 
         <div class="form-group">
-          <label>Pinpoint Live Location</label>
+          <label>Pinpoint Location</label>
           <button type="button" class="location-btn" onclick="getExactLocation()">
-            📍 Share Current Location (Google Maps)
+            <i class="fa-solid fa-crosshairs"></i> Fetch Live GPS Location
           </button>
           <input type="hidden" id="mapLocation" />
           <div class="location-status" id="locationStatus"></div>
         </div>
 
-        <button type="submit" class="submit-btn" id="submitBtn">Place Order</button>
+        <button type="submit" class="order-now-btn" id="submitBtn">Proceed to Pay & Order</button>
       </form>
     </div>
   </div>
@@ -267,29 +567,43 @@
 
     function addToCart(name, price) {
       cart.push({ name, price });
-      updateCartBadge();
-      alert(name + " added to cart!");
+      renderCartBar();
     }
 
-    function updateCartBadge() {
-      document.getElementById('cartCount').innerText = cart.length;
+    function renderCartBar() {
+      const cartBar = document.getElementById('cartBar');
+      if (cart.length > 0) {
+        const total = cart.reduce((acc, curr) => acc + curr.price, 0);
+        document.getElementById('cartCount').innerText = cart.length;
+        document.getElementById('cartTotal').innerText = total;
+        cartBar.style.display = 'flex';
+      } else {
+        cartBar.style.display = 'none';
+      }
     }
 
     function openCheckout() {
-      if (cart.length === 0) {
-        alert("Your cart is empty! Please add items first.");
-        return;
-      }
-      const summaryDiv = document.getElementById('orderSummary');
+      if (cart.length === 0) return;
+      const billDiv = document.getElementById('billSummary');
       let total = 0;
-      let itemsHtml = "<strong>Selected Items:</strong><br/>";
+      let billHtml = `<div style="font-weight:700; margin-bottom:10px;">Item Details</div>`;
+      
       cart.forEach(item => {
-        itemsHtml += `• ${item.name} - ${item.price} BDT<br/>`;
+        billHtml += `
+          <div class="bill-row">
+            <span>${item.name}</span>
+            <span>${item.price} BDT</span>
+          </div>`;
         total += item.price;
       });
-      itemsHtml += `<br/><strong>Total Amount: ${total} BDT</strong>`;
-      summaryDiv.innerHTML = itemsHtml;
 
+      billHtml += `
+        <div class="bill-total">
+          <span>TO PAY</span>
+          <span>${total} BDT</span>
+        </div>`;
+      
+      billDiv.innerHTML = billHtml;
       document.getElementById('checkoutModal').style.display = 'flex';
     }
 
@@ -302,25 +616,25 @@
       const mapInput = document.getElementById('mapLocation');
 
       if (!navigator.geolocation) {
-        status.innerText = "Geolocation is not supported by your browser.";
+        status.innerText = "Geolocation not supported";
         status.style.color = "red";
         return;
       }
 
-      status.innerText = "Locating your exact coordinates...";
-      status.style.color = "#0984e3";
+      status.innerText = "Locating via satellite...";
+      status.style.color = "#fc8019";
 
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
           mapInput.value = `https://www.google.com/maps?q=${lat},${lon}`;
-          status.innerText = "✅ Exact GPS location attached!";
-          status.style.color = "#2ed573";
+          status.innerText = "✓ Exact GPS location attached";
+          status.style.color = "#60b244";
         },
-        (error) => {
-          status.innerText = "Location permission denied. Please write full address.";
-          status.style.color = "#d63031";
+        (err) => {
+          status.innerText = "Permission denied. Please write detailed address.";
+          status.style.color = "#e43b4f";
         },
         { enableHighAccuracy: true, timeout: 10000 }
       );
@@ -329,15 +643,14 @@
     async function handleOrderSubmit(event) {
       event.preventDefault();
 
-      const name = document.getElementById('customerName').value.trim();
-      const phone = document.getElementById('customerPhone').value.trim();
-      const address = document.getElementById('customerAddress').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
       const mapLocation = document.getElementById('mapLocation').value;
 
-      // 11-digit mobile number validation starting with 01
       const phonePattern = /^01[3-9]\d{8}$/;
       if (!phonePattern.test(phone)) {
-        alert("Please enter a valid 11-digit mobile number (e.g., 01712345678).");
+        alert("Please enter a valid 11-digit mobile number (e.g. 017XXXXXXXX)");
         return;
       }
 
@@ -364,20 +677,20 @@
         });
 
         if (response.ok) {
-          alert("Order placed successfully!");
+          alert("🎉 Order placed successfully!");
           cart = [];
-          updateCartBadge();
+          renderCartBar();
           closeCheckout();
           document.getElementById('orderForm').reset();
           document.getElementById('locationStatus').innerText = "";
         } else {
-          alert("Failed to submit order. Please try again.");
+          alert("Could not process order. Please try again.");
         }
       } catch (err) {
-        alert("Server connection error: " + err.message);
+        alert("Server error: " + err.message);
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerText = "Place Order";
+        submitBtn.innerText = "Proceed to Pay & Order";
       }
     }
   </script>
