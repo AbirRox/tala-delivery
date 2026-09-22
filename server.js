@@ -16,8 +16,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/kwiky';
 mongoose
   .connect(MONGO_URI)
-  .then(() => console.log(' Connected to MongoDB Atlas Successfully!'))
-  .catch((err) => console.error(' MongoDB Connection Error:', err));
+  .then(() => console.log('✅ Connected to MongoDB Atlas Successfully!'))
+  .catch((err) => console.error('❌ MongoDB Connection Error:', err));
 
 // Database Schemas
 const ItemSchema = new mongoose.Schema({
@@ -122,7 +122,6 @@ app.post('/api/orders', async (req, res) => {
 // Get all active assignments for delivery fleet
 app.get('/api/rider/orders', async (req, res) => {
   try {
-    // Deliver না হওয়া পর্যন্ত সব একটিভ অর্ডার রাইডার দেখতে পাবে
     const activeOrders = await Order.find({
       status: { $in: ['Pending', 'Accepted', 'Picked Up'] }
     }).sort({ createdAt: -1 });
@@ -133,7 +132,7 @@ app.get('/api/rider/orders', async (req, res) => {
   }
 });
 
-// Update order status by Rider (Accept -> Picked Up -> Delivered)
+// Update order status by Rider
 app.patch('/api/rider/order/:id/status', async (req, res) => {
   try {
     const { status, riderName, riderPhone } = req.body;
@@ -148,11 +147,11 @@ app.patch('/api/rider/order/:id/status', async (req, res) => {
   }
 });
 
-// Fallback to customer portal
-app.get('*', (req, res) => {
+// Safe Fallback Route (Fixes PathError: Missing parameter name at index 1: *)
+app.get('/(.*)', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(` Kwiky Server is running on port ${PORT}`);
+  console.log(`🚀 Kwiky Server is running on port ${PORT}`);
 });
