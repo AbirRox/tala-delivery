@@ -147,8 +147,8 @@ app.patch('/api/rider/order/:id/status', async (req, res) => {
   }
 });
 
-// Safe Fallback Route (Fixes PathError: Missing parameter name at index 1: *)
-app.get('/(.*)', (req, res) => {
+// Safe SPA Fallback (কখনোই path error দেবে না)
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
