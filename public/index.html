@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Kwiky | Fast Food & Essentials Delivery</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Leaflet CSS for Map Preview -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     :root {
       --kwiky-orange: #fc8019;
@@ -47,6 +49,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      cursor: pointer;
     }
 
     .brand-badge {
@@ -72,11 +75,36 @@
 
     .brand-info .delivery-location {
       font-size: 12px;
-      color: var(--kwiky-gray);
+      color: var(--kwiky-dark);
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 4px;
       margin-top: 2px;
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-btn {
+      background: #f1f2f6;
+      color: var(--kwiky-dark);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 20px;
+      border: 1px solid #dfe4ea;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .partner-link-btn {
@@ -91,12 +119,6 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      transition: all 0.2s ease;
-    }
-
-    .partner-link-btn:active {
-      transform: scale(0.95);
-      background: #ffe3cc;
     }
 
     /* Search Bar */
@@ -162,7 +184,7 @@
       opacity: 0.95;
     }
 
-    /* 5 Low-Cost Service Categories */
+    /* 5 Categories */
     .category-section {
       background: #ffffff;
       padding: 16px;
@@ -223,7 +245,7 @@
       text-align: center;
     }
 
-    /* Restaurant & Menu Section */
+    /* Menu Section */
     .menu-container {
       background: #ffffff;
       padding: 16px;
@@ -412,7 +434,7 @@
       text-transform: uppercase;
     }
 
-    /* Bottom Sheet Modal */
+    /* Modal Backdrop */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -430,7 +452,7 @@
       margin: 0 auto;
       border-radius: 22px 22px 0 0;
       padding: 20px 18px 28px;
-      max-height: 88vh;
+      max-height: 90vh;
       overflow-y: auto;
       animation: slideUpSheet 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
     }
@@ -457,13 +479,23 @@
       color: var(--kwiky-gray);
     }
 
-    /* GPS Live Detection Card */
-    .gps-card-box {
-      background: #fff8f0;
-      border: 1px solid #ffd8be;
+    /* Map Box & GPS Preview */
+    .map-preview-card {
+      border: 1px solid var(--kwiky-border);
       border-radius: 12px;
-      padding: 12px 14px;
+      overflow: hidden;
       margin-bottom: 16px;
+    }
+
+    #interactiveMap {
+      width: 100%;
+      height: 160px;
+      background: #eee;
+    }
+
+    .gps-card-bar {
+      background: #fff8f0;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -485,12 +517,44 @@
       background: var(--kwiky-orange);
       color: #ffffff;
       border: none;
-      padding: 8px 14px;
+      padding: 7px 12px;
       border-radius: 8px;
       font-size: 12px;
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
+    }
+
+    /* Saved Profile Card */
+    .user-profile-badge {
+      background: #eef9ee;
+      border: 1px solid #c8e6c9;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-profile-badge p {
+      font-size: 13px;
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    .user-profile-badge span {
+      font-size: 12px;
+      color: var(--kwiky-gray);
+    }
+
+    .edit-profile-btn {
+      background: none;
+      border: none;
+      color: var(--kwiky-orange);
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
     /* Bill Receipt */
@@ -556,7 +620,6 @@
       border-color: var(--kwiky-orange);
     }
 
-    /* Address Type Selector */
     .type-pill-group {
       margin-bottom: 16px;
     }
@@ -623,27 +686,34 @@
 
   <!-- Top Navbar -->
   <header class="kwiky-topbar">
-    <div class="brand-section">
+    <div class="brand-section" onclick="detectUserLocation()">
       <div class="brand-badge">
         <i class="fa-solid fa-bolt"></i>
       </div>
       <div class="brand-info">
         <h1>Kwiky</h1>
-        <div class="delivery-location">
-          <i class="fa-solid fa-location-dot" style="color: var(--kwiky-orange);"></i> Bangladesh Express
+        <div class="delivery-location" id="topLocationDisplay">
+          <i class="fa-solid fa-location-dot" style="color: var(--kwiky-orange);"></i> 
+          <span id="locationAreaText">Locating your area...</span>
+          <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>
         </div>
       </div>
     </div>
-    <a href="/partner.html" class="partner-link-btn">
-      <i class="fa-solid fa-store"></i> Partner with Us
-    </a>
+    <div class="nav-actions">
+      <button class="user-btn" id="headerUserBtn" onclick="openAuthModal()">
+        <i class="fa-regular fa-user"></i> <span id="headerUserName">Login</span>
+      </button>
+      <a href="/partner.html" class="partner-link-btn">
+        <i class="fa-solid fa-store"></i> Partner
+      </a>
+    </div>
   </header>
 
   <!-- Search Filter -->
   <div class="search-section">
     <div class="search-input-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" placeholder="Search food, groceries, or essentials on Kwiky..." />
+      <input type="text" id="searchInput" oninput="filterItems()" placeholder="Search food, groceries, or essentials on Kwiky..." />
     </div>
   </div>
 
@@ -659,27 +729,31 @@
     </div>
   </div>
 
-  <!-- 5 Low-Cost Service Categories -->
+  <!-- 5 Categories -->
   <section class="category-section">
     <div class="section-heading">Explore on Kwiky</div>
     <div class="category-row">
-      <div class="category-node">
+      <div class="category-node" onclick="filterByCategory('All')">
+        <div class="category-icon-bubble"><i class="fa-solid fa-utensils"></i></div>
+        <span>All</span>
+      </div>
+      <div class="category-node" onclick="filterByCategory('Food')">
         <div class="category-icon-bubble"><i class="fa-solid fa-bowl-rice"></i></div>
         <span>Food</span>
       </div>
-      <div class="category-node">
+      <div class="category-node" onclick="filterByCategory('Grocery')">
         <div class="category-icon-bubble"><i class="fa-solid fa-basket-shopping"></i></div>
         <span>Grocery</span>
       </div>
-      <div class="category-node">
+      <div class="category-node" onclick="filterByCategory('Sweets')">
         <div class="category-icon-bubble"><i class="fa-solid fa-cake-candles"></i></div>
         <span>Sweets</span>
       </div>
-      <div class="category-node">
+      <div class="category-node" onclick="filterByCategory('Medicine')">
         <div class="category-icon-bubble"><i class="fa-solid fa-pills"></i></div>
         <span>Medicine</span>
       </div>
-      <div class="category-node">
+      <div class="category-node" onclick="filterByCategory('Parcel')">
         <div class="category-icon-bubble"><i class="fa-solid fa-box"></i></div>
         <span>Parcel</span>
       </div>
@@ -697,7 +771,7 @@
       </div>
     </div>
 
-    <!-- Dynamic Items from Database -->
+    <!-- Dynamic Items Container -->
     <div id="dynamicDishesList">
       <p style="padding: 24px; text-align: center; color: var(--kwiky-gray); font-size: 13px;">
         <i class="fa-solid fa-spinner fa-spin"></i> Loading fresh items from local merchants...
@@ -717,21 +791,60 @@
     </div>
   </div>
 
+  <!-- Customer Login / Register Modal -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="bottom-sheet">
+      <div class="sheet-title-bar">
+        <h3>Customer Login</h3>
+        <button class="close-sheet-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="font-size:13px; color:var(--kwiky-gray); margin-bottom:14px;">Save your phone number once and order seamlessly anytime.</p>
+      
+      <form onsubmit="handleCustomerLogin(event)">
+        <div class="form-unit">
+          <label>Your Full Name</label>
+          <input type="text" id="authUserName" placeholder="e.g. Tanvir Ahmed" required />
+        </div>
+        <div class="form-unit">
+          <label>Mobile Number (11-digit)</label>
+          <input type="tel" id="authUserPhone" placeholder="01XXXXXXXXX" maxlength="11" pattern="01[3-9][0-9]{8}" required />
+        </div>
+        <div class="form-unit">
+          <label>Default Address (Optional)</label>
+          <textarea id="authUserAddress" rows="2" placeholder="House, Road, Village/Area"></textarea>
+        </div>
+        <button type="submit" class="btn-place-final-order" style="margin-top:10px;">Save Profile</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Checkout Bottom Sheet Modal -->
   <div class="modal-backdrop" id="checkoutModal">
     <div class="bottom-sheet">
       <div class="sheet-title-bar">
-        <h3>Delivery Details</h3>
+        <h3>Checkout & Delivery</h3>
         <button class="close-sheet-btn" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- Quick GPS Auto-Pinpoint -->
-      <div class="gps-card-box">
-        <div class="gps-details">
-          <strong><i class="fa-solid fa-location-crosshairs"></i> Exact GPS Location</strong>
-          <span id="gpsPinStatus">Tag exact location on Google Maps</span>
+      <!-- Logged-in Customer Quick Profile Banner -->
+      <div class="user-profile-badge" id="customerSavedProfileBox" style="display:none;">
+        <div>
+          <p id="profileBadgeName"><i class="fa-solid fa-circle-check"></i> Tanvir Ahmed</p>
+          <span id="profileBadgePhone">017XXXXXXXX</span>
         </div>
-        <button type="button" class="detect-gps-btn" onclick="fetchLiveCoordinates()">Detect</button>
+        <button type="button" class="edit-profile-btn" onclick="openAuthModal()">Change</button>
+      </div>
+
+      <!-- Interactive Map & GPS Detection -->
+      <div class="map-preview-card">
+        <div id="interactiveMap"></div>
+        <div class="gps-card-bar">
+          <div class="gps-details">
+            <strong><i class="fa-solid fa-location-crosshairs"></i> Pinpoint Location</strong>
+            <span id="gpsPinStatus">Click detect to pin your location on map</span>
+          </div>
+          <button type="button" class="detect-gps-btn" onclick="detectUserLocation()">Detect GPS</button>
+        </div>
       </div>
 
       <!-- Bill Breakdown -->
@@ -739,21 +852,23 @@
 
       <!-- Bangladeshi Structured Address Form -->
       <form id="orderCheckoutForm" onsubmit="submitCustomerOrder(event)">
-        <div class="input-row">
-          <div class="form-unit">
-            <label for="custName">Full Name</label>
-            <input type="text" id="custName" placeholder="e.g. Abir Roy" required />
-          </div>
+        <div id="manualContactInputs">
+          <div class="input-row">
+            <div class="form-unit">
+              <label for="custName">Full Name</label>
+              <input type="text" id="custName" placeholder="e.g. Tanvir Ahmed" required />
+            </div>
 
-          <div class="form-unit">
-            <label for="custPhone">Mobile Number</label>
-            <input 
-              type="tel" 
-              id="custPhone" 
-              placeholder="01XXXXXXXXX" 
-              maxlength="11" 
-              required 
-            />
+            <div class="form-unit">
+              <label for="custPhone">Mobile Number</label>
+              <input 
+                type="tel" 
+                id="custPhone" 
+                placeholder="01XXXXXXXXX" 
+                maxlength="11" 
+                required 
+              />
+            </div>
           </div>
         </div>
 
@@ -790,63 +905,216 @@
 
         <input type="hidden" id="mapLocationLink" />
 
-        <button type="submit" class="btn-place-final-order" id="orderSubmitBtn">Proceed to Pay & Place Order</button>
+        <button type="submit" class="btn-place-final-order" id="orderSubmitBtn">Confirm & Place Order</button>
       </form>
     </div>
   </div>
 
+  <!-- Leaflet JS for Map -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <script>
     let cart = [];
+    let catalogItems = [];
     let selectedAddressTag = "Home";
+    let mapInstance = null;
+    let markerInstance = null;
 
-    // 1. Fetch Dynamic Verified Items from Backend Database
+    // --- 1. Customer Auth / Profile Management (LocalStorage) ---
+    function checkCustomerAuth() {
+      const savedUser = JSON.parse(localStorage.getItem('kwiky_customer'));
+      const headerName = document.getElementById('headerUserName');
+      const profileBox = document.getElementById('customerSavedProfileBox');
+      const manualInputs = document.getElementById('manualContactInputs');
+
+      if (savedUser && savedUser.phone) {
+        headerName.innerText = savedUser.name.split(' ')[0];
+        profileBox.style.display = 'flex';
+        document.getElementById('profileBadgeName').innerHTML = `<i class="fa-solid fa-circle-check"></i> ${savedUser.name}`;
+        document.getElementById('profileBadgePhone').innerText = savedUser.phone;
+        
+        // Auto fill hidden or visible inputs
+        document.getElementById('custName').value = savedUser.name;
+        document.getElementById('custPhone').value = savedUser.phone;
+        if (savedUser.address) {
+          document.getElementById('villageRoad').value = savedUser.address;
+        }
+        manualInputs.style.display = 'none'; // No need to retype!
+      } else {
+        headerName.innerText = "Login";
+        profileBox.style.display = 'none';
+        manualInputs.style.display = 'block';
+      }
+    }
+
+    function openAuthModal() {
+      const savedUser = JSON.parse(localStorage.getItem('kwiky_customer'));
+      if (savedUser) {
+        document.getElementById('authUserName').value = savedUser.name || '';
+        document.getElementById('authUserPhone').value = savedUser.phone || '';
+        document.getElementById('authUserAddress').value = savedUser.address || '';
+      }
+      document.getElementById('authModal').style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').style.display = 'none';
+    }
+
+    function handleCustomerLogin(e) {
+      e.preventDefault();
+      const name = document.getElementById('authUserName').value.trim();
+      const phone = document.getElementById('authUserPhone').value.trim();
+      const address = document.getElementById('authUserAddress').value.trim();
+
+      const bdPhoneRegex = /^01[3-9]\d{8}$/;
+      if (!bdPhoneRegex.test(phone)) {
+        alert("Please enter a valid 11-digit mobile number");
+        return;
+      }
+
+      localStorage.setItem('kwiky_customer', JSON.stringify({ name, phone, address }));
+      checkCustomerAuth();
+      closeAuthModal();
+      alert("Welcome to Kwiky, " + name + "! Your profile is saved.");
+    }
+
+    // --- 2. Live GPS & Area Detection with Interactive Map ---
+    function initMap(lat, lon) {
+      const mapContainer = document.getElementById('interactiveMap');
+      if (!mapInstance) {
+        mapInstance = L.map('interactiveMap').setView([lat, lon], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap'
+        }).addTo(mapInstance);
+        markerInstance = L.marker([lat, lon], { draggable: true }).addTo(mapInstance);
+        
+        markerInstance.on('dragend', function (e) {
+          const pos = e.target.getLatLng();
+          updateCoordinates(pos.lat, pos.lng);
+        });
+      } else {
+        mapInstance.setView([lat, lon], 15);
+        markerInstance.setLatLng([lat, lon]);
+        setTimeout(() => mapInstance.invalidateSize(), 300);
+      }
+    }
+
+    function updateCoordinates(lat, lon) {
+      document.getElementById('mapLocationLink').value = `https://www.google.com/maps?q=${lat},${lon}`;
+      document.getElementById('gpsPinStatus').innerText = `Pinned at ${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+      document.getElementById('gpsPinStatus').style.color = "var(--kwiky-green)";
+
+      // Reverse geocode to get exact town/area name
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.address) {
+            const area = data.address.suburb || data.address.neighbourhood || data.address.town || data.address.village || data.address.county || data.address.city || "My Location";
+            document.getElementById('locationAreaText').innerText = area;
+            document.getElementById('villageRoad').value = area + (data.address.road ? ", " + data.address.road : "");
+          }
+        }).catch(err => console.log(err));
+    }
+
+    function detectUserLocation() {
+      const areaText = document.getElementById('locationAreaText');
+      const statusText = document.getElementById('gpsPinStatus');
+
+      if (!navigator.geolocation) {
+        areaText.innerText = "GPS Not Supported";
+        return;
+      }
+
+      areaText.innerText = "Locating...";
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          updateCoordinates(lat, lon);
+          initMap(lat, lon);
+        },
+        (err) => {
+          areaText.innerText = "Select Location";
+          if (statusText) statusText.innerText = "Location permission denied. Type address.";
+          // Fallback map centered on Satkhira/Dhaka
+          initMap(22.7185, 89.0705);
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    }
+
+    // --- 3. Dynamic Catalog Fetch ---
     async function loadPublicCatalog() {
       const container = document.getElementById('dynamicDishesList');
       try {
         const res = await fetch('/api/public-menu');
         const data = await res.json();
+        catalogItems = data.catalog || [];
 
-        if (!data.catalog || data.catalog.length === 0) {
-          container.innerHTML = `
-            <div style="padding: 30px 16px; text-align: center; color: var(--kwiky-gray);">
-              <i class="fa-solid fa-store-slash" style="font-size: 32px; color: #dcdde1; margin-bottom: 10px;"></i>
-              <p style="font-weight: 700; font-size: 15px; color: var(--kwiky-dark);">No active store items live right now</p>
-              <p style="font-size: 12px; margin-top: 4px; margin-bottom: 14px;">Are you a local merchant or restaurant owner?</p>
-              <a href="/partner.html" style="background: var(--kwiky-orange); color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: 800; display: inline-block;">
-                + Register & Add Items
-              </a>
-            </div>`;
-          return;
-        }
-
-        container.innerHTML = data.catalog.map(item => `
-          <div class="dish-card">
-            <div class="dish-info">
-              <div class="badge-icon"></div>
-              <div class="dish-store-tag"><i class="fa-solid fa-shop"></i> ${item.storeName}</div>
-              <h3 class="dish-title">${item.name}</h3>
-              <div class="dish-cost">${item.price} BDT</div>
-              <p class="dish-desc">${item.description || 'Freshly prepared and packed upon your order.'}</p>
-            </div>
-            <div class="dish-action-box">
-              <img class="dish-thumb" src="${item.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&q=80'}" alt="${item.name}" />
-              <div class="add-action-wrap">
-                ${item.isAvailable ? 
-                  `<button class="swiggy-add-btn" onclick="addToCart('${item.name.replace(/'/g, "\\'")}', ${item.price})">ADD</button>` :
-                  `<button class="swiggy-add-btn btn-out-of-stock" disabled>OUT OF STOCK</button>`
-                }
-              </div>
-            </div>
-          </div>
-        `).join('');
+        renderCatalog(catalogItems);
       } catch (err) {
-        container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--kwiky-red); font-size: 13px;">Failed to load catalog. Please check connection.</p>';
+        container.innerHTML = '<p style="padding:20px; text-align:center; color:red;">Failed to load items.</p>';
       }
     }
 
-    // Run catalog load on window ready
-    window.addEventListener('DOMContentLoaded', loadPublicCatalog);
+    function renderCatalog(items) {
+      const container = document.getElementById('dynamicDishesList');
+      if (!items || items.length === 0) {
+        container.innerHTML = `
+          <div style="padding: 30px 16px; text-align: center; color: var(--kwiky-gray);">
+            <i class="fa-solid fa-store-slash" style="font-size: 32px; color: #dcdde1; margin-bottom: 10px;"></i>
+            <p style="font-weight: 700; font-size: 15px; color: var(--kwiky-dark);">No items available right now</p>
+            <p style="font-size: 12px; margin-top: 4px; margin-bottom: 14px;">Are you a local restaurant or merchant?</p>
+            <a href="/partner.html" style="background: var(--kwiky-orange); color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: 800; display: inline-block;">
+              + Register & Add Items
+            </a>
+          </div>`;
+        return;
+      }
 
+      container.innerHTML = items.map(item => `
+        <div class="dish-card">
+          <div class="dish-info">
+            <div class="badge-icon"></div>
+            <div class="dish-store-tag"><i class="fa-solid fa-shop"></i> ${item.storeName}</div>
+            <h3 class="dish-title">${item.name}</h3>
+            <div class="dish-cost">${item.price} BDT</div>
+            <p class="dish-desc">${item.description || 'Freshly packed upon your order.'}</p>
+          </div>
+          <div class="dish-action-box">
+            <img class="dish-thumb" src="${item.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&q=80'}" alt="${item.name}" />
+            <div class="add-action-wrap">
+              ${item.isAvailable ? 
+                `<button class="swiggy-add-btn" onclick="addToCart('${item.name.replace(/'/g, "\\'")}', ${item.price})">ADD</button>` :
+                `<button class="swiggy-add-btn btn-out-of-stock" disabled>OUT OF STOCK</button>`
+              }
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterItems() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = catalogItems.filter(i => 
+        i.name.toLowerCase().includes(q) || 
+        (i.description && i.description.toLowerCase().includes(q)) ||
+        (i.storeName && i.storeName.toLowerCase().includes(q))
+      );
+      renderCatalog(filtered);
+    }
+
+    function filterByCategory(cat) {
+      if (cat === 'All') {
+        renderCatalog(catalogItems);
+      } else {
+        const filtered = catalogItems.filter(i => i.category && i.category.toLowerCase().includes(cat.toLowerCase()));
+        renderCatalog(filtered.length ? filtered : catalogItems);
+      }
+    }
+
+    // --- 4. Cart & Checkout ---
     function addToCart(name, price) {
       cart.push({ name, price });
       renderCartBar();
@@ -866,6 +1134,14 @@
 
     function openCheckoutModal() {
       if (cart.length === 0) return;
+
+      // Ensure customer is logged in; if not, ask for phone first
+      const savedUser = JSON.parse(localStorage.getItem('kwiky_customer'));
+      if (!savedUser) {
+        openAuthModal();
+        return;
+      }
+
       const receiptBox = document.getElementById('billSummaryBox');
       let total = 0;
       let summaryHtml = `<div style="font-weight:800; margin-bottom:10px;">Bill Summary</div>`;
@@ -887,6 +1163,12 @@
       
       receiptBox.innerHTML = summaryHtml;
       document.getElementById('checkoutModal').style.display = 'flex';
+      
+      // Auto trigger map redraw after modal becomes visible
+      setTimeout(() => {
+        if (mapInstance) mapInstance.invalidateSize();
+        else detectUserLocation();
+      }, 300);
     }
 
     function closeCheckoutModal() {
@@ -899,35 +1181,6 @@
       selectedAddressTag = tag;
     }
 
-    function fetchLiveCoordinates() {
-      const statusText = document.getElementById('gpsPinStatus');
-      const mapInput = document.getElementById('mapLocationLink');
-
-      if (!navigator.geolocation) {
-        statusText.innerText = "GPS not supported on this browser";
-        statusText.style.color = "red";
-        return;
-      }
-
-      statusText.innerText = "Finding exact satellite location...";
-      statusText.style.color = "#fc8019";
-
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lon = pos.coords.longitude;
-          mapInput.value = `https://www.google.com/maps?q=${lat},${lon}`;
-          statusText.innerText = "✓ Coordinates pinned on Google Maps";
-          statusText.style.color = "#60b244";
-        },
-        (err) => {
-          statusText.innerText = "Location access denied. Please write landmark.";
-          statusText.style.color = "#e43b4f";
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
-    }
-
     async function submitCustomerOrder(event) {
       event.preventDefault();
 
@@ -938,17 +1191,14 @@
       const landmark = document.getElementById('landmark').value.trim();
       const mapLocation = document.getElementById('mapLocationLink').value;
 
-      // 11-digit mobile validation
       const bdPhoneRegex = /^01[3-9]\d{8}$/;
       if (!bdPhoneRegex.test(phone)) {
-        alert("Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX)");
+        alert("Please enter a valid 11-digit mobile number");
         return;
       }
 
       let fullAddress = `[${selectedAddressTag}] ${house}, ${village}`;
-      if (landmark) {
-        fullAddress += ` (Landmark: ${landmark})`;
-      }
+      if (landmark) fullAddress += ` (Landmark: ${landmark})`;
 
       const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
 
@@ -978,8 +1228,7 @@
           renderCartBar();
           closeCheckoutModal();
           document.getElementById('orderCheckoutForm').reset();
-          document.getElementById('gpsPinStatus').innerText = "Tag exact location on Google Maps";
-          document.getElementById('gpsPinStatus').style.color = "";
+          checkCustomerAuth();
         } else {
           alert("Order submission failed. Please try again.");
         }
@@ -987,9 +1236,16 @@
         alert("Server connection error: " + err.message);
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerText = "Proceed to Pay & Place Order";
+        submitBtn.innerText = "Confirm & Place Order";
       }
     }
+
+    // Auto initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      checkCustomerAuth();
+      loadPublicCatalog();
+      detectUserLocation();
+    });
   </script>
 </body>
 </html>
