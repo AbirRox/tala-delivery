@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partner Onboarding | Tala Express</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --swiggy-orange: #fc8019;
+      --swiggy-dark: #282c3f;
+      --swiggy-gray: #686b78;
+      --swiggy-green: #60b244;
+      --border-color: #d4d5d9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f7f7f9; color: var(--swiggy-dark); padding-bottom: 60px; }
+    
+    header { background: #fff; padding: 14px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-size: 18px; font-weight: 800; color: var(--swiggy-orange); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    
+    .container { max-width: 680px; margin: 20px auto; padding: 0 16px; }
+    .card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    .card h2 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .card p { font-size: 13px; color: var(--swiggy-gray); margin-bottom: 18px; line-height: 1.4; }
+    
+    .legal-badge { background: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; padding: 10px 14px; border-radius: 10px; font-size: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--swiggy-gray); margin-bottom: 5px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 13px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; outline: none; background: #fafafb; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--swiggy-orange); background: #fff; }
+    
+    .row { display: flex; gap: 12px; }
+    .row .form-group { flex: 1; }
+
+    .btn-submit { background: var(--swiggy-orange); color: #fff; border: none; padding: 14px; border-radius: 10px; font-weight: 800; font-size: 15px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+    
+    /* Partner Management Area */
+    .partner-dashboard { display: none; }
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+    .status-pending { background: #fff3e0; color: #e65100; }
+    .status-verified { background: #e8f5e9; color: #2e7d32; }
+    .status-rejected { background: #ffebee; color: #c62828; }
+
+    .menu-item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="brand"><i class="fa-solid fa-motorcycle"></i> Tala Express Partner</a>
+    <a href="/" style="text-decoration:none; color:var(--swiggy-dark); font-size:13px; font-weight:700;">Customer App</a>
+  </header>
+
+  <div class="container">
+    
+    <!-- Legal Registration Form -->
+    <div class="card" id="registrationCard">
+      <h2>Partner & Restaurant Registration</h2>
+      <p>Join Tala Express as an official merchant. All businesses must verify identity and licensing according to Bangladesh E-Commerce Guidelines.</p>
+
+      <div class="legal-badge">
+        <i class="fa-solid fa-shield-halved fa-lg"></i>
+        <span>KYC Required: Valid Trade License & NID verification needed before store items become publicly visible.</span>
+      </div>
+
+      <form id="partnerForm" onsubmit="handlePartnerRegister(event)">
+        <div class="row">
+          <div class="form-group">
+            <label>Business / Restaurant Name</label>
+            <input type="text" id="businessName" placeholder="e.g. Tala Royal Kitchen" required />
+          </div>
+          <div class="form-group">
+            <label>Business Category</label>
+            <select id="businessCategory" required>
+              <option value="Food & Restaurant">Food & Restaurant</option>
+              <option value="Grocery & Daily Bazar">Grocery & Daily Bazar</option>
+              <option value="Sweets & Bakery">Sweets & Bakery</option>
+              <option value="Pharmacy / Medicine">Pharmacy / Medicine</option>
+              <option value="Parcel & Courier Hub">Parcel & Courier Hub</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label>Owner Name</label>
+            <input type="text" id="ownerName" placeholder="e.g. Md. Rafiqul Islam" required />
+          </div>
+          <div class="form-group">
+            <label>Official Phone Number</label>
+            <input type="tel" id="partnerPhone" placeholder="017XXXXXXXX" maxlength="11" pattern="01[3-9][0-9]{8}" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label>Trade License No (City/Pourashava/UP)</label>
+            <input type="text" id="tradeLicense" placeholder="e.g. TL-2026-98124" required />
+          </div>
+          <div class="form-group">
+            <label>Owner NID Number (10/17 Digits)</label>
+            <input type="text" id="ownerNid" placeholder="National Identity Card No" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Payout Account Details (Bank / bKash / Nagad Merchant)</label>
+          <input type="text" id="payoutDetails" placeholder="e.g. bKash Merchant: 017XXXXXXXX or Dutch-Bangla A/C: 123456789" required />
+        </div>
+
+        <div class="form-group">
+          <label>Store Physical Address</label>
+          <textarea id="storeAddress" rows="2" placeholder="Market Name, Holding, Road, Tala Bazar" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="regBtn">Submit for Verification</button>
+      </form>
+    </div>
+
+    <!-- Partner Dashboard (Manage Items after Application) -->
+    <div class="card partner-dashboard" id="partnerDashboard">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h2 id="dashBusinessTitle">Merchant Dashboard</h2>
+        <span id="dashStatusBadge" class="status-badge status-pending">Pending Review</span>
+      </div>
+      <p id="dashStatusDesc">Your documents are under review by Tala Express admin. You can add your menu items now; they will go live once verified.</p>
+
+      <hr style="border:none; border-top:1px solid #f0f0f0; margin: 18px 0;" />
+
+      <h3>Add New Item / Dish</h3>
+      <form id="addItemForm" onsubmit="handleAddNewItem(event)" style="margin-top:12px;">
+        <div class="row">
+          <div class="form-group">
+            <label>Item Name</label>
+            <input type="text" id="newItemName" placeholder="e.g. Special Beef Biryani" required />
+          </div>
+          <div class="form-group">
+            <label>Price (BDT)</label>
+            <input type="number" id="newItemPrice" placeholder="180" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Short Description</label>
+          <input type="text" id="newItemDesc" placeholder="e.g. Cooked with fragrant rice & tender beef" required />
+        </div>
+        <button type="submit" class="btn-submit" style="background:var(--swiggy-green);">+ Add to Menu</button>
+      </form>
+
+      <h3 style="margin-top:24px; margin-bottom:10px;">Your Listed Items</h3>
+      <div id="partnerItemsList"></div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentPartner = null;
+
+    async function handlePartnerRegister(event) {
+      event.preventDefault();
+
+      const phone = document.getElementById('partnerPhone').value.trim();
+      const phoneRegex = /^01[3-9]\d{8}$/;
+      if (!phoneRegex.test(phone)) {
+        alert("Please enter a valid 11-digit Bangladeshi mobile number");
+        return;
+      }
+
+      const payload = {
+        businessName: document.getElementById('businessName').value.trim(),
+        category: document.getElementById('businessCategory').value,
+        ownerName: document.getElementById('ownerName').value.trim(),
+        phone: phone,
+        tradeLicense: document.getElementById('tradeLicense').value.trim(),
+        ownerNid: document.getElementById('ownerNid').value.trim(),
+        payoutDetails: document.getElementById('payoutDetails').value.trim(),
+        address: document.getElementById('storeAddress').value.trim()
+      };
+
+      const btn = document.getElementById('regBtn');
+      btn.disabled = true;
+      btn.innerText = "Submitting...";
+
+      try {
+        const res = await fetch('/api/partners/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          alert("Registration submitted! Tala Express will review your Trade License and NID.");
+          currentPartner = data.partner;
+          loadDashboardView(currentPartner);
+        } else {
+          alert("Error: " + (data.message || "Could not register"));
+        }
+      } catch (err) {
+        alert("Server error: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Submit for Verification";
+      }
+    }
+
+    function loadDashboardView(partner) {
+      document.getElementById('registrationCard').style.display = 'none';
+      const dash = document.getElementById('partnerDashboard');
+      dash.style.display = 'block';
+
+      document.getElementById('dashBusinessTitle').innerText = partner.businessName;
+      const statusBadge = document.getElementById('dashStatusBadge');
+      statusBadge.innerText = partner.verificationStatus;
+      statusBadge.className = "status-badge status-" + partner.verificationStatus.toLowerCase();
+
+      renderItems(partner.items || []);
+    }
+
+    function renderItems(items) {
+      const container = document.getElementById('partnerItemsList');
+      if (items.length === 0) {
+        container.innerHTML = "<p style='color:gray; font-size:13px;'>No items added yet.</p>";
+        return;
+      }
+      container.innerHTML = items.map(item => `
+        <div class="menu-item-row">
+          <div>
+            <strong>${item.name}</strong> - ${item.price} BDT
+            <div style="font-size:12px; color:gray;">${item.description}</div>
+          </div>
+          <span style="font-size:12px; color:green; font-weight:700;">✓ Active</span>
+        </div>
+      `).join('');
+    }
+
+    async function handleAddNewItem(e) {
+      e.preventDefault();
+      if (!currentPartner) return;
+
+      const newItem = {
+        name: document.getElementById('newItemName').value.trim(),
+        price: Number(document.getElementById('newItemPrice').value),
+        description: document.getElementById('newItemDesc').value.trim()
+      };
+
+      try {
+        const res = await fetch(`/api/partners/${currentPartner._id}/items`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newItem)
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          currentPartner.items.push(newItem);
+          renderItems(currentPartner.items);
+          document.getElementById('addItemForm').reset();
+          alert("Item added successfully!");
+        }
+      } catch (err) {
+        alert("Error adding item: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>

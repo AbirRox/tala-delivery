@@ -3,54 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Tala Express | Food Delivery</title>
+  <title>Tala Express | Food, Grocery & Essentials Delivery</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
       --swiggy-orange: #fc8019;
       --swiggy-dark: #282c3f;
       --swiggy-gray: #686b78;
-      --swiggy-light-gray: #f8f8f8;
+      --swiggy-light-gray: #f2f2f6;
       --swiggy-border: #e9e9eb;
       --swiggy-green: #60b244;
       --swiggy-red: #e43b4f;
-      --swiggy-card-bg: #ffffff;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'ProximaNova', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: #f2f2f2;
+      background-color: #f7f7f9;
       color: var(--swiggy-dark);
       padding-bottom: 120px;
     }
 
-    /* Top Swiggy Navbar */
-    .swiggy-navbar {
+    /* Swiggy Top Bar */
+    .swiggy-topbar {
       background: #ffffff;
       padding: 12px 16px;
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 15px 40px -20px rgba(40,44,63,.15);
+      box-shadow: 0 4px 14px rgba(40, 44, 63, 0.08);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .brand-group {
+    .brand-section {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .brand-logo-icon {
+    .brand-badge {
       width: 38px;
       height: 38px;
       background: var(--swiggy-orange);
@@ -59,55 +58,64 @@
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-size: 20px;
+      font-size: 19px;
+      box-shadow: 0 4px 10px rgba(252, 128, 25, 0.3);
     }
 
-    .delivery-location-box {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .loc-title {
-      font-size: 14px;
+    .brand-info h1 {
+      font-size: 18px;
       font-weight: 800;
-      color: var(--swiggy-dark);
+      color: var(--swiggy-orange);
+      letter-spacing: -0.4px;
+      line-height: 1.1;
+    }
+
+    .brand-info .delivery-location {
+      font-size: 12px;
+      color: var(--swiggy-gray);
       display: flex;
       align-items: center;
       gap: 4px;
-      cursor: pointer;
+      margin-top: 2px;
     }
 
-    .loc-title i {
-      font-size: 11px;
+    .partner-link-btn {
+      background: #fff3e6;
       color: var(--swiggy-orange);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 7px 12px;
+      border-radius: 20px;
+      border: 1px solid #ffd8be;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
     }
 
-    .loc-sub {
-      font-size: 12px;
-      color: var(--swiggy-gray);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 220px;
+    .partner-link-btn:active {
+      transform: scale(0.95);
+      background: #ffe3cc;
     }
 
     /* Search Bar */
-    .search-wrapper {
+    .search-section {
       padding: 12px 16px;
-      background: #fff;
+      background: #ffffff;
     }
 
-    .search-box {
+    .search-input-box {
       background: var(--swiggy-light-gray);
       border: 1px solid var(--swiggy-border);
       border-radius: 12px;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
-      padding: 10px 14px;
       gap: 10px;
     }
 
-    .search-box input {
+    .search-input-box input {
       border: none;
       background: transparent;
       outline: none;
@@ -116,154 +124,159 @@
       color: var(--swiggy-dark);
     }
 
-    .search-box i {
+    .search-input-box i {
       color: var(--swiggy-gray);
     }
 
-    /* Carousel / Banner */
-    .promo-strip {
+    /* Promo Banners */
+    .promo-scroll {
       padding: 14px 16px;
       display: flex;
-      gap: 14px;
+      gap: 12px;
       overflow-x: auto;
       scrollbar-width: none;
     }
 
-    .promo-strip::-webkit-scrollbar {
+    .promo-scroll::-webkit-scrollbar {
       display: none;
     }
 
     .promo-card {
-      min-width: 280px;
+      min-width: 270px;
       border-radius: 16px;
-      padding: 18px;
+      padding: 16px 18px;
       color: #fff;
-      background: linear-gradient(135deg, #fc8019 0%, #ff5252 100%);
-      box-shadow: 0 4px 16px rgba(252, 128, 25, 0.25);
+      background: linear-gradient(135deg, #fc8019 0%, #ff5722 100%);
+      box-shadow: 0 4px 15px rgba(252, 128, 25, 0.25);
       flex-shrink: 0;
-      position: relative;
     }
 
-    .promo-card h4 {
-      font-size: 18px;
+    .promo-card h3 {
+      font-size: 17px;
       font-weight: 800;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .promo-card p {
       font-size: 12px;
-      opacity: 0.9;
+      opacity: 0.95;
     }
 
-    /* Categories Horizontal Scroll */
+    /* 5 Low-Cost Service Categories */
     .category-section {
-      background: #fff;
+      background: #ffffff;
       padding: 16px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
-    .cat-head {
+    .section-heading {
       font-size: 16px;
       font-weight: 800;
       margin-bottom: 12px;
       letter-spacing: -0.3px;
     }
 
-    .categories-bar {
+    .category-row {
       display: flex;
-      gap: 14px;
+      gap: 16px;
       overflow-x: auto;
       scrollbar-width: none;
+      padding-bottom: 4px;
     }
 
-    .categories-bar::-webkit-scrollbar {
+    .category-row::-webkit-scrollbar {
       display: none;
     }
 
-    .category-item {
+    .category-node {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      min-width: 65px;
+      min-width: 62px;
       cursor: pointer;
     }
 
-    .cat-icon-circle {
+    .category-icon-bubble {
       width: 54px;
       height: 54px;
       border-radius: 50%;
-      background: #fff3e6;
+      background: #fff4ea;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--swiggy-orange);
       font-size: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      transition: transform 0.15s ease;
     }
 
-    .category-item span {
+    .category-node:active .category-icon-bubble {
+      transform: scale(0.92);
+      background: #ffe6d1;
+    }
+
+    .category-node span {
       font-size: 12px;
       font-weight: 700;
       color: var(--swiggy-dark);
       text-align: center;
     }
 
-    /* Restaurant & Dishes Section */
-    .restaurant-container {
-      background: #fff;
+    /* Restaurant & Dishes Menu */
+    .menu-container {
+      background: #ffffff;
       padding: 16px;
       max-width: 680px;
       margin: 0 auto;
+      border-radius: 16px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
     }
 
-    .restaurant-header {
-      padding-bottom: 16px;
+    .store-header {
+      padding-bottom: 14px;
       border-bottom: 1px dashed var(--swiggy-border);
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
-    .restaurant-title {
-      font-size: 20px;
+    .store-header h2 {
+      font-size: 19px;
       font-weight: 800;
       margin-bottom: 4px;
     }
 
-    .restaurant-meta {
+    .store-meta {
       font-size: 12px;
       color: var(--swiggy-gray);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .rating-pill {
+    .rating-tag {
       background: var(--swiggy-green);
       color: #fff;
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 11px;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
     }
 
-    /* Dish Cards */
-    .dish-row {
+    /* Food Dish Row */
+    .dish-card {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      padding: 18px 0;
-      border-bottom: 0.5px solid var(--swiggy-border);
+      padding: 16px 0;
+      border-bottom: 1px solid var(--swiggy-border);
     }
 
     .dish-info {
       flex: 1;
-      padding-right: 16px;
+      padding-right: 14px;
     }
 
-    .non-veg-badge {
+    .badge-icon {
       width: 14px;
       height: 14px;
       border: 1.5px solid var(--swiggy-red);
@@ -271,10 +284,10 @@
       align-items: center;
       justify-content: center;
       border-radius: 3px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
-    .non-veg-badge::after {
+    .badge-icon::after {
       content: '';
       width: 6px;
       height: 6px;
@@ -282,42 +295,43 @@
       border-radius: 50%;
     }
 
-    .dish-name {
+    .dish-title {
       font-size: 15px;
       font-weight: 700;
-      color: var(--swiggy-dark);
-      margin-bottom: 4px;
+      color: #3e4152;
+      margin-bottom: 3px;
     }
 
-    .dish-price {
+    .dish-cost {
       font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 8px;
+      font-weight: 800;
+      color: var(--swiggy-dark);
+      margin-bottom: 6px;
     }
 
-    .dish-description {
+    .dish-desc {
       font-size: 12px;
       color: var(--swiggy-gray);
       line-height: 1.4;
     }
 
-    .dish-image-box {
-      width: 110px;
+    .dish-action-box {
+      width: 105px;
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .dish-thumbnail {
-      width: 106px;
-      height: 94px;
+    .dish-thumb {
+      width: 105px;
+      height: 92px;
       border-radius: 12px;
       object-fit: cover;
       background: #f0f0f0;
     }
 
-    .add-btn-wrapper {
+    .add-action-wrap {
       position: absolute;
       bottom: -10px;
     }
@@ -328,7 +342,7 @@
       font-weight: 800;
       font-size: 13px;
       border: 1px solid var(--swiggy-border);
-      padding: 7px 24px;
+      padding: 7px 22px;
       border-radius: 8px;
       cursor: pointer;
       box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
@@ -340,7 +354,7 @@
       background: #f7fdf5;
     }
 
-    /* Sticky Bottom Cart Bar */
+    /* Floating Cart Bar */
     .cart-float-bar {
       position: fixed;
       bottom: 14px;
@@ -349,7 +363,7 @@
       max-width: 650px;
       margin: 0 auto;
       background: var(--swiggy-green);
-      color: #fff;
+      color: #ffffff;
       padding: 13px 18px;
       border-radius: 12px;
       display: none;
@@ -358,20 +372,20 @@
       box-shadow: 0 8px 24px rgba(96, 178, 68, 0.4);
       cursor: pointer;
       z-index: 150;
-      animation: barSlide 0.25s ease-out;
+      animation: popUpBar 0.25s ease-out;
     }
 
-    .cart-meta-text {
+    .cart-status-text {
       font-size: 14px;
       font-weight: 800;
     }
 
-    .cart-meta-sub {
+    .cart-status-sub {
       font-size: 11px;
       opacity: 0.9;
     }
 
-    .cart-checkout-trigger {
+    .view-cart-box {
       display: flex;
       align-items: center;
       gap: 6px;
@@ -381,7 +395,7 @@
     }
 
     /* Swiggy Bottom Sheet Modal */
-    .modal-overlay {
+    .modal-backdrop {
       position: fixed;
       inset: 0;
       background: rgba(40, 44, 63, 0.7);
@@ -391,33 +405,33 @@
       backdrop-filter: blur(2px);
     }
 
-    .sheet-modal {
+    .bottom-sheet {
       background: #ffffff;
       width: 100%;
       max-width: 650px;
       margin: 0 auto;
-      border-radius: 20px 20px 0 0;
-      padding: 20px 18px 26px;
+      border-radius: 22px 22px 0 0;
+      padding: 20px 18px 28px;
       max-height: 88vh;
       overflow-y: auto;
-      animation: sheetSlideUp 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+      animation: slideUpSheet 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
     }
 
-    .sheet-header {
+    .sheet-title-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 14px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--swiggy-border);
       margin-bottom: 14px;
     }
 
-    .sheet-header h3 {
+    .sheet-title-bar h3 {
       font-size: 17px;
       font-weight: 800;
     }
 
-    .btn-close-sheet {
+    .close-sheet-btn {
       border: none;
       background: none;
       font-size: 20px;
@@ -425,8 +439,8 @@
       color: var(--swiggy-gray);
     }
 
-    /* GPS Swiggy Card */
-    .gps-prompt-card {
+    /* GPS Live Detection Card */
+    .gps-card-box {
       background: #fff8f0;
       border: 1px solid #ffd8be;
       border-radius: 12px;
@@ -437,21 +451,21 @@
       justify-content: space-between;
     }
 
-    .gps-text strong {
+    .gps-details strong {
       display: block;
       color: var(--swiggy-orange);
       font-size: 13px;
       margin-bottom: 2px;
     }
 
-    .gps-text span {
+    .gps-details span {
       font-size: 12px;
       color: var(--swiggy-dark);
     }
 
-    .btn-detect-gps {
+    .detect-gps-btn {
       background: var(--swiggy-orange);
-      color: #fff;
+      color: #ffffff;
       border: none;
       padding: 8px 14px;
       border-radius: 8px;
@@ -461,18 +475,45 @@
       white-space: nowrap;
     }
 
+    /* Bill Receipt Summary */
+    .bill-receipt-box {
+      background: var(--swiggy-light-gray);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .receipt-item-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      color: var(--swiggy-gray);
+    }
+
+    .receipt-grand-total {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #d0d1d6;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--swiggy-dark);
+    }
+
     /* Input Fields */
-    .field-row {
+    .input-row {
       display: flex;
       gap: 10px;
     }
 
-    .input-group {
+    .form-unit {
       margin-bottom: 12px;
       flex: 1;
     }
 
-    .input-group label {
+    .form-unit label {
       display: block;
       font-size: 11px;
       font-weight: 800;
@@ -482,7 +523,7 @@
       margin-bottom: 4px;
     }
 
-    .input-group input, .input-group textarea {
+    .form-unit input, .form-unit textarea {
       width: 100%;
       padding: 11px 12px;
       border: 1px solid var(--swiggy-border);
@@ -492,23 +533,23 @@
       background: #fafafb;
     }
 
-    .input-group input:focus, .input-group textarea:focus {
-      background: #fff;
+    .form-unit input:focus, .form-unit textarea:focus {
+      background: #ffffff;
       border-color: var(--swiggy-orange);
     }
 
     /* Address Type Pills */
-    .address-type-selector {
+    .type-pill-group {
       margin-bottom: 16px;
     }
 
-    .tag-container {
+    .pills-container {
       display: flex;
       gap: 10px;
       margin-top: 6px;
     }
 
-    .tag-btn {
+    .pill-btn {
       flex: 1;
       padding: 9px;
       background: #fbfbfb;
@@ -524,40 +565,13 @@
       gap: 6px;
     }
 
-    .tag-btn.active {
+    .pill-btn.active {
       background: var(--swiggy-dark);
-      color: #fff;
+      color: #ffffff;
       border-color: var(--swiggy-dark);
     }
 
-    /* Bill Receipt Summary */
-    .bill-receipt {
-      background: var(--swiggy-light-gray);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 16px;
-      font-size: 13px;
-    }
-
-    .receipt-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      color: var(--swiggy-gray);
-    }
-
-    .receipt-total {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed #d0d1d6;
-      font-weight: 800;
-      font-size: 15px;
-      color: var(--swiggy-dark);
-    }
-
-    .btn-submit-order {
+    .btn-place-final-order {
       background: var(--swiggy-orange);
       color: white;
       border: none;
@@ -571,17 +585,17 @@
       box-shadow: 0 4px 14px rgba(252, 128, 25, 0.3);
     }
 
-    .btn-submit-order:disabled {
+    .btn-place-final-order:disabled {
       background: #ccc;
       cursor: not-allowed;
     }
 
-    @keyframes barSlide {
+    @keyframes popUpBar {
       from { transform: translateY(40px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
 
-    @keyframes sheetSlideUp {
+    @keyframes slideUpSheet {
       from { transform: translateY(100%); }
       to { transform: translateY(0); }
     }
@@ -589,170 +603,172 @@
 </head>
 <body>
 
-  <!-- Swiggy Sticky Header -->
-  <header class="swiggy-navbar">
-    <div class="brand-group">
-      <div class="brand-logo-icon">
+  <!-- Swiggy Sticky Top Navbar with Partner Access -->
+  <header class="swiggy-topbar">
+    <div class="brand-section">
+      <div class="brand-badge">
         <i class="fa-solid fa-motorcycle"></i>
       </div>
-      <div class="delivery-location-box">
-        <div class="loc-title">
-          <span>Tala, Satkhira</span>
-          <i class="fa-solid fa-chevron-down"></i>
+      <div class="brand-info">
+        <h1>Tala Express</h1>
+        <div class="delivery-location">
+          <i class="fa-solid fa-location-dot" style="color: var(--swiggy-orange);"></i> Tala, Satkhira
         </div>
-        <div class="loc-sub">Doorstep delivery across town</div>
       </div>
     </div>
+    <a href="/partner.html" class="partner-link-btn">
+      <i class="fa-solid fa-store"></i> Partner with Us
+    </a>
   </header>
 
-  <!-- Search Filter Input -->
-  <div class="search-wrapper">
-    <div class="search-box">
+  <!-- Search Filter -->
+  <div class="search-section">
+    <div class="search-input-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" placeholder="Search for biryani, khichuri, or dishes..." />
+      <input type="text" placeholder="Search for biryani, groceries, or essentials..." />
     </div>
   </div>
 
   <!-- Promo Banners -->
-  <div class="promo-strip">
+  <div class="promo-scroll">
     <div class="promo-card">
-      <h4>50% OFF UPTO 100 BDT</h4>
+      <h3>50% OFF UPTO 100 BDT</h3>
       <p>Use code TALA50 on your first order</p>
     </div>
     <div class="promo-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-      <h4>FREE DELIVERY</h4>
-      <p>Instant delivery directly to your home</p>
+      <h3>FREE DELIVERY IN TALA</h3>
+      <p>Doorstep delivery across local area</p>
     </div>
   </div>
 
-  <!-- Category Circles -->
+  <!-- 5 Low-Cost Service Categories -->
   <section class="category-section">
-    <div class="cat-head">What's on your mind?</div>
-    <div class="categories-bar">
-      <div class="category-item">
-        <div class="cat-icon-circle"><i class="fa-solid fa-bowl-rice"></i></div>
-        <span>Biryani</span>
+    <div class="section-heading">Our Services in Tala</div>
+    <div class="category-row">
+      <div class="category-node">
+        <div class="category-icon-bubble"><i class="fa-solid fa-bowl-rice"></i></div>
+        <span>Food</span>
       </div>
-      <div class="category-item">
-        <div class="cat-icon-circle"><i class="fa-solid fa-fire-burner"></i></div>
-        <span>Khichuri</span>
+      <div class="category-node">
+        <div class="category-icon-bubble"><i class="fa-solid fa-basket-shopping"></i></div>
+        <span>Grocery</span>
       </div>
-      <div class="category-item">
-        <div class="cat-icon-circle"><i class="fa-solid fa-drumstick-bite"></i></div>
-        <span>Chicken</span>
+      <div class="category-node">
+        <div class="category-icon-bubble"><i class="fa-solid fa-cake-candles"></i></div>
+        <span>Sweets</span>
       </div>
-      <div class="category-item">
-        <div class="cat-icon-circle"><i class="fa-solid fa-egg"></i></div>
-        <span>Egg Rice</span>
+      <div class="category-node">
+        <div class="category-icon-bubble"><i class="fa-solid fa-pills"></i></div>
+        <span>Medicine</span>
       </div>
-      <div class="category-item">
-        <div class="cat-icon-circle"><i class="fa-solid fa-burger"></i></div>
-        <span>Snacks</span>
+      <div class="category-node">
+        <div class="category-icon-bubble"><i class="fa-solid fa-box"></i></div>
+        <span>Parcel</span>
       </div>
     </div>
   </section>
 
   <!-- Dishes Menu Section -->
-  <main class="restaurant-container">
-    <div class="restaurant-header">
-      <h2 class="restaurant-title">Tala Kitchen Express</h2>
-      <div class="restaurant-meta">
-        <span class="rating-pill"><i class="fa-solid fa-star"></i> 4.4</span>
+  <main class="menu-container">
+    <div class="store-header">
+      <h2>Tala Kitchen Express</h2>
+      <div class="store-meta">
+        <span class="rating-tag"><i class="fa-solid fa-star"></i> 4.4</span>
         <span>• 25-35 mins</span>
         <span>• Tala Bazar</span>
       </div>
     </div>
 
     <!-- Dish 1 -->
-    <div class="dish-row">
+    <div class="dish-card">
       <div class="dish-info">
-        <div class="non-veg-badge"></div>
-        <h3 class="dish-name">Special Chicken Dum Biryani</h3>
-        <div class="dish-price">180 BDT</div>
-        <p class="dish-description">Rich fragrant chinigura rice cooked with tender chicken piece, boiled egg and local secret spices.</p>
+        <div class="badge-icon"></div>
+        <h3 class="dish-title">Special Chicken Dum Biryani</h3>
+        <div class="dish-cost">180 BDT</div>
+        <p class="dish-desc">Rich fragrant chinigura rice cooked with tender chicken piece, boiled egg and local secret spices.</p>
       </div>
-      <div class="dish-image-box">
-        <img class="dish-thumbnail" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&q=80" alt="Biryani" />
-        <div class="add-btn-wrapper">
-          <button class="swiggy-add-btn" onclick="addItemToCart('Special Chicken Dum Biryani', 180)">ADD</button>
+      <div class="dish-action-box">
+        <img class="dish-thumb" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&q=80" alt="Biryani" />
+        <div class="add-action-wrap">
+          <button class="swiggy-add-btn" onclick="addToCart('Special Chicken Dum Biryani', 180)">ADD</button>
         </div>
       </div>
     </div>
 
     <!-- Dish 2 -->
-    <div class="dish-row">
+    <div class="dish-card">
       <div class="dish-info">
-        <div class="non-veg-badge"></div>
-        <h3 class="dish-name">Mustard Beef Bhuna Khichuri</h3>
-        <div class="dish-price">160 BDT</div>
-        <p class="dish-description">Traditional mustard oil lentils and rice khichuri paired with spicy slow-cooked beef curry.</p>
+        <div class="badge-icon"></div>
+        <h3 class="dish-title">Mustard Beef Bhuna Khichuri</h3>
+        <div class="dish-cost">160 BDT</div>
+        <p class="dish-desc">Traditional mustard oil lentils and rice khichuri paired with spicy slow-cooked beef curry.</p>
       </div>
-      <div class="dish-image-box">
-        <img class="dish-thumbnail" src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=300&q=80" alt="Khichuri" />
-        <div class="add-btn-wrapper">
-          <button class="swiggy-add-btn" onclick="addItemToCart('Mustard Beef Bhuna Khichuri', 160)">ADD</button>
+      <div class="dish-action-box">
+        <img class="dish-thumb" src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=300&q=80" alt="Khichuri" />
+        <div class="add-action-wrap">
+          <button class="swiggy-add-btn" onclick="addToCart('Mustard Beef Bhuna Khichuri', 160)">ADD</button>
         </div>
       </div>
     </div>
 
     <!-- Dish 3 -->
-    <div class="dish-row">
+    <div class="dish-card">
       <div class="dish-info">
-        <div class="non-veg-badge"></div>
-        <h3 class="dish-name">Egg Fried Rice with Crispy Wings</h3>
-        <div class="dish-price">130 BDT</div>
-        <p class="dish-description">Fresh egg and vegetable tossed fried rice served with 2 pieces golden crispy chicken wings.</p>
+        <div class="badge-icon"></div>
+        <h3 class="dish-title">Egg Fried Rice with Crispy Wings</h3>
+        <div class="dish-cost">130 BDT</div>
+        <p class="dish-desc">Fresh egg and vegetable tossed fried rice served with 2 pieces golden crispy chicken wings.</p>
       </div>
-      <div class="dish-image-box">
-        <img class="dish-thumbnail" src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300&q=80" alt="Fried Rice" />
-        <div class="add-btn-wrapper">
-          <button class="swiggy-add-btn" onclick="addItemToCart('Egg Fried Rice with Crispy Wings', 130)">ADD</button>
+      <div class="dish-action-box">
+        <img class="dish-thumb" src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300&q=80" alt="Fried Rice" />
+        <div class="add-action-wrap">
+          <button class="swiggy-add-btn" onclick="addToCart('Egg Fried Rice with Crispy Wings', 130)">ADD</button>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Sticky Swiggy Bottom Cart Bar -->
-  <div class="cart-float-bar" id="cartFloatBar" onclick="openCheckoutSheet()">
+  <!-- Swiggy Sticky Floating Cart Bar -->
+  <div class="cart-float-bar" id="cartFloatBar" onclick="openCheckoutModal()">
     <div>
-      <div class="cart-meta-text"><span id="cartCount">0</span> ITEM(S) | <span id="cartGrandTotal">0</span> BDT</div>
-      <div class="cart-meta-sub">Taxes & local packaging included</div>
+      <div class="cart-status-text"><span id="cartItemCount">0</span> ITEM(S) | <span id="cartGrandTotal">0</span> BDT</div>
+      <div class="cart-status-sub">Taxes & local packaging included</div>
     </div>
-    <div class="cart-checkout-trigger">
+    <div class="view-cart-box">
       <span>View Cart</span>
       <i class="fa-solid fa-arrow-right"></i>
     </div>
   </div>
 
   <!-- Swiggy Checkout Bottom Sheet Modal -->
-  <div class="modal-overlay" id="checkoutSheetModal">
-    <div class="sheet-modal">
-      <div class="sheet-header">
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="bottom-sheet">
+      <div class="sheet-title-bar">
         <h3>Delivery Details</h3>
-        <button class="btn-close-sheet" onclick="closeCheckoutSheet()"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-sheet-btn" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <!-- Quick GPS Auto-Pinpoint -->
-      <div class="gps-prompt-card">
-        <div class="gps-text">
+      <div class="gps-card-box">
+        <div class="gps-details">
           <strong><i class="fa-solid fa-location-crosshairs"></i> Exact GPS Location</strong>
-          <span id="gpsCoordinateStatus">Tag exact location on Google Maps</span>
+          <span id="gpsPinStatus">Tag exact location on Google Maps</span>
         </div>
-        <button type="button" class="btn-detect-gps" onclick="fetchLiveCoordinates()">Detect</button>
+        <button type="button" class="detect-gps-btn" onclick="fetchLiveCoordinates()">Detect</button>
       </div>
 
       <!-- Bill Breakdown -->
-      <div class="bill-receipt" id="billReceiptContainer"></div>
+      <div class="bill-receipt-box" id="billSummaryBox"></div>
 
       <!-- Bangladeshi Structured Address Form -->
-      <form id="orderCheckoutForm" onsubmit="handleFinalOrderSubmission(event)">
-        <div class="field-row">
-          <div class="input-group">
+      <form id="orderCheckoutForm" onsubmit="submitCustomerOrder(event)">
+        <div class="input-row">
+          <div class="form-unit">
             <label for="custName">Full Name</label>
             <input type="text" id="custName" placeholder="e.g. Abir Roy" required />
           </div>
 
-          <div class="input-group">
+          <div class="form-unit">
             <label for="custPhone">Mobile Number</label>
             <input 
               type="tel" 
@@ -764,32 +780,32 @@
           </div>
         </div>
 
-        <div class="input-group">
+        <div class="form-unit">
           <label for="flatHouse">House / Holding / Flat No</label>
           <input type="text" id="flatHouse" placeholder="e.g. Holding #45, 2nd Floor" required />
         </div>
 
-        <div class="input-group">
+        <div class="form-unit">
           <label for="villageRoad">Village / Area / Road Name</label>
           <input type="text" id="villageRoad" placeholder="e.g. Katbunia, Tala Bazar Road" required />
         </div>
 
-        <div class="input-group">
+        <div class="form-unit">
           <label for="landmark">Landmark / Well-known Place</label>
           <input type="text" id="landmark" placeholder="e.g. Near Tala College Moor / Central Jame Mosque" />
         </div>
 
         <!-- Address Tag Selector -->
-        <div class="address-type-selector">
+        <div class="type-pill-group">
           <label style="font-size: 11px; font-weight: 800; color: var(--swiggy-gray); text-transform: uppercase;">Save Address As</label>
-          <div class="tag-container">
-            <button type="button" class="tag-btn active" onclick="chooseAddressType(this, 'Home')">
+          <div class="pills-container">
+            <button type="button" class="pill-btn active" onclick="chooseAddressTag(this, 'Home')">
               <i class="fa-solid fa-house"></i> Home
             </button>
-            <button type="button" class="tag-btn" onclick="chooseAddressType(this, 'Work')">
+            <button type="button" class="pill-btn" onclick="chooseAddressTag(this, 'Work')">
               <i class="fa-solid fa-briefcase"></i> Work
             </button>
-            <button type="button" class="tag-btn" onclick="chooseAddressType(this, 'Other')">
+            <button type="button" class="pill-btn" onclick="chooseAddressTag(this, 'Other')">
               <i class="fa-solid fa-location-dot"></i> Other
             </button>
           </div>
@@ -797,7 +813,7 @@
 
         <input type="hidden" id="mapLocationLink" />
 
-        <button type="submit" class="btn-submit-order" id="orderSubmitBtn">Proceed to Pay & Place Order</button>
+        <button type="submit" class="btn-place-final-order" id="orderSubmitBtn">Proceed to Pay & Place Order</button>
       </form>
     </div>
   </div>
@@ -806,7 +822,7 @@
     let cart = [];
     let selectedAddressTag = "Home";
 
-    function addItemToCart(name, price) {
+    function addToCart(name, price) {
       cart.push({ name, price });
       renderCartBar();
     }
@@ -815,7 +831,7 @@
       const cartBar = document.getElementById('cartFloatBar');
       if (cart.length > 0) {
         const total = cart.reduce((acc, curr) => acc + curr.price, 0);
-        document.getElementById('cartCount').innerText = cart.length;
+        document.getElementById('cartItemCount').innerText = cart.length;
         document.getElementById('cartGrandTotal').innerText = total;
         cartBar.style.display = 'flex';
       } else {
@@ -823,15 +839,15 @@
       }
     }
 
-    function openCheckoutSheet() {
+    function openCheckoutModal() {
       if (cart.length === 0) return;
-      const receiptBox = document.getElementById('billReceiptContainer');
+      const receiptBox = document.getElementById('billSummaryBox');
       let total = 0;
       let summaryHtml = `<div style="font-weight:800; margin-bottom:10px;">Bill Summary</div>`;
       
       cart.forEach(item => {
         summaryHtml += `
-          <div class="receipt-row">
+          <div class="receipt-item-line">
             <span>${item.name}</span>
             <span>${item.price} BDT</span>
           </div>`;
@@ -839,27 +855,27 @@
       });
 
       summaryHtml += `
-        <div class="receipt-total">
+        <div class="receipt-grand-total">
           <span>TO PAY</span>
           <span>${total} BDT</span>
         </div>`;
       
       receiptBox.innerHTML = summaryHtml;
-      document.getElementById('checkoutSheetModal').style.display = 'flex';
+      document.getElementById('checkoutModal').style.display = 'flex';
     }
 
-    function closeCheckoutSheet() {
-      document.getElementById('checkoutSheetModal').style.display = 'none';
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').style.display = 'none';
     }
 
-    function chooseAddressType(button, tag) {
-      document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
+    function chooseAddressTag(button, tag) {
+      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
       selectedAddressTag = tag;
     }
 
     function fetchLiveCoordinates() {
-      const statusText = document.getElementById('gpsCoordinateStatus');
+      const statusText = document.getElementById('gpsPinStatus');
       const mapInput = document.getElementById('mapLocationLink');
 
       if (!navigator.geolocation) {
@@ -887,7 +903,7 @@
       );
     }
 
-    async function handleFinalOrderSubmission(event) {
+    async function submitCustomerOrder(event) {
       event.preventDefault();
 
       const name = document.getElementById('custName').value.trim();
@@ -897,7 +913,7 @@
       const landmark = document.getElementById('landmark').value.trim();
       const mapLocation = document.getElementById('mapLocationLink').value;
 
-      // Bangladeshi 11-digit mobile validation (013-019)
+      // Bangladeshi 11-digit mobile validation (013 - 019)
       const bdPhoneRegex = /^01[3-9]\d{8}$/;
       if (!bdPhoneRegex.test(phone)) {
         alert("Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX)");
@@ -932,13 +948,13 @@
         });
 
         if (response.ok) {
-          alert("🎉 Order successfully placed!");
+          alert("🎉 Order placed successfully!");
           cart = [];
           renderCartBar();
-          closeCheckoutSheet();
+          closeCheckoutModal();
           document.getElementById('orderCheckoutForm').reset();
-          document.getElementById('gpsCoordinateStatus').innerText = "Tag exact location on Google Maps";
-          document.getElementById('gpsCoordinateStatus').style.color = "";
+          document.getElementById('gpsPinStatus').innerText = "Tag exact location on Google Maps";
+          document.getElementById('gpsPinStatus').style.color = "";
         } else {
           alert("Order submission failed. Please try again.");
         }
