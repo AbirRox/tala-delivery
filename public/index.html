@@ -9,342 +9,377 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     }
     body {
-      background-color: #f4f5f8;
+      background-color: #f8f9fa;
       color: #1e272e;
-      padding-bottom: 90px;
+      padding-bottom: 80px;
     }
     header {
       background: #ffffff;
-      padding: 14px 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       position: sticky;
       top: 0;
       z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .brand-title {
+    header h1 {
       font-size: 20px;
-      font-weight: 800;
-      color: #fc8019;
+      font-weight: 700;
+      color: #e67e22;
     }
-    .location-tag {
-      font-size: 13px;
+    .cart-badge {
+      background: #e67e22;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 14px;
       font-weight: 600;
-      color: #686b78;
+      cursor: pointer;
     }
     .container {
-      max-width: 550px;
+      max-width: 600px;
       margin: 0 auto;
       padding: 16px;
     }
-    .section-title {
-      font-size: 16px;
+    .menu-title {
+      font-size: 18px;
+      margin: 16px 0 12px;
       font-weight: 700;
-      margin: 16px 0 10px 0;
-      color: #282c3f;
     }
-    .store-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .store-card {
-      background: #ffffff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-      border: 1px solid #e9ecef;
-      cursor: pointer;
-    }
-    .store-banner {
-      height: 100px;
-      background: linear-gradient(135deg, #ff793f, #fc8019);
-      display: flex;
-      align-items: flex-end;
-      padding: 10px 14px;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 12px;
-      letter-spacing: 0.5px;
-    }
-    .store-content {
+    .item-card {
+      background: white;
+      border-radius: 12px;
       padding: 14px;
-    }
-    .store-header {
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
     }
-    .store-name {
+    .item-details h3 {
       font-size: 16px;
-      font-weight: 700;
-      color: #1e272e;
+      margin-bottom: 4px;
     }
-    .rating-badge {
-      background-color: #48c479;
-      color: #fff;
-      padding: 2px 6px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .store-category {
-      font-size: 13px;
-      color: #686b78;
-      margin-top: 2px;
-    }
-    .store-footer {
-      display: flex;
-      gap: 8px;
-      font-size: 12px;
-      color: #7e808c;
-      margin-top: 8px;
-    }
-
-    /* Product Item inside Store */
-    .product-list {
-      margin-top: 12px;
-      border-top: 1px dashed #e9ecef;
-      padding-top: 10px;
-    }
-    .product-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-    }
-    .prod-name {
+    .item-details p {
       font-size: 14px;
+      color: #636e72;
       font-weight: 600;
-      color: #282c3f;
-    }
-    .prod-price {
-      font-size: 13px;
-      color: #686b78;
     }
     .add-btn {
-      background: #ffffff;
-      color: #60b246;
-      border: 1px solid #d4d5d9;
-      padding: 6px 16px;
-      border-radius: 8px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .add-btn:hover {
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    /* Swiggy Style Floating Cart */
-    .floating-cart {
-      position: fixed;
-      bottom: 12px;
-      left: 16px;
-      right: 16px;
-      max-width: 520px;
-      margin: 0 auto;
-      background: #60b246;
-      color: #ffffff;
-      border-radius: 12px;
-      padding: 12px 18px;
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 14px rgba(96, 178, 70, 0.4);
-      z-index: 200;
-    }
-    .cart-summary {
-      font-size: 14px;
-      font-weight: 700;
-    }
-    .checkout-btn {
-      background: #ffffff;
-      color: #60b246;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    /* Modal Form */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 300;
-      padding: 16px;
-    }
-    .modal-box {
-      background: #ffffff;
-      width: 100%;
-      max-width: 420px;
-      border-radius: 16px;
-      padding: 20px;
-    }
-    .modal-input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-    .submit-order-btn {
-      width: 100%;
-      background: #fc8019;
+      background: #2ed573;
       color: white;
       border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
+      padding: 8px 16px;
+      border-radius: 6px;
       cursor: pointer;
-      margin-top: 10px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .checkout-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: flex-end;
+    }
+    .checkout-content {
+      background: white;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 20px 20px 0 0;
+      padding: 24px 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .checkout-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .close-btn {
+      font-size: 24px;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #2d3436;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #dfe4ea;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: #e67e22;
+    }
+    .location-btn {
+      background: #0984e3;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .location-status {
+      font-size: 12px;
+      margin-top: 6px;
+      min-height: 16px;
+    }
+    .order-summary {
+      background: #f1f2f6;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    .submit-btn {
+      background: #e67e22;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      width: 100%;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="brand-title">Tala Express</div>
-    <div class="location-tag">📍 Deliver to: Kathbunia, Tala ▾</div>
+    <h1>Tala Express</h1>
+    <div class="cart-badge" onclick="openCheckout()">
+      Cart (<span id="cartCount">0</span>)
+    </div>
   </header>
 
   <div class="container">
-    <div class="section-title">Available Stores in Tala Area</div>
-    <div class="store-list" id="storeContainer"></div>
-  </div>
-
-  <!-- Floating Green Cart Strip -->
-  <div class="floating-cart" id="cartStrip">
-    <div>
-      <div id="cartCount" style="font-size: 11px; text-transform: uppercase;">0 ITEMS</div>
-      <div id="cartTotal" class="cart-summary">৳ 0</div>
+    <h2 class="menu-title">Available Menu</h2>
+    
+    <div class="item-card">
+      <div class="item-details">
+        <h3>Chicken Biryani</h3>
+        <p>180 BDT</p>
+      </div>
+      <button class="add-btn" onclick="addToCart('Chicken Biryani', 180)">+ Add</button>
     </div>
-    <button class="checkout-btn" onclick="openOrderModal()">Place Order →</button>
+
+    <div class="item-card">
+      <div class="item-details">
+        <h3>Beef Khichuri</h3>
+        <p>160 BDT</p>
+      </div>
+      <button class="add-btn" onclick="addToCart('Beef Khichuri', 160)">+ Add</button>
+    </div>
+
+    <div class="item-card">
+      <div class="item-details">
+        <h3>Egg Fried Rice</h3>
+        <p>120 BDT</p>
+      </div>
+      <button class="add-btn" onclick="addToCart('Egg Fried Rice', 120)">+ Add</button>
+    </div>
   </div>
 
-  <!-- Order Popup Modal -->
-  <div class="modal" id="orderModal">
-    <div class="modal-box">
-      <h3 style="margin-bottom: 10px;">Confirm Delivery Details</h3>
-      <input type="text" id="custName" class="modal-input" placeholder="Your Name (আপনার নাম)" />
-      <input type="text" id="custPhone" class="modal-input" placeholder="Phone Number (মোবাইল নম্বর)" />
-      <input type="text" id="custVillage" class="modal-input" placeholder="Village / Area (গ্রামের নাম)" value="Kathbunia" />
-      <button class="submit-order-btn" onclick="submitOrder()">Confirm Order (Cash on Delivery)</button>
-      <button onclick="closeOrderModal()" style="width: 100%; margin-top: 8px; border: none; background: none; color: #777; cursor: pointer;">Cancel</button>
+  <!-- Checkout Modal -->
+  <div class="checkout-modal" id="checkoutModal">
+    <div class="checkout-content">
+      <div class="checkout-header">
+        <h2>Complete Order</h2>
+        <button class="close-btn" onclick="closeCheckout()">&times;</button>
+      </div>
+
+      <div class="order-summary" id="orderSummary">
+        Your cart is empty.
+      </div>
+
+      <form id="orderForm" onsubmit="handleOrderSubmit(event)">
+        <div class="form-group">
+          <label for="customerName">Full Name</label>
+          <input type="text" id="customerName" placeholder="Enter your name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="customerPhone">Mobile Number</label>
+          <input 
+            type="tel" 
+            id="customerPhone" 
+            placeholder="11-digit number (e.g. 017XXXXXXXX)" 
+            maxlength="11" 
+            required 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="customerAddress">Delivery Address</label>
+          <textarea 
+            id="customerAddress" 
+            rows="3" 
+            placeholder="House/Road no, Area, Village, or Landmark" 
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Pinpoint Live Location</label>
+          <button type="button" class="location-btn" onclick="getExactLocation()">
+            📍 Share Current Location (Google Maps)
+          </button>
+          <input type="hidden" id="mapLocation" />
+          <div class="location-status" id="locationStatus"></div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Place Order</button>
+      </form>
     </div>
   </div>
 
   <script>
     let cart = [];
 
-    async function loadStores() {
-      const response = await fetch('/api/stores');
-      const result = await response.json();
-      const container = document.getElementById('storeContainer');
-      container.innerHTML = '';
-
-      result.data.forEach(store => {
-        const card = document.createElement('div');
-        card.className = 'store-card';
-
-        let productsHtml = '';
-        if (store.products && store.products.length > 0) {
-          productsHtml = '<div class="product-list">' + store.products.map(p => `
-            <div class="product-row">
-              <div>
-                <div class="prod-name">${p.name}</div>
-                <div class="prod-price">৳ ${p.price}</div>
-              </div>
-              <button class="add-btn" onclick="addToCart('${p.name}', ${p.price})">ADD +</button>
-            </div>
-          `).join('') + '</div>';
-        }
-
-        card.innerHTML = `
-          <div class="store-banner">FASTEST LOCAL DELIVERY</div>
-          <div class="store-content">
-            <div class="store-header">
-              <span class="store-name">${store.name}</span>
-              <span class="rating-badge">★ 4.8</span>
-            </div>
-            <div class="store-category">${store.category}</div>
-            <div class="store-footer">
-              <span>📍 ${store.area}</span>
-              <span>•</span>
-              <span style="color: #60b246; font-weight: 700;">25-35 mins</span>
-            </div>
-            ${productsHtml}
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
     function addToCart(name, price) {
       cart.push({ name, price });
-      updateCartUI();
+      updateCartBadge();
+      alert(name + " added to cart!");
     }
 
-    function updateCartUI() {
-      const cartStrip = document.getElementById('cartStrip');
-      if (cart.length > 0) {
-        cartStrip.style.display = 'flex';
-        const total = cart.reduce((sum, item) => sum + item.price, 0);
-        document.getElementById('cartCount').innerText = `${cart.length} ITEM${cart.length > 1 ? 'S' : ''} ADDED`;
-        document.getElementById('cartTotal').innerText = `৳ ${total} plus delivery`;
-      } else {
-        cartStrip.style.display = 'none';
+    function updateCartBadge() {
+      document.getElementById('cartCount').innerText = cart.length;
+    }
+
+    function openCheckout() {
+      if (cart.length === 0) {
+        alert("Your cart is empty! Please add items first.");
+        return;
       }
+      const summaryDiv = document.getElementById('orderSummary');
+      let total = 0;
+      let itemsHtml = "<strong>Selected Items:</strong><br/>";
+      cart.forEach(item => {
+        itemsHtml += `• ${item.name} - ${item.price} BDT<br/>`;
+        total += item.price;
+      });
+      itemsHtml += `<br/><strong>Total Amount: ${total} BDT</strong>`;
+      summaryDiv.innerHTML = itemsHtml;
+
+      document.getElementById('checkoutModal').style.display = 'flex';
     }
 
-    function openOrderModal() {
-      document.getElementById('orderModal').style.display = 'flex';
+    function closeCheckout() {
+      document.getElementById('checkoutModal').style.display = 'none';
     }
 
-    function closeOrderModal() {
-      document.getElementById('orderModal').style.display = 'none';
-    }
+    function getExactLocation() {
+      const status = document.getElementById('locationStatus');
+      const mapInput = document.getElementById('mapLocation');
 
-    async function submitOrder() {
-      const name = document.getElementById('custName').value;
-      const phone = document.getElementById('custPhone').value;
-      const village = document.getElementById('custVillage').value;
-
-      if (!name || !phone) {
-        alert('নাম ও ফোন নম্বর দিন!');
+      if (!navigator.geolocation) {
+        status.innerText = "Geolocation is not supported by your browser.";
+        status.style.color = "red";
         return;
       }
 
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      status.innerText = "Locating your exact coordinates...";
+      status.style.color = "#0984e3";
 
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerName: name,
-          phone: phone,
-          village: village,
-          items: cart,
-          totalAmount: total + 30
-        })
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        alert(`অর্ডার সফল হয়েছে! আপনার অর্ডার আইডি: ${result.orderId}`);
-        cart = [];
-        updateCartUI();
-        closeOrderModal();
-      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          mapInput.value = `https://www.google.com/maps?q=${lat},${lon}`;
+          status.innerText = "✅ Exact GPS location attached!";
+          status.style.color = "#2ed573";
+        },
+        (error) => {
+          status.innerText = "Location permission denied. Please write full address.";
+          status.style.color = "#d63031";
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
     }
 
-    loadStores();
+    async function handleOrderSubmit(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('customerName').value.trim();
+      const phone = document.getElementById('customerPhone').value.trim();
+      const address = document.getElementById('customerAddress').value.trim();
+      const mapLocation = document.getElementById('mapLocation').value;
+
+      // 11-digit mobile number validation starting with 01
+      const phonePattern = /^01[3-9]\d{8}$/;
+      if (!phonePattern.test(phone)) {
+        alert("Please enter a valid 11-digit mobile number (e.g., 01712345678).");
+        return;
+      }
+
+      const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+
+      const payload = {
+        name,
+        phone,
+        address,
+        mapLocation,
+        items: cart,
+        total: totalAmount
+      };
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Placing Order...";
+
+      try {
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          alert("Order placed successfully!");
+          cart = [];
+          updateCartBadge();
+          closeCheckout();
+          document.getElementById('orderForm').reset();
+          document.getElementById('locationStatus').innerText = "";
+        } else {
+          alert("Failed to submit order. Please try again.");
+        }
+      } catch (err) {
+        alert("Server connection error: " + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Place Order";
+      }
+    }
   </script>
 </body>
 </html>
