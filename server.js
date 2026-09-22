@@ -16,8 +16,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/kwiky';
 mongoose
   .connect(MONGO_URI)
-  .then(() => console.log(' Connected to MongoDB Atlas Successfully!'))
-  .catch((err) => console.error(' MongoDB Connection Error:', err));
+  .then(() => console.log('✅ Connected to MongoDB Atlas Successfully!'))
+  .catch((err) => console.error('❌ MongoDB Connection Error:', err));
 
 // Database Schemas
 const ItemSchema = new mongoose.Schema({
@@ -53,8 +53,19 @@ const OrderSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const MerchantSchema = new mongoose.Schema({
+  storeName: { type: String, required: true },
+  ownerName: { type: String, required: true },
+  phone: { type: String, required: true },
+  nid: { type: String, default: '' },
+  tradeLicense: { type: String, default: '' },
+  status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
+  createdAt: { type: Date, default: Date.now }
+});
+
 const Item = mongoose.model('Item', ItemSchema);
 const Order = mongoose.model('Order', OrderSchema);
+const Merchant = mongoose.model('Merchant', MerchantSchema);
 
 // In-Memory OTP Store
 const otpStore = {};
@@ -112,6 +123,40 @@ app.post('/api/orders', async (req, res) => {
     });
     await newOrder.save();
     res.json({ success: true, order: newOrder });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// ==================== Admin Panel APIs ==================== //
+
+// Admin Panel Orders Endpoint (handles both /api/orders and /api/admin/orders)
+app.get(['/api/orders', '/api/admin/orders'], async (req, res) => {
+  try {
+    const orders = await Order.find({}).sort({ createdAt: -1 });
+    // Returns array directly or wrapped object depending on frontend requirements
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Admin Merchant KYC Endpoint
+app.get(['/api/merchants', '/api/admin/merchants'], async (req, res) => {
+  try {
+    const merchants = await Merchant.find({}).sort({ createdAt: -1 });
+    res.json(merchants);
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Update Order Status via Admin
+app.patch('/api/orders/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+    const updated = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    res.json({ success: true, order: updated });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -312,7 +357,7 @@ app.get('/api/seed-now', async (req, res) => {
 
     await Item.insertMany(bulkItems);
     res.send(`<div style="font-family: sans-serif; text-align: center; padding-top: 50px;">
-      <h1 style="color: #27ae60;"> SUCCESS!</h1>
+      <h1 style="color: #27ae60;">✅ SUCCESS!</h1>
       <h2>${bulkItems.length} items successfully loaded into your MongoDB Atlas across 10 partners!</h2>
       <p><a href="/" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #fc8019; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">Go to Store Front</a></p>
     </div>`);
@@ -327,5 +372,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(` Kwiky Server is running on port ${PORT}`);
+  console.log(`🚀 Kwiky Server is running on port ${PORT}`);
 });
