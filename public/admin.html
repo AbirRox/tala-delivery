@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tala Express - Admin & Dispatch</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #f1f2f6;
+      padding: 20px;
+      color: #2f3542;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 22px;
+      color: #fc8019;
+    }
+    .refresh-btn {
+      background: #2ed573;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .order-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-left: 5px solid #fc8019;
+    }
+    .order-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .order-id {
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .order-time {
+      font-size: 12px;
+      color: #747d8c;
+    }
+    .customer-info {
+      font-size: 13px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .items-box {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+    .item-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .total-price {
+      font-weight: bold;
+      font-size: 15px;
+      color: #2ed573;
+      text-align: right;
+    }
+    .action-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      background: #3742fa;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+      <h1>Tala Delivery Live Orders</h1>
+      <p style="font-size: 13px; color: #747d8c;">Real-time orders for Tala & nearby villages</p>
+    </div>
+    <button class="refresh-btn" onclick="fetchOrders()">🔄 Refresh</button>
+  </div>
+
+  <div class="orders-grid" id="ordersContainer">
+    <!-- Live orders will appear here -->
+  </div>
+
+  <script>
+    async function fetchOrders() {
+      try {
+        const response = await fetch('/api/orders');
+        const result = await response.json();
+        const container = document.getElementById('ordersContainer');
+        container.innerHTML = '';
+
+        if (!result.data || result.data.length === 0) {
+          container.innerHTML = '<p>No orders yet. Place an order from the user page to test!</p>';
+          return;
+        }
+
+        result.data.forEach(order => {
+          const card = document.createElement('div');
+          card.className = 'order-card';
+
+          const itemsHtml = order.items.map(i => `
+            <div class="item-line">
+              <span>• ${i.name}</span>
+              <span>৳${i.price}</span>
+            </div>
+          `).join('');
+
+          card.innerHTML = `
+            <div class="order-top">
+              <span class="order-id">${order.orderId}</span>
+              <span class="order-time">${order.time || 'Just now'}</span>
+            </div>
+            <div class="customer-info">
+              <div>👤 <strong>${order.customerName}</strong></div>
+              <div>📞 <a href="tel:${order.phone}">${order.phone}</a></div>
+              <div>📍 Village: <strong>${order.village}</strong></div>
+            </div>
+            <div class="items-box">
+              <div style="font-weight: bold; margin-bottom: 6px;">Ordered Items:</div>
+              ${itemsHtml}
+            </div>
+            <div class="total-price">Total (with delivery): ৳${order.totalAmount}</div>
+            <button class="action-btn" onclick="alert('Rider dispatched for order: ${order.orderId}')">Dispatch Rider</button>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Error fetching orders:', err);
+      }
+    }
+
+    fetchOrders();
+    // Auto-refresh every 10 seconds
+    setInterval(fetchOrders, 10000);
+  </script>
+</body>
+</html>

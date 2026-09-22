@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tala Express - Fast Local Delivery</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #f4f5f8;
+      color: #1e272e;
+      padding-bottom: 90px;
+    }
+    header {
+      background: #ffffff;
+      padding: 14px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fc8019;
+    }
+    .location-tag {
+      font-size: 13px;
+      font-weight: 600;
+      color: #686b78;
+    }
+    .container {
+      max-width: 550px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 16px 0 10px 0;
+      color: #282c3f;
+    }
+    .store-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .store-card {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      border: 1px solid #e9ecef;
+      cursor: pointer;
+    }
+    .store-banner {
+      height: 100px;
+      background: linear-gradient(135deg, #ff793f, #fc8019);
+      display: flex;
+      align-items: flex-end;
+      padding: 10px 14px;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+    .store-content {
+      padding: 14px;
+    }
+    .store-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .store-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e272e;
+    }
+    .rating-badge {
+      background-color: #48c479;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .store-category {
+      font-size: 13px;
+      color: #686b78;
+      margin-top: 2px;
+    }
+    .store-footer {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      color: #7e808c;
+      margin-top: 8px;
+    }
+
+    /* Product Item inside Store */
+    .product-list {
+      margin-top: 12px;
+      border-top: 1px dashed #e9ecef;
+      padding-top: 10px;
+    }
+    .product-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+    }
+    .prod-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #282c3f;
+    }
+    .prod-price {
+      font-size: 13px;
+      color: #686b78;
+    }
+    .add-btn {
+      background: #ffffff;
+      color: #60b246;
+      border: 1px solid #d4d5d9;
+      padding: 6px 16px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .add-btn:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Swiggy Style Floating Cart */
+    .floating-cart {
+      position: fixed;
+      bottom: 12px;
+      left: 16px;
+      right: 16px;
+      max-width: 520px;
+      margin: 0 auto;
+      background: #60b246;
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 14px rgba(96, 178, 70, 0.4);
+      z-index: 200;
+    }
+    .cart-summary {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .checkout-btn {
+      background: #ffffff;
+      color: #60b246;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* Modal Form */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 300;
+      padding: 16px;
+    }
+    .modal-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .modal-input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .submit-order-btn {
+      width: 100%;
+      background: #fc8019;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-title">Tala Express</div>
+    <div class="location-tag">📍 Deliver to: Kathbunia, Tala ▾</div>
+  </header>
+
+  <div class="container">
+    <div class="section-title">Available Stores in Tala Area</div>
+    <div class="store-list" id="storeContainer"></div>
+  </div>
+
+  <!-- Floating Green Cart Strip -->
+  <div class="floating-cart" id="cartStrip">
+    <div>
+      <div id="cartCount" style="font-size: 11px; text-transform: uppercase;">0 ITEMS</div>
+      <div id="cartTotal" class="cart-summary">৳ 0</div>
+    </div>
+    <button class="checkout-btn" onclick="openOrderModal()">Place Order →</button>
+  </div>
+
+  <!-- Order Popup Modal -->
+  <div class="modal" id="orderModal">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 10px;">Confirm Delivery Details</h3>
+      <input type="text" id="custName" class="modal-input" placeholder="Your Name (আপনার নাম)" />
+      <input type="text" id="custPhone" class="modal-input" placeholder="Phone Number (মোবাইল নম্বর)" />
+      <input type="text" id="custVillage" class="modal-input" placeholder="Village / Area (গ্রামের নাম)" value="Kathbunia" />
+      <button class="submit-order-btn" onclick="submitOrder()">Confirm Order (Cash on Delivery)</button>
+      <button onclick="closeOrderModal()" style="width: 100%; margin-top: 8px; border: none; background: none; color: #777; cursor: pointer;">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    let cart = [];
+
+    async function loadStores() {
+      const response = await fetch('/api/stores');
+      const result = await response.json();
+      const container = document.getElementById('storeContainer');
+      container.innerHTML = '';
+
+      result.data.forEach(store => {
+        const card = document.createElement('div');
+        card.className = 'store-card';
+
+        let productsHtml = '';
+        if (store.products && store.products.length > 0) {
+          productsHtml = '<div class="product-list">' + store.products.map(p => `
+            <div class="product-row">
+              <div>
+                <div class="prod-name">${p.name}</div>
+                <div class="prod-price">৳ ${p.price}</div>
+              </div>
+              <button class="add-btn" onclick="addToCart('${p.name}', ${p.price})">ADD +</button>
+            </div>
+          `).join('') + '</div>';
+        }
+
+        card.innerHTML = `
+          <div class="store-banner">FASTEST LOCAL DELIVERY</div>
+          <div class="store-content">
+            <div class="store-header">
+              <span class="store-name">${store.name}</span>
+              <span class="rating-badge">★ 4.8</span>
+            </div>
+            <div class="store-category">${store.category}</div>
+            <div class="store-footer">
+              <span>📍 ${store.area}</span>
+              <span>•</span>
+              <span style="color: #60b246; font-weight: 700;">25-35 mins</span>
+            </div>
+            ${productsHtml}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const cartStrip = document.getElementById('cartStrip');
+      if (cart.length > 0) {
+        cartStrip.style.display = 'flex';
+        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        document.getElementById('cartCount').innerText = `${cart.length} ITEM${cart.length > 1 ? 'S' : ''} ADDED`;
+        document.getElementById('cartTotal').innerText = `৳ ${total} plus delivery`;
+      } else {
+        cartStrip.style.display = 'none';
+      }
+    }
+
+    function openOrderModal() {
+      document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeOrderModal() {
+      document.getElementById('orderModal').style.display = 'none';
+    }
+
+    async function submitOrder() {
+      const name = document.getElementById('custName').value;
+      const phone = document.getElementById('custPhone').value;
+      const village = document.getElementById('custVillage').value;
+
+      if (!name || !phone) {
+        alert('নাম ও ফোন নম্বর দিন!');
+        return;
+      }
+
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: name,
+          phone: phone,
+          village: village,
+          items: cart,
+          totalAmount: total + 30
+        })
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert(`অর্ডার সফল হয়েছে! আপনার অর্ডার আইডি: ${result.orderId}`);
+        cart = [];
+        updateCartUI();
+        closeOrderModal();
+      }
+    }
+
+    loadStores();
+  </script>
+</body>
+</html>
