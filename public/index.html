@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Kwiky | Fast Food & Essentials Delivery</title>
+
+  <!-- PWA Manifest & App Theme -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#fc8019" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
@@ -437,7 +444,7 @@
     .sheet-title-bar h3 { font-size: 17px; font-weight: 800; }
     .close-sheet-btn { border: none; background: none; font-size: 20px; cursor: pointer; color: var(--kwiky-gray); }
 
-    /* Swiggy Style OTP Boxes */
+    /* OTP Boxes */
     .otp-input-container {
       display: flex;
       justify-content: center;
@@ -696,7 +703,7 @@
     </div>
   </div>
 
-  <!-- Swiggy Style OTP Login Modal -->
+  <!-- OTP Login Modal -->
   <div class="modal-backdrop" id="authModal">
     <div class="bottom-sheet">
       <div class="sheet-title-bar">
@@ -704,7 +711,7 @@
         <button class="close-sheet-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- Step 1: Enter Phone Number -->
+      <!-- Step 1: Phone Form -->
       <div id="otpPhoneStep">
         <p style="font-size:13px; color:var(--kwiky-gray); margin-bottom:14px;">Enter your 11-digit mobile number to get an instant OTP.</p>
         <form onsubmit="handleSendOtp(event)">
@@ -720,7 +727,7 @@
         </form>
       </div>
 
-      <!-- Step 2: Enter 4-Digit OTP -->
+      <!-- Step 2: OTP Verification Form -->
       <div id="otpVerifyStep" style="display:none;">
         <p style="font-size:13px; color:var(--kwiky-gray); text-align:center;">
           Enter 4-digit code sent to <strong id="sentPhoneDisplay">01XXXXXXXXX</strong>
@@ -752,7 +759,7 @@
         <button class="close-sheet-btn" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- Logged-in Customer Quick Profile Banner -->
+      <!-- Logged-in Profile Banner -->
       <div class="user-profile-badge" id="customerSavedProfileBox" style="display:none;">
         <div>
           <p id="profileBadgeName"><i class="fa-solid fa-circle-check"></i> Customer</p>
@@ -840,7 +847,7 @@
     let currentAuthPhone = "";
     let currentAuthName = "";
 
-    // --- 1. Swiggy Style OTP Logic ---
+    // 1. Swiggy OTP Login System
     function checkCustomerAuth() {
       const savedUser = JSON.parse(localStorage.getItem('kwiky_customer'));
       const headerName = document.getElementById('headerUserName');
@@ -907,7 +914,6 @@
           
           startTimer();
           
-          // Clear previous values and focus first box
           ['otp1','otp2','otp3','otp4'].forEach(id => document.getElementById(id).value = '');
           setTimeout(() => document.getElementById('otp1').focus(), 300);
 
@@ -993,7 +999,7 @@
       }
     }
 
-    // --- 2. Live Map & GPS ---
+    // 2. Live Map & GPS Detection
     function initMap(lat, lon) {
       if (!mapInstance) {
         mapInstance = L.map('interactiveMap').setView([lat, lon], 15);
@@ -1048,7 +1054,7 @@
       );
     }
 
-    // --- 3. Dynamic Catalog ---
+    // 3. Dynamic Catalog
     async function loadPublicCatalog() {
       const container = document.getElementById('dynamicDishesList');
       try {
@@ -1116,7 +1122,7 @@
       }
     }
 
-    // --- 4. Cart & Orders ---
+    // 4. Cart & Checkout
     function addToCart(name, price) {
       cart.push({ name, price });
       renderCartBar();
