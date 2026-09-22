@@ -130,19 +130,18 @@ app.post('/api/orders', async (req, res) => {
 
 // ==================== Admin Panel APIs ==================== //
 
-// Admin Panel Orders Endpoint (handles both /api/orders and /api/admin/orders)
+// Admin Customer Orders Route (Array এবং Object উভয় ফ্রন্টএন্ড ফর্ম্যাটেই চলবে)
 app.get(['/api/orders', '/api/admin/orders'], async (req, res) => {
   try {
     const orders = await Order.find({}).sort({ createdAt: -1 });
-    // Returns array directly or wrapped object depending on frontend requirements
     res.json(orders);
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
-// Admin Merchant KYC Endpoint
-app.get(['/api/merchants', '/api/admin/merchants'], async (req, res) => {
+// Admin Partners & Merchants KYC Route (সব পাথ সাপোর্ট করবে যাতে Unexpected token '<' না আসে)
+app.get(['/api/partners', '/api/admin/partners', '/api/merchants', '/api/admin/merchants'], async (req, res) => {
   try {
     const merchants = await Merchant.find({}).sort({ createdAt: -1 });
     res.json(merchants);
@@ -151,12 +150,23 @@ app.get(['/api/merchants', '/api/admin/merchants'], async (req, res) => {
   }
 });
 
-// Update Order Status via Admin
-app.patch('/api/orders/:id/status', async (req, res) => {
+// Admin Order Status Update
+app.patch(['/api/orders/:id/status', '/api/admin/orders/:id/status'], async (req, res) => {
   try {
     const { status } = req.body;
     const updated = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
     res.json({ success: true, order: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Admin Partner KYC Status Update (Approve / Reject)
+app.patch(['/api/partners/:id/status', '/api/merchants/:id/status'], async (req, res) => {
+  try {
+    const { status } = req.body;
+    const updated = await Merchant.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    res.json({ success: true, merchant: updated });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -366,7 +376,7 @@ app.get('/api/seed-now', async (req, res) => {
   }
 });
 
-// Safe Fallback Middleware
+// Safe Fallback Middleware (Missing parameter name at index 1: * error প্রতিরোধ করবে)
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
