@@ -28,10 +28,10 @@
     body {
       background-color: var(--bg-gray);
       color: #282c3f;
-      padding-bottom: 40px;
+      padding-bottom: 50px;
     }
 
-    /* Swiggy Partner Top Bar */
+    /* Partner Top Bar */
     .partner-topbar {
       background-color: var(--swiggy-black);
       color: #ffffff;
@@ -52,14 +52,14 @@
     }
 
     .partner-avatar {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       background: var(--swiggy-orange);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 19px;
       color: #fff;
     }
 
@@ -101,7 +101,7 @@
 
     .duty-pill.active .duty-indicator {
       background: var(--swiggy-green);
-      box-shadow: 0 0 8px var(--swiggy-green);
+      box-shadow: 0 0 10px var(--swiggy-green);
     }
 
     .duty-pill span {
@@ -111,7 +111,7 @@
       color: #fff;
     }
 
-    /* Floating Earnings Summary */
+    /* Persistent Earnings Summary */
     .earning-card {
       margin: 14px 16px;
       background: #ffffff;
@@ -120,6 +120,7 @@
       display: flex;
       justify-content: space-around;
       box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      position: relative;
     }
 
     .metric-unit {
@@ -140,13 +141,24 @@
       margin-top: 2px;
     }
 
-    /* Active Orders Container */
+    .reset-btn {
+      position: absolute;
+      right: 12px;
+      top: 10px;
+      background: none;
+      border: none;
+      color: #a4b0be;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    /* Active Orders Feed */
     .order-feed-container {
       padding: 0 16px;
     }
 
     .feed-header {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
       color: var(--swiggy-black);
       margin-bottom: 12px;
@@ -162,7 +174,6 @@
       box-shadow: 0 4px 14px rgba(0,0,0,0.06);
       overflow: hidden;
       border: 1px solid #e9e9eb;
-      animation: popTicket 0.3s ease-out;
     }
 
     .ticket-header {
@@ -280,11 +291,6 @@
       color: #ccc;
       margin-bottom: 14px;
     }
-
-    @keyframes popTicket {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
   </style>
 </head>
 <body>
@@ -297,11 +303,11 @@
       </div>
       <div class="partner-details">
         <h2>Kwiky Fleet</h2>
-        <p id="fleetRiderName">Rider ID: #KW-884</p>
+        <p>Rider ID: #KW-884</p>
       </div>
     </div>
 
-    <!-- Go Online / Offline Toggle -->
+    <!-- Duty Toggle Button -->
     <div class="duty-pill" id="dutyBtn" onclick="toggleDuty()">
       <div class="duty-indicator"></div>
       <span id="dutyText">GO ONLINE</span>
@@ -310,6 +316,7 @@
 
   <!-- Payout & Performance Overview -->
   <section class="earning-card">
+    <button class="reset-btn" onclick="resetDailyEarnings()" title="Reset day stats">Reset Day</button>
     <div class="metric-unit">
       <small>Completed Trips</small>
       <h3 id="tripsCount">0</h3>
@@ -338,14 +345,41 @@
   </main>
 
   <script>
-    let isOnline = false;
+    const DELIVERY_PAY_PER_TRIP = 40; // প্রতি ট্রিপে ৪০ টাকা
     let pollTimer = null;
-    let completedTrips = 0;
-    let totalEarnings = 0;
-    const DELIVERY_PAY_PER_TRIP = 40; // প্রতি অর্ডারে রাইডারের আয় ৪০ টাকা
+
+    // localStorage থেকে সেভ করা ডেটা রিস্টোর করার ফাংশন
+    function initPartnerState() {
+      const savedDuty = localStorage.getItem('kwiky_rider_duty');
+      const savedTrips = localStorage.getItem('kwiky_rider_trips') || 0;
+      const savedEarnings = localStorage.getItem('kwiky_rider_earnings') || 0;
+
+      document.getElementById('tripsCount').innerText = savedTrips;
+      document.getElementById('earningsAmount').innerText = `${savedEarnings} BDT`;
+
+      if (savedDuty === 'ONLINE') {
+        setDutyUI(true);
+        startPolling();
+      } else {
+        setDutyUI(false);
+      }
+    }
 
     function toggleDuty() {
-      isOnline = !isOnline;
+      const isCurrentlyOnline = localStorage.getItem('kwiky_rider_duty') === 'ONLINE';
+      const newState = !isCurrentlyOnline;
+
+      localStorage.setItem('kwiky_rider_duty', newState ? 'ONLINE' : 'OFFLINE');
+      setDutyUI(newState);
+
+      if (newState) {
+        startPolling();
+      } else {
+        stopPolling();
+      }
+    }
+
+    function setDutyUI(isOnline) {
       const btn = document.getElementById('dutyBtn');
       const text = document.getElementById('dutyText');
       const badge = document.getElementById('liveBadge');
@@ -354,13 +388,10 @@
         btn.classList.add('active');
         text.innerText = "ONLINE";
         badge.style.display = "inline";
-        fetchFleetOrders();
-        pollTimer = setInterval(fetchFleetOrders, 8000); // ৮ সেকেন্ড পরপর নতুন অর্ডারের জন্য রিফ্রেশ
       } else {
         btn.classList.remove('active');
         text.innerText = "GO ONLINE";
         badge.style.display = "none";
-        clearInterval(pollTimer);
         document.getElementById('ordersContainer').innerHTML = `
           <div class="offline-placeholder">
             <i class="fa-solid fa-power-off"></i>
@@ -371,15 +402,29 @@
       }
     }
 
+    function startPolling() {
+      fetchFleetOrders();
+      if (!pollTimer) {
+        pollTimer = setInterval(fetchFleetOrders, 6000);
+      }
+    }
+
+    function stopPolling() {
+      if (pollTimer) {
+        clearInterval(pollTimer);
+        pollTimer = null;
+      }
+    }
+
     async function fetchFleetOrders() {
-      if (!isOnline) return;
+      if (localStorage.getItem('kwiky_rider_duty') !== 'ONLINE') return;
 
       try {
         const res = await fetch('/api/rider/orders');
         const data = await res.json();
         renderOrders(data.orders || []);
       } catch (err) {
-        console.error("Error fetching fleet assignments:", err);
+        console.error("Order sync error:", err);
       }
     }
 
@@ -389,16 +434,16 @@
       if (orders.length === 0) {
         container.innerHTML = `
           <div style="text-align: center; padding: 40px 14px; color: var(--text-muted);">
-            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 30px; color: var(--swiggy-orange); margin-bottom: 12px;"></i>
+            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 28px; color: var(--swiggy-orange); margin-bottom: 12px;"></i>
             <p style="font-weight: 700; color: #282c3f; font-size: 14px;">Searching for nearby orders...</p>
-            <p style="font-size: 11px; margin-top: 4px;">Orders placed by local customers will pop up here instantly.</p>
+            <p style="font-size: 11px; margin-top: 4px;">New orders will appear here automatically.</p>
           </div>
         `;
         return;
       }
 
       container.innerHTML = orders.map(order => {
-        const itemsSummary = (order.items || []).map(i => i.name).join(', ') || 'Package order';
+        const itemsSummary = (order.items || []).map(i => i.name).join(', ') || 'Package items';
         const mapsUrl = order.mapLocation || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}`;
         
         let statusClass = 'status-pending';
@@ -425,10 +470,9 @@
             <div class="ticket-body">
               <div class="items-tag-box">
                 <strong><i class="fa-solid fa-bag-shopping"></i> Items:</strong> ${itemsSummary}
-                <div style="margin-top: 3px; font-weight: 800; color: var(--swiggy-black);">Total Bill: ${order.total} BDT (Cash on Delivery)</div>
+                <div style="margin-top: 3px; font-weight: 800; color: var(--swiggy-black);">Total Bill: ${order.total} BDT (COD)</div>
               </div>
 
-              <!-- Customer Drop Details -->
               <div class="location-step">
                 <i class="fa-solid fa-location-dot step-icon" style="color: var(--swiggy-red);"></i>
                 <div class="step-info">
@@ -437,7 +481,6 @@
                 </div>
               </div>
 
-              <!-- Action Row -->
               <div class="button-grid">
                 <a href="${mapsUrl}" target="_blank" class="action-sub-btn">
                   <i class="fa-solid fa-diamond-turn-right" style="color: var(--swiggy-blue);"></i> Map
@@ -463,11 +506,16 @@
 
         if (res.ok) {
           if (nextStatus === 'Delivered') {
-            completedTrips++;
-            totalEarnings += DELIVERY_PAY_PER_TRIP;
-            document.getElementById('tripsCount').innerText = completedTrips;
-            document.getElementById('earningsAmount').innerText = `${totalEarnings} BDT`;
-            alert(" Deliver সম্পন্ন হয়েছে! নগদ টাকা কালেক্ট করা নিশ্চিত করুন।");
+            let currentTrips = parseInt(localStorage.getItem('kwiky_rider_trips') || 0) + 1;
+            let currentEarnings = parseInt(localStorage.getItem('kwiky_rider_earnings') || 0) + DELIVERY_PAY_PER_TRIP;
+
+            localStorage.setItem('kwiky_rider_trips', currentTrips);
+            localStorage.setItem('kwiky_rider_earnings', currentEarnings);
+
+            document.getElementById('tripsCount').innerText = currentTrips;
+            document.getElementById('earningsAmount').innerText = `${currentEarnings} BDT`;
+
+            alert("🎉 অর্ডার সম্পন্ন হয়েছে! নগদ টাকা কালেক্ট করে নিন।");
           }
           fetchFleetOrders();
         } else {
@@ -477,6 +525,18 @@
         alert("Server error: " + err.message);
       }
     }
+
+    function resetDailyEarnings() {
+      if (confirm("আজকের ট্রিপ ও আয়ের হিসাব কি রিসেট করতে চান?")) {
+        localStorage.setItem('kwiky_rider_trips', 0);
+        localStorage.setItem('kwiky_rider_earnings', 0);
+        document.getElementById('tripsCount').innerText = 0;
+        document.getElementById('earningsAmount').innerText = "0 BDT";
+      }
+    }
+
+    // পেজ লোড হলেই পূর্বের অবস্থা রিস্টোর হবে
+    window.addEventListener('DOMContentLoaded', initPartnerState);
   </script>
 </body>
 </html>
