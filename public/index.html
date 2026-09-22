@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Tala Express | Food, Grocery & Essentials Delivery</title>
+  <title>Kwiky | Fast Food & Essentials Delivery</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
@@ -30,8 +30,8 @@
       padding-bottom: 120px;
     }
 
-    /* Swiggy Top Bar */
-    .swiggy-topbar {
+    /* Top Navigation Bar */
+    .kwiky-topbar {
       background: #ffffff;
       padding: 12px 16px;
       position: sticky;
@@ -63,10 +63,10 @@
     }
 
     .brand-info h1 {
-      font-size: 18px;
-      font-weight: 800;
+      font-size: 20px;
+      font-weight: 900;
       color: var(--swiggy-orange);
-      letter-spacing: -0.4px;
+      letter-spacing: -0.5px;
       line-height: 1.1;
     }
 
@@ -162,7 +162,7 @@
       opacity: 0.95;
     }
 
-    /* 5 Low-Cost Service Categories */
+    /* 5 Categories */
     .category-section {
       background: #ffffff;
       padding: 16px;
@@ -223,7 +223,7 @@
       text-align: center;
     }
 
-    /* Restaurant & Dishes Menu */
+    /* Restaurant & Menu Section */
     .menu-container {
       background: #ffffff;
       padding: 16px;
@@ -262,7 +262,7 @@
       font-size: 11px;
     }
 
-    /* Food Dish Row */
+    /* Dish Card */
     .dish-card {
       display: flex;
       justify-content: space-between;
@@ -394,7 +394,7 @@
       text-transform: uppercase;
     }
 
-    /* Swiggy Bottom Sheet Modal */
+    /* Bottom Sheet Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -475,7 +475,7 @@
       white-space: nowrap;
     }
 
-    /* Bill Receipt Summary */
+    /* Bill Receipt */
     .bill-receipt-box {
       background: var(--swiggy-light-gray);
       border-radius: 12px;
@@ -502,7 +502,7 @@
       color: var(--swiggy-dark);
     }
 
-    /* Input Fields */
+    /* Form Units */
     .input-row {
       display: flex;
       gap: 10px;
@@ -538,7 +538,7 @@
       border-color: var(--swiggy-orange);
     }
 
-    /* Address Type Pills */
+    /* Address Type Selector */
     .type-pill-group {
       margin-bottom: 16px;
     }
@@ -603,16 +603,16 @@
 </head>
 <body>
 
-  <!-- Swiggy Sticky Top Navbar with Partner Access -->
-  <header class="swiggy-topbar">
+  <!-- Top Navbar -->
+  <header class="kwiky-topbar">
     <div class="brand-section">
       <div class="brand-badge">
-        <i class="fa-solid fa-motorcycle"></i>
+        <i class="fa-solid fa-bolt"></i>
       </div>
       <div class="brand-info">
-        <h1>Tala Express</h1>
+        <h1>Kwiky</h1>
         <div class="delivery-location">
-          <i class="fa-solid fa-location-dot" style="color: var(--swiggy-orange);"></i> Tala, Satkhira
+          <i class="fa-solid fa-location-dot" style="color: var(--swiggy-orange);"></i> Bangladesh Express
         </div>
       </div>
     </div>
@@ -625,7 +625,7 @@
   <div class="search-section">
     <div class="search-input-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" placeholder="Search for biryani, groceries, or essentials..." />
+      <input type="text" placeholder="Search food, groceries, or essentials on Kwiky..." />
     </div>
   </div>
 
@@ -633,17 +633,17 @@
   <div class="promo-scroll">
     <div class="promo-card">
       <h3>50% OFF UPTO 100 BDT</h3>
-      <p>Use code TALA50 on your first order</p>
+      <p>Use code KWIKY50 on your first order</p>
     </div>
     <div class="promo-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-      <h3>FREE DELIVERY IN TALA</h3>
-      <p>Doorstep delivery across local area</p>
+      <h3>SUPERFAST DELIVERY</h3>
+      <p>Delivering at your doorstep in minutes</p>
     </div>
   </div>
 
   <!-- 5 Low-Cost Service Categories -->
   <section class="category-section">
-    <div class="section-heading">Our Services in Tala</div>
+    <div class="section-heading">Explore on Kwiky</div>
     <div class="category-row">
       <div class="category-node">
         <div class="category-icon-bubble"><i class="fa-solid fa-bowl-rice"></i></div>
@@ -671,11 +671,11 @@
   <!-- Dishes Menu Section -->
   <main class="menu-container">
     <div class="store-header">
-      <h2>Tala Kitchen Express</h2>
+      <h2>Kwiky Food Express</h2>
       <div class="store-meta">
-        <span class="rating-tag"><i class="fa-solid fa-star"></i> 4.4</span>
-        <span>• 25-35 mins</span>
-        <span>• Tala Bazar</span>
+        <span class="rating-tag"><i class="fa-solid fa-star"></i> 4.5</span>
+        <span>• 25-30 mins</span>
+        <span>• Verified Kitchen</span>
       </div>
     </div>
 
@@ -685,7 +685,7 @@
         <div class="badge-icon"></div>
         <h3 class="dish-title">Special Chicken Dum Biryani</h3>
         <div class="dish-cost">180 BDT</div>
-        <p class="dish-desc">Rich fragrant chinigura rice cooked with tender chicken piece, boiled egg and local secret spices.</p>
+        <p class="dish-desc">Rich fragrant chinigura rice cooked with tender chicken piece, boiled egg and secret spices.</p>
       </div>
       <div class="dish-action-box">
         <img class="dish-thumb" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&q=80" alt="Biryani" />
@@ -728,11 +728,11 @@
     </div>
   </main>
 
-  <!-- Swiggy Sticky Floating Cart Bar -->
+  <!-- Sticky Floating Cart Bar -->
   <div class="cart-float-bar" id="cartFloatBar" onclick="openCheckoutModal()">
     <div>
       <div class="cart-status-text"><span id="cartItemCount">0</span> ITEM(S) | <span id="cartGrandTotal">0</span> BDT</div>
-      <div class="cart-status-sub">Taxes & local packaging included</div>
+      <div class="cart-status-sub">Taxes & packaging included</div>
     </div>
     <div class="view-cart-box">
       <span>View Cart</span>
@@ -740,7 +740,7 @@
     </div>
   </div>
 
-  <!-- Swiggy Checkout Bottom Sheet Modal -->
+  <!-- Checkout Bottom Sheet Modal -->
   <div class="modal-backdrop" id="checkoutModal">
     <div class="bottom-sheet">
       <div class="sheet-title-bar">
@@ -786,13 +786,13 @@
         </div>
 
         <div class="form-unit">
-          <label for="villageRoad">Village / Area / Road Name</label>
-          <input type="text" id="villageRoad" placeholder="e.g. Katbunia, Tala Bazar Road" required />
+          <label for="villageRoad">Area / Village / Road Name</label>
+          <input type="text" id="villageRoad" placeholder="e.g. Katbunia, Main Bazar Road" required />
         </div>
 
         <div class="form-unit">
           <label for="landmark">Landmark / Well-known Place</label>
-          <input type="text" id="landmark" placeholder="e.g. Near Tala College Moor / Central Jame Mosque" />
+          <input type="text" id="landmark" placeholder="e.g. Near College Moor / Central Mosque" />
         </div>
 
         <!-- Address Tag Selector -->
@@ -948,7 +948,7 @@
         });
 
         if (response.ok) {
-          alert("🎉 Order placed successfully!");
+          alert("🎉 Order placed successfully on Kwiky!");
           cart = [];
           renderCartBar();
           closeCheckoutModal();

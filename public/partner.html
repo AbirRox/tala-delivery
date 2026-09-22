@@ -3,38 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Partner Onboarding | Tala Express</title>
+  <title>Partner with Kwiky | Merchant & Restaurant Onboarding</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --swiggy-orange: #fc8019;
-      --swiggy-dark: #282c3f;
-      --swiggy-gray: #686b78;
-      --swiggy-green: #60b244;
+      --kwiky-orange: #fc8019;
+      --kwiky-dark: #282c3f;
+      --kwiky-gray: #686b78;
+      --kwiky-green: #60b244;
       --border-color: #d4d5d9;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f7f7f9; color: var(--swiggy-dark); padding-bottom: 60px; }
+    body { background-color: #f7f7f9; color: var(--kwiky-dark); padding-bottom: 60px; }
     
     header { background: #fff; padding: 14px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; }
-    .brand { font-size: 18px; font-weight: 800; color: var(--swiggy-orange); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .brand { font-size: 20px; font-weight: 900; color: var(--kwiky-orange); text-decoration: none; display: flex; align-items: center; gap: 8px; }
     
     .container { max-width: 680px; margin: 20px auto; padding: 0 16px; }
     .card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
     .card h2 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
-    .card p { font-size: 13px; color: var(--swiggy-gray); margin-bottom: 18px; line-height: 1.4; }
+    .card p { font-size: 13px; color: var(--kwiky-gray); margin-bottom: 18px; line-height: 1.4; }
     
     .legal-badge { background: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; padding: 10px 14px; border-radius: 10px; font-size: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     
     .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--swiggy-gray); margin-bottom: 5px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--kwiky-gray); margin-bottom: 5px; }
     .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 13px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; outline: none; background: #fafafb; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--swiggy-orange); background: #fff; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--kwiky-orange); background: #fff; }
     
     .row { display: flex; gap: 12px; }
     .row .form-group { flex: 1; }
 
-    .btn-submit { background: var(--swiggy-orange); color: #fff; border: none; padding: 14px; border-radius: 10px; font-weight: 800; font-size: 15px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+    .btn-submit { background: var(--kwiky-orange); color: #fff; border: none; padding: 14px; border-radius: 10px; font-weight: 800; font-size: 15px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
     
     /* Partner Management Area */
     .partner-dashboard { display: none; }
@@ -49,8 +49,8 @@
 <body>
 
   <header>
-    <a href="/" class="brand"><i class="fa-solid fa-motorcycle"></i> Tala Express Partner</a>
-    <a href="/" style="text-decoration:none; color:var(--swiggy-dark); font-size:13px; font-weight:700;">Customer App</a>
+    <a href="/" class="brand"><i class="fa-solid fa-bolt"></i> Kwiky Partner</a>
+    <a href="/" style="text-decoration:none; color:var(--kwiky-dark); font-size:13px; font-weight:700;">Customer App</a>
   </header>
 
   <div class="container">
@@ -58,18 +58,18 @@
     <!-- Legal Registration Form -->
     <div class="card" id="registrationCard">
       <h2>Partner & Restaurant Registration</h2>
-      <p>Join Tala Express as an official merchant. All businesses must verify identity and licensing according to Bangladesh E-Commerce Guidelines.</p>
+      <p>Grow your business with Kwiky. Register your store or restaurant with required legal verification (Trade License & NID) under Bangladesh E-Commerce Guidelines.</p>
 
       <div class="legal-badge">
         <i class="fa-solid fa-shield-halved fa-lg"></i>
-        <span>KYC Required: Valid Trade License & NID verification needed before store items become publicly visible.</span>
+        <span>KYC Required: Valid Trade License & NID verification needed before your store items go live on Kwiky.</span>
       </div>
 
       <form id="partnerForm" onsubmit="handlePartnerRegister(event)">
         <div class="row">
           <div class="form-group">
             <label>Business / Restaurant Name</label>
-            <input type="text" id="businessName" placeholder="e.g. Tala Royal Kitchen" required />
+            <input type="text" id="businessName" placeholder="e.g. Dhaka Delight / Royal Kitchen" required />
           </div>
           <div class="form-group">
             <label>Business Category</label>
@@ -86,7 +86,7 @@
         <div class="row">
           <div class="form-group">
             <label>Owner Name</label>
-            <input type="text" id="ownerName" placeholder="e.g. Md. Rafiqul Islam" required />
+            <input type="text" id="ownerName" placeholder="Owner Full Name" required />
           </div>
           <div class="form-group">
             <label>Official Phone Number</label>
@@ -97,7 +97,7 @@
         <div class="row">
           <div class="form-group">
             <label>Trade License No (City/Pourashava/UP)</label>
-            <input type="text" id="tradeLicense" placeholder="e.g. TL-2026-98124" required />
+            <input type="text" id="tradeLicense" placeholder="Trade License Number" required />
           </div>
           <div class="form-group">
             <label>Owner NID Number (10/17 Digits)</label>
@@ -107,15 +107,15 @@
 
         <div class="form-group">
           <label>Payout Account Details (Bank / bKash / Nagad Merchant)</label>
-          <input type="text" id="payoutDetails" placeholder="e.g. bKash Merchant: 017XXXXXXXX or Dutch-Bangla A/C: 123456789" required />
+          <input type="text" id="payoutDetails" placeholder="e.g. bKash Merchant: 01XXXXXXXXX or Bank A/C info" required />
         </div>
 
         <div class="form-group">
           <label>Store Physical Address</label>
-          <textarea id="storeAddress" rows="2" placeholder="Market Name, Holding, Road, Tala Bazar" required></textarea>
+          <textarea id="storeAddress" rows="2" placeholder="Market Name, Holding, Road, Area, District" required></textarea>
         </div>
 
-        <button type="submit" class="btn-submit" id="regBtn">Submit for Verification</button>
+        <button type="submit" class="btn-submit" id="regBtn">Submit for Kwiky Verification</button>
       </form>
     </div>
 
@@ -125,7 +125,7 @@
         <h2 id="dashBusinessTitle">Merchant Dashboard</h2>
         <span id="dashStatusBadge" class="status-badge status-pending">Pending Review</span>
       </div>
-      <p id="dashStatusDesc">Your documents are under review by Tala Express admin. You can add your menu items now; they will go live once verified.</p>
+      <p id="dashStatusDesc">Your documents are under review by Kwiky Admin. You can add your menu items now; they will become publicly visible once verified.</p>
 
       <hr style="border:none; border-top:1px solid #f0f0f0; margin: 18px 0;" />
 
@@ -134,7 +134,7 @@
         <div class="row">
           <div class="form-group">
             <label>Item Name</label>
-            <input type="text" id="newItemName" placeholder="e.g. Special Beef Biryani" required />
+            <input type="text" id="newItemName" placeholder="e.g. Kwiky Special Biryani" required />
           </div>
           <div class="form-group">
             <label>Price (BDT)</label>
@@ -143,9 +143,9 @@
         </div>
         <div class="form-group">
           <label>Short Description</label>
-          <input type="text" id="newItemDesc" placeholder="e.g. Cooked with fragrant rice & tender beef" required />
+          <input type="text" id="newItemDesc" placeholder="e.g. Fragrant rice with succulent spiced chicken" required />
         </div>
-        <button type="submit" class="btn-submit" style="background:var(--swiggy-green);">+ Add to Menu</button>
+        <button type="submit" class="btn-submit" style="background:var(--kwiky-green);">+ Add to Kwiky Store</button>
       </form>
 
       <h3 style="margin-top:24px; margin-bottom:10px;">Your Listed Items</h3>
@@ -180,7 +180,7 @@
 
       const btn = document.getElementById('regBtn');
       btn.disabled = true;
-      btn.innerText = "Submitting...";
+      btn.innerText = "Submitting to Kwiky...";
 
       try {
         const res = await fetch('/api/partners/register', {
@@ -191,7 +191,7 @@
         const data = await res.json();
 
         if (res.ok && data.success) {
-          alert("Registration submitted! Tala Express will review your Trade License and NID.");
+          alert("Application submitted! Kwiky team will review your Trade License and NID.");
           currentPartner = data.partner;
           loadDashboardView(currentPartner);
         } else {
@@ -201,7 +201,7 @@
         alert("Server error: " + err.message);
       } finally {
         btn.disabled = false;
-        btn.innerText = "Submit for Verification";
+        btn.innerText = "Submit for Kwiky Verification";
       }
     }
 
@@ -256,7 +256,7 @@
           currentPartner.items.push(newItem);
           renderItems(currentPartner.items);
           document.getElementById('addItemForm').reset();
-          alert("Item added successfully!");
+          alert("Item added successfully to Kwiky catalog!");
         }
       } catch (err) {
         alert("Error adding item: " + err.message);

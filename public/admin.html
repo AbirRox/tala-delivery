@@ -3,165 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tala Express - Admin & Dispatch</title>
+  <title>Kwiky Admin | Orders & Merchants Control Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    :root {
+      --kwiky-orange: #fc8019;
+      --kwiky-dark: #282c3f;
+      --kwiky-gray: #686b78;
+      --kwiky-green: #60b244;
     }
-    body {
-      background-color: #f1f2f6;
-      padding: 20px;
-      color: #2f3542;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .header h1 {
-      font-size: 22px;
-      color: #fc8019;
-    }
-    .refresh-btn {
-      background: #2ed573;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .orders-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 16px;
-    }
-    .order-card {
-      background: white;
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      border-left: 5px solid #fc8019;
-    }
-    .order-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .order-id {
-      font-weight: 800;
-      font-size: 15px;
-    }
-    .order-time {
-      font-size: 12px;
-      color: #747d8c;
-    }
-    .customer-info {
-      font-size: 13px;
-      margin-bottom: 12px;
-      line-height: 1.5;
-    }
-    .items-box {
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 12px;
-      font-size: 13px;
-    }
-    .item-line {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 4px;
-    }
-    .total-price {
-      font-weight: bold;
-      font-size: 15px;
-      color: #2ed573;
-      text-align: right;
-    }
-    .action-btn {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      background: #3742fa;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #f5f6fa; color: var(--kwiky-dark); padding: 20px; }
+    
+    header { background: #fff; padding: 16px 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .brand { font-size: 20px; font-weight: 900; color: var(--kwiky-orange); display: flex; align-items: center; gap: 8px; }
+    
+    .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    .tab-btn { background: #fff; border: 1px solid #dfe4ea; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    .tab-btn.active { background: var(--kwiky-orange); color: #fff; border-color: var(--kwiky-orange); }
+    
+    .section-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
+    th, td { text-align: left; padding: 12px; border-bottom: 1px solid #f1f2f6; }
+    th { background: #fafafa; font-weight: 800; color: var(--kwiky-gray); text-transform: uppercase; font-size: 11px; }
+    
+    .btn-maps { background: #2ed573; color: white; padding: 5px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; }
+    .badge-pending { background: #fff3e0; color: #e65100; }
+    .badge-verified { background: #e8f5e9; color: #2e7d32; }
+    .badge-rejected { background: #ffebee; color: #c62828; }
+
+    .action-btn { border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 11px; margin-right: 4px; }
+    .btn-verify { background: #2ed573; color: white; }
+    .btn-reject { background: #ff4757; color: white; }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <div>
-      <h1>Tala Delivery Live Orders</h1>
-      <p style="font-size: 13px; color: #747d8c;">Real-time orders for Tala & nearby villages</p>
-    </div>
-    <button class="refresh-btn" onclick="fetchOrders()">🔄 Refresh</button>
+  <header>
+    <div class="brand"><i class="fa-solid fa-bolt"></i> Kwiky Operations Admin</div>
+    <div style="font-size:13px; font-weight:600; color:var(--kwiky-gray);"><i class="fa-solid fa-circle" style="color:green; font-size:9px;"></i> Live Bangladesh Network</div>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('orders')"><i class="fa-solid fa-bag-shopping"></i> Customer Orders</button>
+    <button class="tab-btn" onclick="showTab('partners')"><i class="fa-solid fa-store"></i> Merchant Onboarding (KYC)</button>
   </div>
 
-  <div class="orders-grid" id="ordersContainer">
-    <!-- Live orders will appear here -->
+  <!-- Tab 1: Orders -->
+  <div id="ordersSection" class="section-card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="font-size:16px;">Live Customer Orders</h3>
+      <button onclick="loadOrders()" style="cursor:pointer; background:none; border:1px solid #ddd; padding:6px 12px; border-radius:6px; font-size:12px;"><i class="fa-solid fa-rotate"></i> Refresh</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer & Phone</th>
+            <th>Delivery Address</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>GPS Location</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTableBody">
+          <tr><td colspan="7">Loading Kwiky orders...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tab 2: Partners KYC -->
+  <div id="partnersSection" class="section-card" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="font-size:16px;">Registered Merchants & Legal Verification</h3>
+      <button onclick="loadPartners()" style="cursor:pointer; background:none; border:1px solid #ddd; padding:6px 12px; border-radius:6px; font-size:12px;"><i class="fa-solid fa-rotate"></i> Refresh</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Business Name</th>
+            <th>Owner & Phone</th>
+            <th>Trade License & NID</th>
+            <th>Payout Details</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="partnersTableBody">
+          <tr><td colspan="6">Loading partner applications...</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
-    async function fetchOrders() {
-      try {
-        const response = await fetch('/api/orders');
-        const result = await response.json();
-        const container = document.getElementById('ordersContainer');
-        container.innerHTML = '';
-
-        if (!result.data || result.data.length === 0) {
-          container.innerHTML = '<p>No orders yet. Place an order from the user page to test!</p>';
-          return;
-        }
-
-        result.data.forEach(order => {
-          const card = document.createElement('div');
-          card.className = 'order-card';
-
-          const itemsHtml = order.items.map(i => `
-            <div class="item-line">
-              <span>• ${i.name}</span>
-              <span>৳${i.price}</span>
-            </div>
-          `).join('');
-
-          card.innerHTML = `
-            <div class="order-top">
-              <span class="order-id">${order.orderId}</span>
-              <span class="order-time">${order.time || 'Just now'}</span>
-            </div>
-            <div class="customer-info">
-              <div>👤 <strong>${order.customerName}</strong></div>
-              <div>📞 <a href="tel:${order.phone}">${order.phone}</a></div>
-              <div>📍 Village: <strong>${order.village}</strong></div>
-            </div>
-            <div class="items-box">
-              <div style="font-weight: bold; margin-bottom: 6px;">Ordered Items:</div>
-              ${itemsHtml}
-            </div>
-            <div class="total-price">Total (with delivery): ৳${order.totalAmount}</div>
-            <button class="action-btn" onclick="alert('Rider dispatched for order: ${order.orderId}')">Dispatch Rider</button>
-          `;
-          container.appendChild(card);
-        });
-      } catch (err) {
-        console.error('Error fetching orders:', err);
+    function showTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (tab === 'orders') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('ordersSection').style.display = 'block';
+        document.getElementById('partnersSection').style.display = 'none';
+        loadOrders();
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('ordersSection').style.display = 'none';
+        document.getElementById('partnersSection').style.display = 'block';
+        loadPartners();
       }
     }
 
-    fetchOrders();
-    // Auto-refresh every 10 seconds
-    setInterval(fetchOrders, 10000);
+    async function loadOrders() {
+      const tbody = document.getElementById('ordersTableBody');
+      try {
+        const res = await fetch('/api/orders');
+        const orders = await res.json();
+        if (!orders || orders.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7">No orders placed yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = orders.map(o => `
+          <tr>
+            <td><strong>#${o._id.slice(-5)}</strong></td>
+            <td><strong>${o.name}</strong><br/><span style="color:gray;">${o.phone}</span></td>
+            <td>${o.address}</td>
+            <td>${o.items.map(i => `${i.name} (x1)`).join(', ')}</td>
+            <td><strong>${o.total} BDT</strong></td>
+            <td>
+              ${o.mapLocation ? `<a href="${o.mapLocation}" target="_blank" class="btn-maps"><i class="fa-solid fa-map-pin"></i> View Map</a>` : '<span style="color:gray;">No GPS</span>'}
+            </td>
+            <td>${new Date(o.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="7">Error loading orders: ' + err.message + '</td></tr>';
+      }
+    }
+
+    async function loadPartners() {
+      const tbody = document.getElementById('partnersTableBody');
+      try {
+        const res = await fetch('/api/partners');
+        const partners = await res.json();
+        if (!partners || partners.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6">No partner applications yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = partners.map(p => `
+          <tr>
+            <td><strong>${p.businessName}</strong><br/><span style="color:gray; font-size:11px;">${p.category}</span></td>
+            <td>${p.ownerName}<br/><span style="color:gray;">${p.phone}</span></td>
+            <td>TL: <strong>${p.tradeLicense}</strong><br/>NID: ${p.ownerNid}</td>
+            <td>${p.payoutDetails}</td>
+            <td><span class="badge badge-${p.verificationStatus.toLowerCase()}">${p.verificationStatus}</span></td>
+            <td>
+              <button class="action-btn btn-verify" onclick="updateStatus('${p._id}', 'Verified')">Approve</button>
+              <button class="action-btn btn-reject" onclick="updateStatus('${p._id}', 'Rejected')">Reject</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="6">Error loading partners: ' + err.message + '</td></tr>';
+      }
+    }
+
+    async function updateStatus(id, status) {
+      if (!confirm(`Mark this partner as ${status}?`)) return;
+      try {
+        const res = await fetch(`/api/partners/${id}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+        if (res.ok) {
+          alert("Partner status updated!");
+          loadPartners();
+        }
+      } catch (err) {
+        alert("Update failed: " + err.message);
+      }
+    }
+
+    // Initial Load
+    loadOrders();
   </script>
 </body>
 </html>
