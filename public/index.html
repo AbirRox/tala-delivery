@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --swiggy-orange: #fc8019;
-      --swiggy-dark: #282c3f;
-      --swiggy-gray: #686b78;
-      --swiggy-light-gray: #f2f2f6;
-      --swiggy-border: #e9e9eb;
-      --swiggy-green: #60b244;
-      --swiggy-red: #e43b4f;
+      --kwiky-orange: #fc8019;
+      --kwiky-dark: #282c3f;
+      --kwiky-gray: #686b78;
+      --kwiky-light-gray: #f2f2f6;
+      --kwiky-border: #e9e9eb;
+      --kwiky-green: #60b244;
+      --kwiky-red: #e43b4f;
     }
 
     * {
@@ -26,11 +26,11 @@
 
     body {
       background-color: #f7f7f9;
-      color: var(--swiggy-dark);
+      color: var(--kwiky-dark);
       padding-bottom: 120px;
     }
 
-    /* Top Navigation Bar */
+    /* Top Navbar */
     .kwiky-topbar {
       background: #ffffff;
       padding: 12px 16px;
@@ -52,7 +52,7 @@
     .brand-badge {
       width: 38px;
       height: 38px;
-      background: var(--swiggy-orange);
+      background: var(--kwiky-orange);
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -65,14 +65,14 @@
     .brand-info h1 {
       font-size: 20px;
       font-weight: 900;
-      color: var(--swiggy-orange);
+      color: var(--kwiky-orange);
       letter-spacing: -0.5px;
       line-height: 1.1;
     }
 
     .brand-info .delivery-location {
       font-size: 12px;
-      color: var(--swiggy-gray);
+      color: var(--kwiky-gray);
       display: flex;
       align-items: center;
       gap: 4px;
@@ -81,7 +81,7 @@
 
     .partner-link-btn {
       background: #fff3e6;
-      color: var(--swiggy-orange);
+      color: var(--kwiky-orange);
       text-decoration: none;
       font-size: 12px;
       font-weight: 800;
@@ -106,8 +106,8 @@
     }
 
     .search-input-box {
-      background: var(--swiggy-light-gray);
-      border: 1px solid var(--swiggy-border);
+      background: var(--kwiky-light-gray);
+      border: 1px solid var(--kwiky-border);
       border-radius: 12px;
       padding: 10px 14px;
       display: flex;
@@ -121,11 +121,11 @@
       outline: none;
       width: 100%;
       font-size: 14px;
-      color: var(--swiggy-dark);
+      color: var(--kwiky-dark);
     }
 
     .search-input-box i {
-      color: var(--swiggy-gray);
+      color: var(--kwiky-gray);
     }
 
     /* Promo Banners */
@@ -162,7 +162,7 @@
       opacity: 0.95;
     }
 
-    /* 5 Categories */
+    /* 5 Low-Cost Service Categories */
     .category-section {
       background: #ffffff;
       padding: 16px;
@@ -205,7 +205,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--swiggy-orange);
+      color: var(--kwiky-orange);
       font-size: 20px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
       transition: transform 0.15s ease;
@@ -219,7 +219,7 @@
     .category-node span {
       font-size: 12px;
       font-weight: 700;
-      color: var(--swiggy-dark);
+      color: var(--kwiky-dark);
       text-align: center;
     }
 
@@ -235,7 +235,7 @@
 
     .store-header {
       padding-bottom: 14px;
-      border-bottom: 1px dashed var(--swiggy-border);
+      border-bottom: 1px dashed var(--kwiky-border);
       margin-bottom: 12px;
     }
 
@@ -247,14 +247,14 @@
 
     .store-meta {
       font-size: 12px;
-      color: var(--swiggy-gray);
+      color: var(--kwiky-gray);
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
     .rating-tag {
-      background: var(--swiggy-green);
+      background: var(--kwiky-green);
       color: #fff;
       font-weight: 700;
       padding: 2px 6px;
@@ -268,7 +268,7 @@
       justify-content: space-between;
       align-items: flex-start;
       padding: 16px 0;
-      border-bottom: 1px solid var(--swiggy-border);
+      border-bottom: 1px solid var(--kwiky-border);
     }
 
     .dish-info {
@@ -279,7 +279,7 @@
     .badge-icon {
       width: 14px;
       height: 14px;
-      border: 1.5px solid var(--swiggy-red);
+      border: 1.5px solid var(--kwiky-red);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -291,8 +291,16 @@
       content: '';
       width: 6px;
       height: 6px;
-      background-color: var(--swiggy-red);
+      background-color: var(--kwiky-red);
       border-radius: 50%;
+    }
+
+    .dish-store-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--kwiky-orange);
+      text-transform: uppercase;
+      margin-bottom: 2px;
     }
 
     .dish-title {
@@ -305,13 +313,13 @@
     .dish-cost {
       font-size: 14px;
       font-weight: 800;
-      color: var(--swiggy-dark);
+      color: var(--kwiky-dark);
       margin-bottom: 6px;
     }
 
     .dish-desc {
       font-size: 12px;
-      color: var(--swiggy-gray);
+      color: var(--kwiky-gray);
       line-height: 1.4;
     }
 
@@ -338,20 +346,30 @@
 
     .swiggy-add-btn {
       background: #ffffff;
-      color: var(--swiggy-green);
+      color: var(--kwiky-green);
       font-weight: 800;
       font-size: 13px;
-      border: 1px solid var(--swiggy-border);
+      border: 1px solid var(--kwiky-border);
       padding: 7px 22px;
       border-radius: 8px;
       cursor: pointer;
       box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
       transition: all 0.15s ease;
+      white-space: nowrap;
     }
 
     .swiggy-add-btn:active {
       transform: scale(0.92);
       background: #f7fdf5;
+    }
+
+    .btn-out-of-stock {
+      background: #f1f2f6 !important;
+      color: #a4b0be !important;
+      border-color: #dcdde1 !important;
+      cursor: not-allowed !important;
+      font-size: 11px !important;
+      padding: 7px 12px !important;
     }
 
     /* Floating Cart Bar */
@@ -362,7 +380,7 @@
       right: 14px;
       max-width: 650px;
       margin: 0 auto;
-      background: var(--swiggy-green);
+      background: var(--kwiky-green);
       color: #ffffff;
       padding: 13px 18px;
       border-radius: 12px;
@@ -422,7 +440,7 @@
       justify-content: space-between;
       align-items: center;
       padding-bottom: 12px;
-      border-bottom: 1px solid var(--swiggy-border);
+      border-bottom: 1px solid var(--kwiky-border);
       margin-bottom: 14px;
     }
 
@@ -436,7 +454,7 @@
       background: none;
       font-size: 20px;
       cursor: pointer;
-      color: var(--swiggy-gray);
+      color: var(--kwiky-gray);
     }
 
     /* GPS Live Detection Card */
@@ -453,18 +471,18 @@
 
     .gps-details strong {
       display: block;
-      color: var(--swiggy-orange);
+      color: var(--kwiky-orange);
       font-size: 13px;
       margin-bottom: 2px;
     }
 
     .gps-details span {
       font-size: 12px;
-      color: var(--swiggy-dark);
+      color: var(--kwiky-dark);
     }
 
     .detect-gps-btn {
-      background: var(--swiggy-orange);
+      background: var(--kwiky-orange);
       color: #ffffff;
       border: none;
       padding: 8px 14px;
@@ -477,7 +495,7 @@
 
     /* Bill Receipt */
     .bill-receipt-box {
-      background: var(--swiggy-light-gray);
+      background: var(--kwiky-light-gray);
       border-radius: 12px;
       padding: 14px;
       margin-bottom: 16px;
@@ -488,7 +506,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 6px;
-      color: var(--swiggy-gray);
+      color: var(--kwiky-gray);
     }
 
     .receipt-grand-total {
@@ -499,7 +517,7 @@
       border-top: 1px dashed #d0d1d6;
       font-weight: 800;
       font-size: 15px;
-      color: var(--swiggy-dark);
+      color: var(--kwiky-dark);
     }
 
     /* Form Units */
@@ -517,7 +535,7 @@
       display: block;
       font-size: 11px;
       font-weight: 800;
-      color: var(--swiggy-gray);
+      color: var(--kwiky-gray);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 4px;
@@ -526,7 +544,7 @@
     .form-unit input, .form-unit textarea {
       width: 100%;
       padding: 11px 12px;
-      border: 1px solid var(--swiggy-border);
+      border: 1px solid var(--kwiky-border);
       border-radius: 8px;
       font-size: 14px;
       outline: none;
@@ -535,7 +553,7 @@
 
     .form-unit input:focus, .form-unit textarea:focus {
       background: #ffffff;
-      border-color: var(--swiggy-orange);
+      border-color: var(--kwiky-orange);
     }
 
     /* Address Type Selector */
@@ -553,11 +571,11 @@
       flex: 1;
       padding: 9px;
       background: #fbfbfb;
-      border: 1px solid var(--swiggy-border);
+      border: 1px solid var(--kwiky-border);
       border-radius: 8px;
       font-size: 12px;
       font-weight: 700;
-      color: var(--swiggy-dark);
+      color: var(--kwiky-dark);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -566,13 +584,13 @@
     }
 
     .pill-btn.active {
-      background: var(--swiggy-dark);
+      background: var(--kwiky-dark);
       color: #ffffff;
-      border-color: var(--swiggy-dark);
+      border-color: var(--kwiky-dark);
     }
 
     .btn-place-final-order {
-      background: var(--swiggy-orange);
+      background: var(--kwiky-orange);
       color: white;
       border: none;
       width: 100%;
@@ -612,7 +630,7 @@
       <div class="brand-info">
         <h1>Kwiky</h1>
         <div class="delivery-location">
-          <i class="fa-solid fa-location-dot" style="color: var(--swiggy-orange);"></i> Bangladesh Express
+          <i class="fa-solid fa-location-dot" style="color: var(--kwiky-orange);"></i> Bangladesh Express
         </div>
       </div>
     </div>
@@ -671,60 +689,19 @@
   <!-- Dishes Menu Section -->
   <main class="menu-container">
     <div class="store-header">
-      <h2>Kwiky Food Express</h2>
+      <h2>Live Store Items</h2>
       <div class="store-meta">
         <span class="rating-tag"><i class="fa-solid fa-star"></i> 4.5</span>
         <span>• 25-30 mins</span>
-        <span>• Verified Kitchen</span>
+        <span>• Verified Merchants</span>
       </div>
     </div>
 
-    <!-- Dish 1 -->
-    <div class="dish-card">
-      <div class="dish-info">
-        <div class="badge-icon"></div>
-        <h3 class="dish-title">Special Chicken Dum Biryani</h3>
-        <div class="dish-cost">180 BDT</div>
-        <p class="dish-desc">Rich fragrant chinigura rice cooked with tender chicken piece, boiled egg and secret spices.</p>
-      </div>
-      <div class="dish-action-box">
-        <img class="dish-thumb" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&q=80" alt="Biryani" />
-        <div class="add-action-wrap">
-          <button class="swiggy-add-btn" onclick="addToCart('Special Chicken Dum Biryani', 180)">ADD</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Dish 2 -->
-    <div class="dish-card">
-      <div class="dish-info">
-        <div class="badge-icon"></div>
-        <h3 class="dish-title">Mustard Beef Bhuna Khichuri</h3>
-        <div class="dish-cost">160 BDT</div>
-        <p class="dish-desc">Traditional mustard oil lentils and rice khichuri paired with spicy slow-cooked beef curry.</p>
-      </div>
-      <div class="dish-action-box">
-        <img class="dish-thumb" src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=300&q=80" alt="Khichuri" />
-        <div class="add-action-wrap">
-          <button class="swiggy-add-btn" onclick="addToCart('Mustard Beef Bhuna Khichuri', 160)">ADD</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Dish 3 -->
-    <div class="dish-card">
-      <div class="dish-info">
-        <div class="badge-icon"></div>
-        <h3 class="dish-title">Egg Fried Rice with Crispy Wings</h3>
-        <div class="dish-cost">130 BDT</div>
-        <p class="dish-desc">Fresh egg and vegetable tossed fried rice served with 2 pieces golden crispy chicken wings.</p>
-      </div>
-      <div class="dish-action-box">
-        <img class="dish-thumb" src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300&q=80" alt="Fried Rice" />
-        <div class="add-action-wrap">
-          <button class="swiggy-add-btn" onclick="addToCart('Egg Fried Rice with Crispy Wings', 130)">ADD</button>
-        </div>
-      </div>
+    <!-- Dynamic Items from Database -->
+    <div id="dynamicDishesList">
+      <p style="padding: 24px; text-align: center; color: var(--kwiky-gray); font-size: 13px;">
+        <i class="fa-solid fa-spinner fa-spin"></i> Loading fresh items from local merchants...
+      </p>
     </div>
   </main>
 
@@ -797,7 +774,7 @@
 
         <!-- Address Tag Selector -->
         <div class="type-pill-group">
-          <label style="font-size: 11px; font-weight: 800; color: var(--swiggy-gray); text-transform: uppercase;">Save Address As</label>
+          <label style="font-size: 11px; font-weight: 800; color: var(--kwiky-gray); text-transform: uppercase;">Save Address As</label>
           <div class="pills-container">
             <button type="button" class="pill-btn active" onclick="chooseAddressTag(this, 'Home')">
               <i class="fa-solid fa-house"></i> Home
@@ -821,6 +798,54 @@
   <script>
     let cart = [];
     let selectedAddressTag = "Home";
+
+    // 1. Fetch Dynamic Verified Items from Backend Database
+    async function loadPublicCatalog() {
+      const container = document.getElementById('dynamicDishesList');
+      try {
+        const res = await fetch('/api/public-menu');
+        const data = await res.json();
+
+        if (!data.catalog || data.catalog.length === 0) {
+          container.innerHTML = `
+            <div style="padding: 30px 16px; text-align: center; color: var(--kwiky-gray);">
+              <i class="fa-solid fa-store-slash" style="font-size: 32px; color: #dcdde1; margin-bottom: 10px;"></i>
+              <p style="font-weight: 700; font-size: 15px; color: var(--kwiky-dark);">No active store items live right now</p>
+              <p style="font-size: 12px; margin-top: 4px; margin-bottom: 14px;">Are you a local merchant or restaurant owner?</p>
+              <a href="/partner.html" style="background: var(--kwiky-orange); color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: 800; display: inline-block;">
+                + Register & Add Items
+              </a>
+            </div>`;
+          return;
+        }
+
+        container.innerHTML = data.catalog.map(item => `
+          <div class="dish-card">
+            <div class="dish-info">
+              <div class="badge-icon"></div>
+              <div class="dish-store-tag"><i class="fa-solid fa-shop"></i> ${item.storeName}</div>
+              <h3 class="dish-title">${item.name}</h3>
+              <div class="dish-cost">${item.price} BDT</div>
+              <p class="dish-desc">${item.description || 'Freshly prepared and packed upon your order.'}</p>
+            </div>
+            <div class="dish-action-box">
+              <img class="dish-thumb" src="${item.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&q=80'}" alt="${item.name}" />
+              <div class="add-action-wrap">
+                ${item.isAvailable ? 
+                  `<button class="swiggy-add-btn" onclick="addToCart('${item.name.replace(/'/g, "\\'")}', ${item.price})">ADD</button>` :
+                  `<button class="swiggy-add-btn btn-out-of-stock" disabled>OUT OF STOCK</button>`
+                }
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--kwiky-red); font-size: 13px;">Failed to load catalog. Please check connection.</p>';
+      }
+    }
+
+    // Run catalog load on window ready
+    window.addEventListener('DOMContentLoaded', loadPublicCatalog);
 
     function addToCart(name, price) {
       cart.push({ name, price });
@@ -913,7 +938,7 @@
       const landmark = document.getElementById('landmark').value.trim();
       const mapLocation = document.getElementById('mapLocationLink').value;
 
-      // Bangladeshi 11-digit mobile validation (013 - 019)
+      // 11-digit mobile validation
       const bdPhoneRegex = /^01[3-9]\d{8}$/;
       if (!bdPhoneRegex.test(phone)) {
         alert("Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX)");

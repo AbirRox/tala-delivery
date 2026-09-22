@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Partner with Kwiky | Merchant & Restaurant Onboarding</title>
+  <title>Kwiky Partner Hub | Store & Stock Management</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
@@ -11,21 +11,24 @@
       --kwiky-dark: #282c3f;
       --kwiky-gray: #686b78;
       --kwiky-green: #60b244;
+      --kwiky-red: #e43b4f;
       --border-color: #d4d5d9;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f7f7f9; color: var(--kwiky-dark); padding-bottom: 60px; }
+    body { background-color: #f7f7f9; color: var(--kwiky-dark); padding-bottom: 70px; }
     
-    header { background: #fff; padding: 14px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; }
+    header { background: #fff; padding: 14px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; position: sticky; top:0; z-index:100; }
     .brand { font-size: 20px; font-weight: 900; color: var(--kwiky-orange); text-decoration: none; display: flex; align-items: center; gap: 8px; }
     
     .container { max-width: 680px; margin: 20px auto; padding: 0 16px; }
-    .card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    .card { background: #fff; border-radius: 16px; padding: 22px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
     .card h2 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
-    .card p { font-size: 13px; color: var(--kwiky-gray); margin-bottom: 18px; line-height: 1.4; }
+    .card p { font-size: 13px; color: var(--kwiky-gray); margin-bottom: 16px; line-height: 1.4; }
     
-    .legal-badge { background: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; padding: 10px 14px; border-radius: 10px; font-size: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-    
+    .auth-toggle { display: flex; gap: 10px; margin-bottom: 18px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
+    .auth-btn { background: none; border: none; font-size: 14px; font-weight: 800; color: var(--kwiky-gray); cursor: pointer; padding-bottom: 6px; }
+    .auth-btn.active { color: var(--kwiky-orange); border-bottom: 2px solid var(--kwiky-orange); }
+
     .form-group { margin-bottom: 14px; }
     .form-group label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--kwiky-gray); margin-bottom: 5px; }
     .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 13px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; outline: none; background: #fafafb; }
@@ -34,42 +37,70 @@
     .row { display: flex; gap: 12px; }
     .row .form-group { flex: 1; }
 
-    .btn-submit { background: var(--kwiky-orange); color: #fff; border: none; padding: 14px; border-radius: 10px; font-weight: 800; font-size: 15px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+    .btn-action { background: var(--kwiky-orange); color: #fff; border: none; padding: 13px; border-radius: 10px; font-weight: 800; font-size: 14px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 6px; }
     
-    /* Partner Management Area */
-    .partner-dashboard { display: none; }
+    /* Merchant Hub */
+    .dashboard-panel { display: none; }
+    .store-status-bar { display: flex; justify-content: space-between; align-items: center; background: #fafafa; border: 1px solid #eee; padding: 12px 16px; border-radius: 10px; margin-bottom: 18px; }
+    
     .status-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
     .status-pending { background: #fff3e0; color: #e65100; }
     .status-verified { background: #e8f5e9; color: #2e7d32; }
     .status-rejected { background: #ffebee; color: #c62828; }
 
-    .menu-item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+    /* Swiggy Style Stock Item Card */
+    .stock-item-card { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding: 14px 0; }
+    .item-meta h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .item-meta .price { font-size: 13px; font-weight: 800; color: #222; margin-bottom: 4px; }
+    .item-meta .desc { font-size: 11px; color: var(--kwiky-gray); }
+
+    .item-controls { display: flex; align-items: center; gap: 12px; }
+    
+    /* Toggle Switch */
+    .switch-label { font-size: 11px; font-weight: 800; text-transform: uppercase; }
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--kwiky-green); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    .btn-delete { background: none; border: none; color: var(--kwiky-red); cursor: pointer; font-size: 16px; padding: 4px; }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="/" class="brand"><i class="fa-solid fa-bolt"></i> Kwiky Partner</a>
+    <a href="/" class="brand"><i class="fa-solid fa-bolt"></i> Kwiky Partner Hub</a>
     <a href="/" style="text-decoration:none; color:var(--kwiky-dark); font-size:13px; font-weight:700;">Customer App</a>
   </header>
 
   <div class="container">
     
-    <!-- Legal Registration Form -->
-    <div class="card" id="registrationCard">
-      <h2>Partner & Restaurant Registration</h2>
-      <p>Grow your business with Kwiky. Register your store or restaurant with required legal verification (Trade License & NID) under Bangladesh E-Commerce Guidelines.</p>
-
-      <div class="legal-badge">
-        <i class="fa-solid fa-shield-halved fa-lg"></i>
-        <span>KYC Required: Valid Trade License & NID verification needed before your store items go live on Kwiky.</span>
+    <!-- Auth Box (Login or Register) -->
+    <div class="card" id="authBox">
+      <div class="auth-toggle">
+        <button class="auth-btn active" id="tabLogin" onclick="switchAuthTab('login')">Existing Partner Login</button>
+        <button class="auth-btn" id="tabReg" onclick="switchAuthTab('reg')">New Store Registration</button>
       </div>
 
-      <form id="partnerForm" onsubmit="handlePartnerRegister(event)">
+      <!-- Quick Login Form -->
+      <form id="loginForm" onsubmit="handlePartnerLogin(event)">
+        <p>Login to manage your restaurant menu, orders, and live stock availability.</p>
+        <div class="form-group">
+          <label>Registered Phone Number</label>
+          <input type="tel" id="loginPhone" placeholder="01XXXXXXXXX" maxlength="11" required />
+        </div>
+        <button type="submit" class="btn-action" id="loginBtn">Access My Store</button>
+      </form>
+
+      <!-- Full KYC Registration Form -->
+      <form id="regForm" onsubmit="handlePartnerRegister(event)" style="display:none;">
+        <p>Legal merchant onboarding with Trade License & NID verification.</p>
         <div class="row">
           <div class="form-group">
-            <label>Business / Restaurant Name</label>
-            <input type="text" id="businessName" placeholder="e.g. Dhaka Delight / Royal Kitchen" required />
+            <label>Store / Restaurant Name</label>
+            <input type="text" id="businessName" placeholder="e.g. Dhaka Treat / Royal Biryani" required />
           </div>
           <div class="form-group">
             <label>Business Category</label>
@@ -89,89 +120,140 @@
             <input type="text" id="ownerName" placeholder="Owner Full Name" required />
           </div>
           <div class="form-group">
-            <label>Official Phone Number</label>
-            <input type="tel" id="partnerPhone" placeholder="017XXXXXXXX" maxlength="11" pattern="01[3-9][0-9]{8}" required />
+            <label>Phone Number (Login ID)</label>
+            <input type="tel" id="regPhone" placeholder="01XXXXXXXXX" maxlength="11" pattern="01[3-9][0-9]{8}" required />
           </div>
         </div>
 
         <div class="row">
           <div class="form-group">
-            <label>Trade License No (City/Pourashava/UP)</label>
-            <input type="text" id="tradeLicense" placeholder="Trade License Number" required />
+            <label>Trade License No</label>
+            <input type="text" id="tradeLicense" placeholder="Trade License No" required />
           </div>
           <div class="form-group">
-            <label>Owner NID Number (10/17 Digits)</label>
-            <input type="text" id="ownerNid" placeholder="National Identity Card No" required />
+            <label>Owner NID (10/17 Digits)</label>
+            <input type="text" id="ownerNid" placeholder="National ID Card No" required />
           </div>
         </div>
 
         <div class="form-group">
-          <label>Payout Account Details (Bank / bKash / Nagad Merchant)</label>
-          <input type="text" id="payoutDetails" placeholder="e.g. bKash Merchant: 01XXXXXXXXX or Bank A/C info" required />
+          <label>Payout Details (bKash / Nagad / Bank)</label>
+          <input type="text" id="payoutDetails" placeholder="bKash Merchant: 01XXXXXXXXX" required />
         </div>
 
         <div class="form-group">
           <label>Store Physical Address</label>
-          <textarea id="storeAddress" rows="2" placeholder="Market Name, Holding, Road, Area, District" required></textarea>
+          <textarea id="storeAddress" rows="2" placeholder="Market Name, Holding, Road, District" required></textarea>
         </div>
 
-        <button type="submit" class="btn-submit" id="regBtn">Submit for Kwiky Verification</button>
+        <button type="submit" class="btn-action" id="regBtn">Submit for Kwiky Approval</button>
       </form>
     </div>
 
-    <!-- Partner Dashboard (Manage Items after Application) -->
-    <div class="card partner-dashboard" id="partnerDashboard">
+    <!-- Partner Control Center -->
+    <div class="card dashboard-panel" id="dashboardPanel">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h2 id="dashBusinessTitle">Merchant Dashboard</h2>
-        <span id="dashStatusBadge" class="status-badge status-pending">Pending Review</span>
+        <h2 id="hubStoreTitle">My Store Hub</h2>
+        <button onclick="logoutPartner()" style="background:none; border:none; color:var(--kwiky-red); font-size:12px; font-weight:800; cursor:pointer;">Logout</button>
       </div>
-      <p id="dashStatusDesc">Your documents are under review by Kwiky Admin. You can add your menu items now; they will become publicly visible once verified.</p>
 
-      <hr style="border:none; border-top:1px solid #f0f0f0; margin: 18px 0;" />
+      <div class="store-status-bar">
+        <div>
+          <div style="font-size:11px; color:var(--kwiky-gray); font-weight:700;">KYC STATUS</div>
+          <span id="hubKycBadge" class="status-badge status-pending">Pending Review</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:12px; font-weight:800;">Store Open</span>
+          <label class="switch">
+            <input type="checkbox" id="storeOpenToggle" onchange="toggleStoreOpen()" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
 
-      <h3>Add New Item / Dish</h3>
-      <form id="addItemForm" onsubmit="handleAddNewItem(event)" style="margin-top:12px;">
+      <!-- Add New Item Form -->
+      <h3 style="font-size:15px; margin-bottom:8px;">Add New Menu Item</h3>
+      <form id="addItemForm" onsubmit="handleAddNewItem(event)">
         <div class="row">
           <div class="form-group">
             <label>Item Name</label>
-            <input type="text" id="newItemName" placeholder="e.g. Kwiky Special Biryani" required />
+            <input type="text" id="newItemName" placeholder="e.g. Chicken Dum Biryani" required />
           </div>
           <div class="form-group">
             <label>Price (BDT)</label>
             <input type="number" id="newItemPrice" placeholder="180" required />
           </div>
         </div>
-        <div class="form-group">
-          <label>Short Description</label>
-          <input type="text" id="newItemDesc" placeholder="e.g. Fragrant rice with succulent spiced chicken" required />
+        <div class="row">
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" id="newItemDesc" placeholder="Cooked with aromatic chinigura rice & egg" />
+          </div>
+          <div class="form-group">
+            <label>Image URL (Optional)</label>
+            <input type="url" id="newItemImage" placeholder="https://..." />
+          </div>
         </div>
-        <button type="submit" class="btn-submit" style="background:var(--kwiky-green);">+ Add to Kwiky Store</button>
+        <button type="submit" class="btn-action" style="background:var(--kwiky-green);">+ Add to Live Store</button>
       </form>
 
-      <h3 style="margin-top:24px; margin-bottom:10px;">Your Listed Items</h3>
-      <div id="partnerItemsList"></div>
+      <!-- Live Stock Control List -->
+      <h3 style="font-size:15px; margin-top:24px; margin-bottom:8px;">Store Items & Live Stock</h3>
+      <div id="partnerStockList">Loading items...</div>
     </div>
 
   </div>
 
   <script>
-    let currentPartner = null;
+    let activePartner = null;
 
-    async function handlePartnerRegister(event) {
-      event.preventDefault();
-
-      const phone = document.getElementById('partnerPhone').value.trim();
-      const phoneRegex = /^01[3-9]\d{8}$/;
-      if (!phoneRegex.test(phone)) {
-        alert("Please enter a valid 11-digit Bangladeshi mobile number");
-        return;
+    function switchAuthTab(type) {
+      if (type === 'login') {
+        document.getElementById('tabLogin').classList.add('active');
+        document.getElementById('tabReg').classList.remove('active');
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('regForm').style.display = 'none';
+      } else {
+        document.getElementById('tabReg').classList.add('active');
+        document.getElementById('tabLogin').classList.remove('active');
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('regForm').style.display = 'block';
       }
+    }
 
+    async function handlePartnerLogin(e) {
+      e.preventDefault();
+      const phone = document.getElementById('loginPhone').value.trim();
+      const btn = document.getElementById('loginBtn');
+      btn.innerText = "Checking...";
+
+      try {
+        const res = await fetch('/api/partners/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          activePartner = data.partner;
+          openDashboard(activePartner);
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert("Server error: " + err.message);
+      } finally {
+        btn.innerText = "Access My Store";
+      }
+    }
+
+    async function handlePartnerRegister(e) {
+      e.preventDefault();
       const payload = {
         businessName: document.getElementById('businessName').value.trim(),
         category: document.getElementById('businessCategory').value,
         ownerName: document.getElementById('ownerName').value.trim(),
-        phone: phone,
+        phone: document.getElementById('regPhone').value.trim(),
         tradeLicense: document.getElementById('tradeLicense').value.trim(),
         ownerNid: document.getElementById('ownerNid').value.trim(),
         payoutDetails: document.getElementById('payoutDetails').value.trim(),
@@ -179,8 +261,7 @@
       };
 
       const btn = document.getElementById('regBtn');
-      btn.disabled = true;
-      btn.innerText = "Submitting to Kwiky...";
+      btn.innerText = "Registering...";
 
       try {
         const res = await fetch('/api/partners/register', {
@@ -189,78 +270,135 @@
           body: JSON.stringify(payload)
         });
         const data = await res.json();
-
         if (res.ok && data.success) {
-          alert("Application submitted! Kwiky team will review your Trade License and NID.");
-          currentPartner = data.partner;
-          loadDashboardView(currentPartner);
+          alert("Registration submitted! Kwiky will verify your KYC documents.");
+          activePartner = data.partner;
+          openDashboard(activePartner);
         } else {
-          alert("Error: " + (data.message || "Could not register"));
+          alert("Error: " + data.message);
         }
       } catch (err) {
         alert("Server error: " + err.message);
       } finally {
-        btn.disabled = false;
-        btn.innerText = "Submit for Kwiky Verification";
+        btn.innerText = "Submit for Kwiky Approval";
       }
     }
 
-    function loadDashboardView(partner) {
-      document.getElementById('registrationCard').style.display = 'none';
-      const dash = document.getElementById('partnerDashboard');
+    function openDashboard(partner) {
+      document.getElementById('authBox').style.display = 'none';
+      const dash = document.getElementById('dashboardPanel');
       dash.style.display = 'block';
 
-      document.getElementById('dashBusinessTitle').innerText = partner.businessName;
-      const statusBadge = document.getElementById('dashStatusBadge');
-      statusBadge.innerText = partner.verificationStatus;
-      statusBadge.className = "status-badge status-" + partner.verificationStatus.toLowerCase();
+      document.getElementById('hubStoreTitle').innerText = partner.businessName;
+      const kyc = document.getElementById('hubKycBadge');
+      kyc.innerText = partner.verificationStatus;
+      kyc.className = 'status-badge status-' + partner.verificationStatus.toLowerCase();
 
-      renderItems(partner.items || []);
+      document.getElementById('storeOpenToggle').checked = partner.isOpen !== false;
+
+      renderStockItems(partner.items || []);
     }
 
-    function renderItems(items) {
-      const container = document.getElementById('partnerItemsList');
-      if (items.length === 0) {
-        container.innerHTML = "<p style='color:gray; font-size:13px;'>No items added yet.</p>";
+    function renderStockItems(items) {
+      const container = document.getElementById('partnerStockList');
+      if (!items || items.length === 0) {
+        container.innerHTML = '<p style="color:gray; font-size:12px; margin-top:8px;">No items added yet. Add your first item above.</p>';
         return;
       }
+
       container.innerHTML = items.map(item => `
-        <div class="menu-item-row">
-          <div>
-            <strong>${item.name}</strong> - ${item.price} BDT
-            <div style="font-size:12px; color:gray;">${item.description}</div>
+        <div class="stock-item-card">
+          <div class="item-meta">
+            <h4>${item.name}</h4>
+            <div class="price">${item.price} BDT</div>
+            <div class="desc">${item.description || 'No description'}</div>
           </div>
-          <span style="font-size:12px; color:green; font-weight:700;">✓ Active</span>
+          <div class="item-controls">
+            <span class="switch-label" id="stockLabel-${item._id}" style="color:${item.isAvailable ? 'var(--kwiky-green)' : 'var(--kwiky-red)'};">
+              ${item.isAvailable ? 'In Stock' : 'Out of Stock'}
+            </span>
+            <label class="switch">
+              <input type="checkbox" ${item.isAvailable ? 'checked' : ''} onchange="toggleItemStock('${item._id}')">
+              <span class="slider"></span>
+            </label>
+            <button class="btn-delete" title="Delete Item" onclick="deleteItem('${item._id}')">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
         </div>
       `).join('');
     }
 
     async function handleAddNewItem(e) {
       e.preventDefault();
-      if (!currentPartner) return;
+      if (!activePartner) return;
 
-      const newItem = {
+      const payload = {
         name: document.getElementById('newItemName').value.trim(),
         price: Number(document.getElementById('newItemPrice').value),
-        description: document.getElementById('newItemDesc').value.trim()
+        description: document.getElementById('newItemDesc').value.trim(),
+        imageUrl: document.getElementById('newItemImage').value.trim()
       };
 
       try {
-        const res = await fetch(`/api/partners/${currentPartner._id}/items`, {
+        const res = await fetch(`/api/partners/${activePartner._id}/items`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newItem)
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (res.ok && data.success) {
-          currentPartner.items.push(newItem);
-          renderItems(currentPartner.items);
+          activePartner.items = data.items;
+          renderStockItems(activePartner.items);
           document.getElementById('addItemForm').reset();
-          alert("Item added successfully to Kwiky catalog!");
+          alert("Item added successfully to your store!");
         }
       } catch (err) {
-        alert("Error adding item: " + err.message);
+        alert("Failed to add item: " + err.message);
       }
+    }
+
+    async function toggleItemStock(itemId) {
+      try {
+        const res = await fetch(`/api/partners/${activePartner._id}/items/${itemId}/toggle-stock`, { method: 'PATCH' });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          const label = document.getElementById(`stockLabel-${itemId}`);
+          label.innerText = data.isAvailable ? 'In Stock' : 'Out of Stock';
+          label.style.color = data.isAvailable ? 'var(--kwiky-green)' : 'var(--kwiky-red)';
+        }
+      } catch (err) {
+        alert("Could not update stock status");
+      }
+    }
+
+    async function deleteItem(itemId) {
+      if (!confirm("Are you sure you want to remove this item?")) return;
+      try {
+        const res = await fetch(`/api/partners/${activePartner._id}/items/${itemId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          activePartner.items = data.items;
+          renderStockItems(activePartner.items);
+        }
+      } catch (err) {
+        alert("Could not delete item");
+      }
+    }
+
+    async function toggleStoreOpen() {
+      try {
+        await fetch(`/api/partners/${activePartner._id}/toggle-open`, { method: 'PATCH' });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function logoutPartner() {
+      activePartner = null;
+      document.getElementById('authBox').style.display = 'block';
+      document.getElementById('dashboardPanel').style.display = 'none';
+      document.getElementById('loginForm').reset();
     }
   </script>
 </body>

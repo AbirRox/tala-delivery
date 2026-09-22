@@ -17,10 +17,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 const mongoURI = process.env.MONGO_URI;
 
 if (!mongoURI) {
-  console.error("Database connection failed: MONGO_URI is missing!");
+  console.error("Database connection failed: MONGO_URI missing!");
 } else {
   mongoose.connect(mongoURI)
-    .then(() => console.log('>>> MongoDB Cloud Database Connected Successfully! <<<'))
+    .then(() => console.log('>>> MongoDB Connected Successfully! <<<'))
     .catch(err => console.error('Database connection failed:', err.message));
 }
 
@@ -35,62 +35,51 @@ const orderSchema = new mongoose.Schema({
   status: { type: String, default: 'Pending' },
   createdAt: { type: Date, default: Date.now }
 });
-
 const Order = mongoose.model('Order', orderSchema);
 
-// 2. Partner / Merchant Schema & Model (For Legal Onboarding)
+// 2. Partner / Merchant Schema & Model
 const partnerSchema = new mongoose.Schema({
   businessName: { type: String, required: true },
   category: { type: String, required: true },
   ownerName: { type: String, required: true },
-  phone: { type: String, required: true },
+  phone: { type: String, required: true, unique: true },
   tradeLicense: { type: String, required: true },
   ownerNid: { type: String, required: true },
   payoutDetails: { type: String, required: true },
   address: { type: String, required: true },
+  isOpen: { type: Boolean, default: true }, // Store open/close switch
   verificationStatus: { 
     type: String, 
     enum: ['Pending', 'Verified', 'Rejected'], 
     default: 'Pending' 
   },
   items: [{
-    name: String,
-    price: Number,
-    description: String,
-    available: { type: Boolean, default: true }
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
+    description: { type: String, default: '' },
+    imageUrl: { type: String, default: '' },
+    isAvailable: { type: Boolean, default: true } // Stock toggle
   }],
   createdAt: { type: Date, default: Date.now }
 });
-
 const Partner = mongoose.model('Partner', partnerSchema);
 
-// Admin & Partner Page Routes
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
+// Web Pages
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
+app.get('/partner', (req, res) => res.sendFile(path.join(__dirname, 'public', 'partner.html')));
 
-app.get('/partner', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'partner.html'));
-});
+// --- Customer APIs ---
 
-// Customer API: Place Order
+// Place Customer Order
 app.post('/api/orders', async (req, res) => {
   try {
     const { name, phone, address, mapLocation, items, total } = req.body;
     if (!name || !phone || !address || !items || items.length === 0) {
       return res.status(400).json({ success: false, message: 'Missing order details.' });
     }
-
     const newOrder = new Order({
-      name,
-      phone,
-      address,
-      mapLocation: mapLocation || '',
-      items,
-      total: total || 0,
-      status: 'Pending'
+      name, phone, address, mapLocation: mapLocation || '', items, total: total || 0, status: 'Pending'
     });
-
     const savedOrder = await newOrder.save();
     res.status(201).json({ success: true, message: 'Order placed successfully!', order: savedOrder });
   } catch (error) {
@@ -98,62 +87,44 @@ app.post('/api/orders', async (req, res) => {
   }
 });
 
-// Admin API: Get All Orders
+// Get Public Menu (Only Verified Partners & In-Stock Items)
+app.get('/api/public-menu', async (req, res) => {
+  try {
+    const partners = await Partner.find({ verificationStatus: 'Verified', isOpen: true });
+    let publicCatalog = [];
+    
+    partners.forEach(partner => {
+      partner.items.forEach(item => {
+        publicCatalog.push({
+          itemId: item._id,
+          partnerId: partner._id,
+          storeName: partner.businessName,
+          category: partner.category,
+          name: item.name,
+          price: item.price,
+          description: item.description,
+          imageUrl: item.imageUrl,
+          isAvailable: item.isAvailable
+        });
+      });
+    });
+
+    res.json({ success: true, catalog: publicCatalog });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error fetching catalog' });
+  }
+});
+
+// --- Admin APIs ---
 app.get('/api/orders', async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ success: false, message: 'Failed to fetch orders.' });
   }
 });
 
-// Partner API: Register New Merchant
-app.post('/api/partners/register', async (req, res) => {
-  try {
-    const { businessName, category, ownerName, phone, tradeLicense, ownerNid, payoutDetails, address } = req.body;
-    
-    if (!businessName || !phone || !tradeLicense || !ownerNid) {
-      return res.status(400).json({ success: false, message: 'Mandatory KYC fields are missing.' });
-    }
-
-    const newPartner = new Partner({
-      businessName,
-      category,
-      ownerName,
-      phone,
-      tradeLicense,
-      ownerNid,
-      payoutDetails,
-      address,
-      verificationStatus: 'Pending',
-      items: []
-    });
-
-    const savedPartner = await newPartner.save();
-    res.status(201).json({ success: true, partner: savedPartner });
-  } catch (err) {
-    res.status(500).json({ success: false, message: 'Error registering partner: ' + err.message });
-  }
-});
-
-// Partner API: Add New Item
-app.post('/api/partners/:id/items', async (req, res) => {
-  try {
-    const { name, price, description } = req.body;
-    const partner = await Partner.findById(req.params.id);
-    if (!partner) return res.status(404).json({ success: false, message: 'Partner not found' });
-
-    partner.items.push({ name, price, description, available: true });
-    await partner.save();
-
-    res.json({ success: true, message: 'Item added successfully', items: partner.items });
-  } catch (err) {
-    res.status(500).json({ success: false, message: 'Could not add item' });
-  }
-});
-
-// Admin API: List all Partners & Verification
 app.get('/api/partners', async (req, res) => {
   try {
     const partners = await Partner.find().sort({ createdAt: -1 });
@@ -165,11 +136,120 @@ app.get('/api/partners', async (req, res) => {
 
 app.put('/api/partners/:id/status', async (req, res) => {
   try {
-    const { status } = req.body; // 'Verified' or 'Rejected'
+    const { status } = req.body;
     const updated = await Partner.findByIdAndUpdate(req.params.id, { verificationStatus: status }, { new: true });
     res.json({ success: true, partner: updated });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Could not update status' });
+  }
+});
+
+// --- Partner Merchant Portal APIs ---
+
+// 1. Partner Login via Phone
+app.post('/api/partners/login', async (req, res) => {
+  try {
+    const { phone } = req.body;
+    const partner = await Partner.findOne({ phone: phone.trim() });
+    if (!partner) {
+      return res.status(404).json({ success: false, message: 'Partner not found with this phone number. Please register first.' });
+    }
+    res.json({ success: true, partner });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// 2. Register New Partner
+app.post('/api/partners/register', async (req, res) => {
+  try {
+    const { businessName, category, ownerName, phone, tradeLicense, ownerNid, payoutDetails, address } = req.body;
+    
+    const existing = await Partner.findOne({ phone: phone.trim() });
+    if (existing) {
+      return res.status(400).json({ success: false, message: 'This phone number is already registered!' });
+    }
+
+    const newPartner = new Partner({
+      businessName, category, ownerName, phone: phone.trim(), tradeLicense, ownerNid, payoutDetails, address, verificationStatus: 'Pending', items: []
+    });
+
+    const saved = await newPartner.save();
+    res.status(201).json({ success: true, partner: saved });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// 3. Add Item to Store
+app.post('/api/partners/:id/items', async (req, res) => {
+  try {
+    const { name, price, description, imageUrl } = req.body;
+    const partner = await Partner.findById(req.params.id);
+    if (!partner) return res.status(404).json({ success: false, message: 'Partner not found' });
+
+    partner.items.push({
+      name,
+      price: Number(price),
+      description: description || '',
+      imageUrl: imageUrl || '',
+      isAvailable: true
+    });
+
+    await partner.save();
+    res.json({ success: true, message: 'Item added successfully', items: partner.items });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Could not add item' });
+  }
+});
+
+// 4. Toggle Stock Availability (In Stock / Out of Stock)
+app.patch('/api/partners/:partnerId/items/:itemId/toggle-stock', async (req, res) => {
+  try {
+    const { partnerId, itemId } = req.params;
+    const partner = await Partner.findById(partnerId);
+    if (!partner) return res.status(404).json({ success: false, message: 'Partner not found' });
+
+    const item = partner.items.id(itemId);
+    if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
+
+    item.isAvailable = !item.isAvailable;
+    await partner.save();
+
+    res.json({ success: true, message: `Item is now ${item.isAvailable ? 'In Stock' : 'Out of Stock'}`, isAvailable: item.isAvailable });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Failed to update stock' });
+  }
+});
+
+// 5. Delete Item from Store
+app.delete('/api/partners/:partnerId/items/:itemId', async (req, res) => {
+  try {
+    const { partnerId, itemId } = req.params;
+    const partner = await Partner.findById(partnerId);
+    if (!partner) return res.status(404).json({ success: false, message: 'Partner not found' });
+
+    partner.items.pull({ _id: itemId });
+    await partner.save();
+
+    res.json({ success: true, message: 'Item deleted successfully', items: partner.items });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Failed to delete item' });
+  }
+});
+
+// 6. Toggle Store Open/Closed
+app.patch('/api/partners/:partnerId/toggle-open', async (req, res) => {
+  try {
+    const partner = await Partner.findById(req.params.partnerId);
+    if (!partner) return res.status(404).json({ success: false, message: 'Partner not found' });
+
+    partner.isOpen = !partner.isOpen;
+    await partner.save();
+
+    res.json({ success: true, isOpen: partner.isOpen });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Could not toggle store status' });
   }
 });
 
