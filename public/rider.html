@@ -30,7 +30,6 @@
       padding-bottom: 50px;
     }
 
-    /* Top Bar */
     .partner-topbar {
       background-color: var(--swiggy-black);
       color: #ffffff;
@@ -65,7 +64,6 @@
     .partner-details h2 {
       font-size: 15px;
       font-weight: 800;
-      letter-spacing: -0.3px;
     }
 
     .partner-details p {
@@ -73,7 +71,6 @@
       color: var(--text-muted);
     }
 
-    /* Duty Pill */
     .duty-pill {
       display: flex;
       align-items: center;
@@ -106,11 +103,9 @@
     .duty-pill span {
       font-size: 12px;
       font-weight: 800;
-      letter-spacing: 0.5px;
       color: #fff;
     }
 
-    /* Floating Alert Banner (Swiggy Alarm Style) */
     .alert-banner {
       display: none;
       background: #d63031;
@@ -118,7 +113,7 @@
       padding: 12px 16px;
       text-align: center;
       font-weight: 900;
-      font-size: 14px;
+      font-size: 13px;
       animation: pulseAlert 0.8s infinite alternate;
     }
 
@@ -127,7 +122,6 @@
       to { background-color: #e17055; }
     }
 
-    /* Performance Overview */
     .earning-card {
       margin: 14px 16px;
       background: #ffffff;
@@ -153,7 +147,6 @@
       margin-top: 2px;
     }
 
-    /* Order Feed */
     .order-feed-container { padding: 0 16px; }
     .feed-header {
       font-size: 13px;
@@ -264,7 +257,6 @@
 </head>
 <body>
 
-  <!-- Top Bar -->
   <header class="partner-topbar">
     <div class="partner-id-box">
       <div class="partner-avatar"><i class="fa-solid fa-motorcycle"></i></div>
@@ -280,12 +272,10 @@
     </div>
   </header>
 
-  <!-- Sound Alert Banner -->
   <div class="alert-banner" id="alertBanner">
     🚨 NEW ORDER ASSIGNED! ACCEPT NOW! 🚨
   </div>
 
-  <!-- Performance Overview -->
   <section class="earning-card">
     <div class="metric-unit">
       <small>Completed</small>
@@ -298,7 +288,6 @@
     </div>
   </section>
 
-  <!-- Feed -->
   <main class="order-feed-container">
     <div class="feed-header">
       <span>LIVE ASSIGNMENTS</span>
@@ -315,7 +304,6 @@
   </main>
 
   <script>
-    // অনন্য Rider ID তৈরি বা লোড করা
     let riderId = localStorage.getItem('kwiky_rider_id');
     if (!riderId) {
       riderId = 'KW-' + Math.floor(100 + Math.random() * 900);
@@ -331,7 +319,6 @@
     let lastKnownLat = 22.5726;
     let lastKnownLng = 88.3639;
 
-    // Swiggy-Style Loud Audio Synthesizer (কোনো এক্সটার্নাল mp3 লাগবে না)
     function playSwiggyTone() {
       try {
         if (!audioContext) {
@@ -346,7 +333,6 @@
         osc.connect(gain);
         gain.connect(audioContext.destination);
 
-        // Swiggy High-Pitch Beep Alert (750Hz to 1100Hz)
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(750, audioContext.currentTime);
         osc.frequency.exponentialRampToValueAtTime(1100, audioContext.currentTime + 0.15);
@@ -357,7 +343,6 @@
         osc.start();
         osc.stop(audioContext.currentTime + 0.25);
 
-        // Vibration
         if ('vibrate' in navigator) {
           navigator.vibrate([200, 100, 200]);
         }
@@ -382,7 +367,6 @@
       }
     }
 
-    // Initialize State
     function init() {
       const savedTrips = localStorage.getItem('kwiky_rider_trips') || 0;
       const savedPay = localStorage.getItem('kwiky_rider_earnings') || 0;
@@ -402,7 +386,6 @@
       setDutyUI(newState);
 
       if (newState) {
-        // অডিও পারমিশন এনশিওর করার জন্য
         if (!audioContext) {
           audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
@@ -437,7 +420,6 @@
     }
 
     function startTrackingAndPolling() {
-      // ১. লাইভ জিপিএস লোকেশন নেওয়া
       if (navigator.geolocation) {
         locationWatchId = navigator.geolocation.watchPosition(
           (pos) => {
@@ -445,23 +427,19 @@
             lastKnownLng = pos.coords.longitude;
             sendRiderPing();
           },
-          (err) => {
-            console.warn("GPS Location error, using default", err);
-            sendRiderPing();
-          },
+          () => sendRiderPing(),
           { enableHighAccuracy: true, maximumAge: 5000 }
         );
       } else {
         sendRiderPing();
       }
 
-      // ২. অর্ডার ফেচ ও সার্ভারে পিং পাঠানো
       fetchAssignedOrders();
       if (!pollInterval) {
         pollInterval = setInterval(() => {
           sendRiderPing();
           fetchAssignedOrders();
-        }, 5000); // প্রতি ৫ সেকেন্ড পর পর লাইভ চেক
+        }, 5000);
       }
     }
 
@@ -469,7 +447,6 @@
       if (locationWatchId) navigator.geolocation.clearWatch(locationWatchId);
       if (pollInterval) clearInterval(pollInterval);
       pollInterval = null;
-      // সার্ভারকে অফলাইন স্ট্যাটাস জানিয়ে দেওয়া
       fetch('/api/rider/ping', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -484,7 +461,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             riderId,
-            name: "Rider " + riderId,
+            name: "Rider #" + riderId,
             phone: "01700000000",
             isOnline: true,
             lat: lastKnownLat,
@@ -506,7 +483,6 @@
 
         renderOrders(orders);
 
-        // নতুন অ্যাসাইনড অর্ডার এসেছে কি না চেক
         const hasIncomingOrder = orders.some(o => o.status === 'Assigned' || o.status === 'Pending');
         if (hasIncomingOrder) {
           startOrderAlarm();

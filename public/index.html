@@ -4,1227 +4,776 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Kwiky | Fast Food & Essentials Delivery</title>
-
-  <!-- PWA Manifest & App Theme -->
+  
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#fc8019" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
   <style>
     :root {
-      --kwiky-orange: #fc8019;
-      --kwiky-dark: #282c3f;
-      --kwiky-gray: #686b78;
-      --kwiky-light-gray: #f2f2f6;
-      --kwiky-border: #e9e9eb;
-      --kwiky-green: #60b244;
-      --kwiky-red: #e43b4f;
+      --primary: #fc8019;
+      --dark: #171a29;
+      --card-bg: #ffffff;
+      --light-gray: #f2f2f6;
+      --text-muted: #686b78;
+      --green: #60b244;
+      --border: #e9e9eb;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: #f7f7f9;
-      color: var(--kwiky-dark);
-      padding-bottom: 120px;
+      background-color: var(--light-gray);
+      color: var(--dark);
+      padding-bottom: 90px;
     }
 
-    /* Top Navbar */
-    .kwiky-topbar {
+    .navbar {
       background: #ffffff;
-      padding: 12px 16px;
       position: sticky;
       top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 14px rgba(40, 44, 63, 0.08);
+      z-index: 200;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .brand-section {
+    .brand-box {
       display: flex;
       align-items: center;
-      gap: 10px;
-      cursor: pointer;
+      gap: 8px;
+      text-decoration: none;
+      color: inherit;
     }
 
-    .brand-badge {
+    .brand-logo {
+      background: var(--primary);
+      color: white;
+      font-weight: 900;
+      font-size: 20px;
       width: 38px;
       height: 38px;
-      background: var(--kwiky-orange);
-      border-radius: 12px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      font-size: 19px;
-      box-shadow: 0 4px 10px rgba(252, 128, 25, 0.3);
     }
 
-    .brand-info h1 {
-      font-size: 20px;
+    .brand-text h1 {
+      font-size: 18px;
       font-weight: 900;
-      color: var(--kwiky-orange);
       letter-spacing: -0.5px;
-      line-height: 1.1;
+      color: var(--dark);
     }
 
-    .brand-info .delivery-location {
-      font-size: 12px;
-      color: var(--kwiky-dark);
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 2px;
-      max-width: 190px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .brand-text p {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .user-btn {
-      background: #f1f2f6;
-      color: var(--kwiky-dark);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 7px 12px;
-      border-radius: 20px;
-      border: 1px solid #dfe4ea;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .partner-link-btn {
-      background: #fff3e6;
-      color: var(--kwiky-orange);
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 800;
-      padding: 7px 12px;
-      border-radius: 20px;
-      border: 1px solid #ffd8be;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    /* Search Bar */
-    .search-section {
-      padding: 12px 16px;
-      background: #ffffff;
-    }
-
-    .search-input-box {
-      background: var(--kwiky-light-gray);
-      border: 1px solid var(--kwiky-border);
-      border-radius: 12px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .search-input-box input {
-      border: none;
-      background: transparent;
-      outline: none;
-      width: 100%;
-      font-size: 14px;
-      color: var(--kwiky-dark);
-    }
-
-    /* Promo Banners */
-    .promo-scroll {
-      padding: 14px 16px;
-      display: flex;
       gap: 12px;
-      overflow-x: auto;
-      scrollbar-width: none;
     }
 
-    .promo-scroll::-webkit-scrollbar {
-      display: none;
-    }
-
-    .promo-card {
-      min-width: 270px;
-      border-radius: 16px;
-      padding: 16px 18px;
-      color: #fff;
-      background: linear-gradient(135deg, #fc8019 0%, #ff5722 100%);
-      box-shadow: 0 4px 15px rgba(252, 128, 25, 0.25);
-      flex-shrink: 0;
-    }
-
-    .promo-card h3 {
-      font-size: 17px;
-      font-weight: 800;
-      margin-bottom: 3px;
-    }
-
-    .promo-card p {
-      font-size: 12px;
-      opacity: 0.95;
-    }
-
-    /* 5 Categories */
-    .category-section {
-      background: #ffffff;
-      padding: 16px;
-      margin-bottom: 10px;
-    }
-
-    .section-heading {
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 12px;
-      letter-spacing: -0.3px;
-    }
-
-    .category-row {
-      display: flex;
-      gap: 16px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding-bottom: 4px;
-    }
-
-    .category-row::-webkit-scrollbar {
-      display: none;
-    }
-
-    .category-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      min-width: 62px;
-      cursor: pointer;
-    }
-
-    .category-icon-bubble {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      background: #fff4ea;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--kwiky-orange);
-      font-size: 20px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-    }
-
-    .category-node span {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--kwiky-dark);
-      text-align: center;
-    }
-
-    /* Menu Container */
-    .menu-container {
-      background: #ffffff;
-      padding: 16px;
-      max-width: 680px;
-      margin: 0 auto;
-      border-radius: 16px;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
-    }
-
-    .store-header {
-      padding-bottom: 14px;
-      border-bottom: 1px dashed var(--kwiky-border);
-      margin-bottom: 12px;
-    }
-
-    .store-header h2 {
-      font-size: 19px;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-
-    .store-meta {
-      font-size: 12px;
-      color: var(--kwiky-gray);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .rating-tag {
-      background: var(--kwiky-green);
-      color: #fff;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 11px;
-    }
-
-    /* Dish Card */
-    .dish-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--kwiky-border);
-    }
-
-    .dish-info {
-      flex: 1;
-      padding-right: 14px;
-    }
-
-    .badge-icon {
-      width: 14px;
-      height: 14px;
-      border: 1.5px solid var(--kwiky-red);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 3px;
-      margin-bottom: 5px;
-    }
-
-    .badge-icon::after {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background-color: var(--kwiky-red);
-      border-radius: 50%;
-    }
-
-    .dish-store-tag {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--kwiky-orange);
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-
-    .dish-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #3e4152;
-      margin-bottom: 3px;
-    }
-
-    .dish-cost {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--kwiky-dark);
-      margin-bottom: 6px;
-    }
-
-    .dish-desc {
-      font-size: 12px;
-      color: var(--kwiky-gray);
-      line-height: 1.4;
-    }
-
-    .dish-action-box {
-      width: 105px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .dish-thumb {
-      width: 105px;
-      height: 92px;
-      border-radius: 12px;
-      object-fit: cover;
-      background: #f0f0f0;
-    }
-
-    .add-action-wrap {
-      position: absolute;
-      bottom: -10px;
-    }
-
-    .swiggy-add-btn {
-      background: #ffffff;
-      color: var(--kwiky-green);
+    .cart-btn-pill {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
       font-weight: 800;
       font-size: 13px;
-      border: 1px solid var(--kwiky-border);
-      padding: 7px 22px;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-      white-space: nowrap;
-    }
-
-    .btn-out-of-stock {
-      background: #f1f2f6 !important;
-      color: #a4b0be !important;
-      border-color: #dcdde1 !important;
-      cursor: not-allowed !important;
-      font-size: 11px !important;
-      padding: 7px 12px !important;
-    }
-
-    /* Floating Cart Bar */
-    .cart-float-bar {
-      position: fixed;
-      bottom: 14px;
-      left: 14px;
-      right: 14px;
-      max-width: 650px;
-      margin: 0 auto;
-      background: var(--kwiky-green);
-      color: #ffffff;
-      padding: 13px 18px;
-      border-radius: 12px;
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 8px 24px rgba(96, 178, 68, 0.4);
-      cursor: pointer;
-      z-index: 150;
-      animation: popUpBar 0.25s ease-out;
-    }
-
-    .cart-status-text { font-size: 14px; font-weight: 800; }
-    .cart-status-sub { font-size: 11px; opacity: 0.9; }
-    .view-cart-box { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 800; text-transform: uppercase; }
-
-    /* Modals */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(40, 44, 63, 0.7);
-      display: none;
-      align-items: flex-end;
-      z-index: 250;
-      backdrop-filter: blur(2px);
-    }
-
-    .bottom-sheet {
-      background: #ffffff;
-      width: 100%;
-      max-width: 650px;
-      margin: 0 auto;
-      border-radius: 22px 22px 0 0;
-      padding: 20px 18px 28px;
-      max-height: 90vh;
-      overflow-y: auto;
-      animation: slideUpSheet 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
-    }
-
-    .sheet-title-bar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--kwiky-border);
-      margin-bottom: 14px;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(252, 128, 25, 0.3);
     }
 
-    .sheet-title-bar h3 { font-size: 17px; font-weight: 800; }
-    .close-sheet-btn { border: none; background: none; font-size: 20px; cursor: pointer; color: var(--kwiky-gray); }
-
-    /* OTP Boxes */
-    .otp-input-container {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0;
-    }
-
-    .otp-box {
-      width: 48px;
-      height: 52px;
+    .hero-strip {
+      background: linear-gradient(135deg, #fc8019 0%, #ff5252 100%);
+      color: white;
+      padding: 24px 16px;
       text-align: center;
-      font-size: 22px;
-      font-weight: 800;
-      border: 1.5px solid var(--kwiky-border);
+    }
+
+    .hero-strip h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    .hero-strip p { font-size: 12px; opacity: 0.95; }
+
+    .category-slider {
+      display: flex;
+      gap: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      background: white;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .category-slider::-webkit-scrollbar { display: none; }
+
+    .category-pill {
+      padding: 8px 16px;
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #3d4152;
+    }
+
+    .category-pill.active {
+      background: var(--dark);
+      color: white;
+      border-color: var(--dark);
+    }
+
+    .search-box-wrap { padding: 12px 16px; }
+    .search-input {
+      width: 100%;
+      padding: 12px 16px;
       border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 13px;
       outline: none;
-      background: #fafafb;
+      background: white;
+    }
+
+    .items-container {
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+    }
+
+    .food-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .food-img-holder {
+      width: 100%;
+      height: 125px;
+      background: #eee;
+      position: relative;
+    }
+
+    .food-img-holder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .store-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(23, 26, 41, 0.85);
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .card-info {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .item-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .item-price {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .btn-add-cart {
+      background: #ffffff;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      text-transform: uppercase;
       transition: all 0.2s;
     }
 
-    .otp-box:focus {
-      border-color: var(--kwiky-orange);
-      background: #fff;
-      box-shadow: 0 0 0 2px rgba(252, 128, 25, 0.2);
+    .btn-add-cart:active {
+      background: var(--primary);
+      color: white;
     }
 
-    .resend-timer-box {
-      text-align: center;
-      font-size: 13px;
-      color: var(--kwiky-gray);
-      margin-bottom: 14px;
-    }
-
-    .resend-link {
-      color: var(--kwiky-orange);
-      font-weight: 800;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    /* Map Box */
-    .map-preview-card {
-      border: 1px solid var(--kwiky-border);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    #interactiveMap { width: 100%; height: 160px; background: #eee; }
-
-    .gps-card-bar {
-      background: #fff8f0;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .gps-details strong { display: block; color: var(--kwiky-orange); font-size: 13px; margin-bottom: 2px; }
-    .gps-details span { font-size: 12px; color: var(--kwiky-dark); }
-
-    .detect-gps-btn {
-      background: var(--kwiky-orange);
-      color: #ffffff;
-      border: none;
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .user-profile-badge {
-      background: #eef9ee;
-      border: 1px solid #c8e6c9;
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .user-profile-badge p { font-size: 13px; color: #2e7d32; font-weight: 700; }
-    .user-profile-badge span { font-size: 12px; color: var(--kwiky-gray); }
-    .edit-profile-btn { background: none; border: none; color: var(--kwiky-orange); font-size: 12px; font-weight: 800; cursor: pointer; }
-
-    .bill-receipt-box {
-      background: var(--kwiky-light-gray);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 16px;
-      font-size: 13px;
-    }
-
-    .receipt-item-line { display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--kwiky-gray); }
-    .receipt-grand-total {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed #d0d1d6;
-      font-weight: 800;
-      font-size: 15px;
-      color: var(--kwiky-dark);
-    }
-
-    .input-row { display: flex; gap: 10px; }
-    .form-unit { margin-bottom: 12px; flex: 1; }
-    .form-unit label { display: block; font-size: 11px; font-weight: 800; color: var(--kwiky-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .form-unit input, .form-unit textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--kwiky-border); border-radius: 8px; font-size: 14px; outline: none; background: #fafafb; }
-    .form-unit input:focus, .form-unit textarea:focus { background: #ffffff; border-color: var(--kwiky-orange); }
-
-    .type-pill-group { margin-bottom: 16px; }
-    .pills-container { display: flex; gap: 10px; margin-top: 6px; }
-    .pill-btn {
-      flex: 1;
-      padding: 9px;
-      background: #fbfbfb;
-      border: 1px solid var(--kwiky-border);
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--kwiky-dark);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 300;
       justify-content: center;
-      gap: 6px;
+      align-items: flex-end;
     }
-    .pill-btn.active { background: var(--kwiky-dark); color: #ffffff; border-color: var(--kwiky-dark); }
 
-    .btn-place-final-order {
-      background: var(--kwiky-orange);
+    .modal-box {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 20px 20px 0 0;
+      padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 13px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .form-group { margin-top: 10px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .bill-summary-box {
+      background: #fcfcfd;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 14px 0;
+      font-size: 12px;
+    }
+
+    .bill-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
+
+    .bill-total {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    .consent-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 12px 0;
+      font-size: 11px;
+      color: #555;
+      line-height: 1.4;
+    }
+
+    .consent-wrap a {
+      color: var(--primary);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .btn-submit-order {
+      width: 100%;
+      background: var(--primary);
       color: white;
       border: none;
-      width: 100%;
       padding: 14px;
-      font-size: 15px;
-      font-weight: 800;
       border-radius: 10px;
-      cursor: pointer;
+      font-size: 14px;
+      font-weight: 800;
       text-transform: uppercase;
-      box-shadow: 0 4px 14px rgba(252, 128, 25, 0.3);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(252, 128, 25, 0.35);
     }
 
-    @keyframes popUpBar { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes slideUpSheet { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .payment-trust-bar {
+      margin-top: 30px;
+      padding: 20px 16px;
+      background: #ffffff;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .payment-trust-bar h4 {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .partner-logos-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 24px;
+      color: #576574;
+    }
+
+    .compliance-footer {
+      background: var(--dark);
+      color: #93959f;
+      padding: 30px 16px 20px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .footer-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .footer-links-grid a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #2d3436;
+      padding-top: 16px;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .policy-modal-box {
+      background: white;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      border-radius: 14px;
+      padding: 20px;
+      overflow-y: auto;
+      margin: auto;
+      line-height: 1.6;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Top Navbar -->
-  <header class="kwiky-topbar">
-    <div class="brand-section" onclick="detectUserLocation()">
-      <div class="brand-badge">
-        <i class="fa-solid fa-bolt"></i>
-      </div>
-      <div class="brand-info">
+  <header class="navbar">
+    <a href="/" class="brand-box">
+      <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
+      <div class="brand-text">
         <h1>Kwiky</h1>
-        <div class="delivery-location" id="topLocationDisplay">
-          <i class="fa-solid fa-location-dot" style="color: var(--kwiky-orange);"></i> 
-          <span id="locationAreaText">Detecting location...</span>
-          <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>
-        </div>
+        <p>30 Mins Instant Delivery</p>
       </div>
-    </div>
+    </a>
     <div class="nav-actions">
-      <button class="user-btn" id="headerUserBtn" onclick="openAuthModal()">
-        <i class="fa-regular fa-user"></i> <span id="headerUserName">Login</span>
-      </button>
-      <a href="/partner.html" class="partner-link-btn">
-        <i class="fa-solid fa-store"></i> Partner
+      <a href="/rider.html" style="font-size: 11px; color: var(--primary); font-weight: 800; text-decoration: none;">
+        <i class="fa-solid fa-motorcycle"></i> Partner
       </a>
+      <button class="cart-btn-pill" onclick="openCartModal()">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span id="cartCount">0</span>
+      </button>
     </div>
   </header>
 
-  <!-- Search Filter -->
-  <div class="search-section">
-    <div class="search-input-box">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" oninput="filterItems()" placeholder="Search food, groceries, or essentials on Kwiky..." />
-    </div>
+  <div class="hero-strip">
+    <h2>10+ Partner Kitchens & 200+ Delicacies</h2>
+    <p>Biryani, Crispy Burgers, Bengali Thali, Sweets & Daily Essentials delivered fresh!</p>
   </div>
 
-  <!-- Promo Banners -->
-  <div class="promo-scroll">
-    <div class="promo-card">
-      <h3>50% OFF UPTO 100 BDT</h3>
-      <p>Use code KWIKY50 on your first order</p>
-    </div>
-    <div class="promo-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-      <h3>SUPERFAST DELIVERY</h3>
-      <p>Delivering at your doorstep in minutes</p>
-    </div>
+  <div class="category-slider">
+    <button class="category-pill active" onclick="filterCategory('All', this)">All Items</button>
+    <button class="category-pill" onclick="filterCategory('Biryani & Kebab', this)">Biryani & Kebab</button>
+    <button class="category-pill" onclick="filterCategory('Fast Food & Burgers', this)">Burgers & Fast Food</button>
+    <button class="category-pill" onclick="filterCategory('Bengali Thali & Rice', this)">Bengali Thali</button>
+    <button class="category-pill" onclick="filterCategory('Desserts & Sweets', this)">Desserts & Sweets</button>
+    <button class="category-pill" onclick="filterCategory('Grocery & Essentials', this)">Grocery & Essentials</button>
   </div>
 
-  <!-- 5 Categories -->
-  <section class="category-section">
-    <div class="section-heading">Explore on Kwiky</div>
-    <div class="category-row">
-      <div class="category-node" onclick="filterByCategory('All')">
-        <div class="category-icon-bubble"><i class="fa-solid fa-utensils"></i></div>
-        <span>All</span>
-      </div>
-      <div class="category-node" onclick="filterByCategory('Food')">
-        <div class="category-icon-bubble"><i class="fa-solid fa-bowl-rice"></i></div>
-        <span>Food</span>
-      </div>
-      <div class="category-node" onclick="filterByCategory('Grocery')">
-        <div class="category-icon-bubble"><i class="fa-solid fa-basket-shopping"></i></div>
-        <span>Grocery</span>
-      </div>
-      <div class="category-node" onclick="filterByCategory('Sweets')">
-        <div class="category-icon-bubble"><i class="fa-solid fa-cake-candles"></i></div>
-        <span>Sweets</span>
-      </div>
-      <div class="category-node" onclick="filterByCategory('Medicine')">
-        <div class="category-icon-bubble"><i class="fa-solid fa-pills"></i></div>
-        <span>Medicine</span>
-      </div>
-      <div class="category-node" onclick="filterByCategory('Parcel')">
-        <div class="category-icon-bubble"><i class="fa-solid fa-box"></i></div>
-        <span>Parcel</span>
-      </div>
+  <div class="search-box-wrap">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search delicious food or groceries..." onkeyup="handleSearch()" />
+  </div>
+
+  <main class="items-container" id="itemsGrid">
+    <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">
+      <i class="fa-solid fa-circle-notch fa-spin"></i> Loading fresh menu catalog...
+    </p>
+  </main>
+
+  <section class="payment-trust-bar">
+    <h4>100% Secure Payments & Compliance</h4>
+    <div class="partner-logos-row">
+      <i class="fa-brands fa-cc-visa" title="Visa"></i>
+      <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
+      <span style="font-size: 14px; font-weight: 800; color: #e2136e;">bKash</span>
+      <span style="font-size: 14px; font-weight: 800; color: #f7941d;">Nagad</span>
+      <i class="fa-solid fa-money-bill-wave" style="color: #60b244;" title="Cash on Delivery"></i>
     </div>
   </section>
 
-  <!-- Dishes Menu Section -->
-  <main class="menu-container">
-    <div class="store-header">
-      <h2>Live Store Items</h2>
-      <div class="store-meta">
-        <span class="rating-tag"><i class="fa-solid fa-star"></i> 4.5</span>
-        <span>• 25-30 mins</span>
-        <span>• Verified Merchants</span>
-      </div>
+  <footer class="compliance-footer">
+    <div class="footer-links-grid">
+      <a onclick="showPolicy('terms')">Terms & Conditions</a>
+      <a onclick="showPolicy('privacy')">Privacy Policy</a>
+      <a onclick="showPolicy('refund')">Refund & Cancellation</a>
+      <a onclick="showPolicy('contact')">Contact Support</a>
     </div>
-    <div id="dynamicDishesList">
-      <p style="padding: 24px; text-align: center; color: var(--kwiky-gray); font-size: 13px;">
-        <i class="fa-solid fa-spinner fa-spin"></i> Loading fresh items from local merchants...
-      </p>
+    <div class="footer-bottom">
+      <p>© 2026 Kwiky Online Delivery Platform. All rights reserved.</p>
+      <p style="margin-top: 4px; color: #64748b;">Licensed On-Demand Logistics</p>
     </div>
-  </main>
+  </footer>
 
-  <!-- Sticky Floating Cart Bar -->
-  <div class="cart-float-bar" id="cartFloatBar" onclick="openCheckoutModal()">
-    <div>
-      <div class="cart-status-text"><span id="cartItemCount">0</span> ITEM(S) | <span id="cartGrandTotal">0</span> BDT</div>
-      <div class="cart-status-sub">Taxes & packaging included</div>
-    </div>
-    <div class="view-cart-box">
-      <span>View Cart</span>
-      <i class="fa-solid fa-arrow-right"></i>
-    </div>
-  </div>
-
-  <!-- OTP Login Modal -->
-  <div class="modal-backdrop" id="authModal">
-    <div class="bottom-sheet">
-      <div class="sheet-title-bar">
-        <h3 id="authStepTitle">Login or Sign up</h3>
-        <button class="close-sheet-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+  <div class="modal-backdrop" id="cartModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 style="font-size: 16px; font-weight: 900;">Your Cart (<span id="cartModalCount">0</span>)</h3>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeCartModal()"></i>
       </div>
 
-      <!-- Step 1: Phone Form -->
-      <div id="otpPhoneStep">
-        <p style="font-size:13px; color:var(--kwiky-gray); margin-bottom:14px;">Enter your 11-digit mobile number to get an instant OTP.</p>
-        <form onsubmit="handleSendOtp(event)">
-          <div class="form-unit">
-            <label>Full Name</label>
-            <input type="text" id="custAuthName" placeholder="e.g. Tanvir Ahmed" required />
-          </div>
-          <div class="form-unit">
-            <label>Mobile Number</label>
-            <input type="tel" id="custAuthPhone" placeholder="01XXXXXXXXX" maxlength="11" pattern="01[3-9][0-9]{8}" required />
-          </div>
-          <button type="submit" class="btn-place-final-order" id="sendOtpBtn" style="margin-top:8px;">Send OTP</button>
-        </form>
-      </div>
+      <div id="cartItemsList"></div>
 
-      <!-- Step 2: OTP Verification Form -->
-      <div id="otpVerifyStep" style="display:none;">
-        <p style="font-size:13px; color:var(--kwiky-gray); text-align:center;">
-          Enter 4-digit code sent to <strong id="sentPhoneDisplay">01XXXXXXXXX</strong>
-          <span onclick="backToPhoneStep()" style="color:var(--kwiky-orange); cursor:pointer; font-weight:700; margin-left:4px;">Edit</span>
-        </p>
-
-        <div class="otp-input-container">
-          <input type="tel" class="otp-box" maxlength="1" oninput="moveToNext(this, 1)" id="otp1" autofocus />
-          <input type="tel" class="otp-box" maxlength="1" oninput="moveToNext(this, 2)" id="otp2" />
-          <input type="tel" class="otp-box" maxlength="1" oninput="moveToNext(this, 3)" id="otp3" />
-          <input type="tel" class="otp-box" maxlength="1" oninput="moveToNext(this, 4)" id="otp4" />
+      <div class="bill-summary-box">
+        <div class="bill-line">
+          <span>Items Subtotal</span>
+          <span id="billSubtotal">0 BDT</span>
         </div>
-
-        <div class="resend-timer-box">
-          <span id="timerText">Resend OTP in <strong id="countdownSec">30</strong>s</span>
-          <span id="resendBtn" class="resend-link" style="display:none;" onclick="resendOtp()">Resend OTP</span>
+        <div class="bill-line">
+          <span>Delivery Partner Fee</span>
+          <span>40 BDT</span>
         </div>
-
-        <button type="button" class="btn-place-final-order" onclick="handleVerifyOtp()" id="verifyOtpBtn">Verify & Login</button>
+        <div class="bill-line">
+          <span>Platform Fee</span>
+          <span>0 BDT</span>
+        </div>
+        <div class="bill-total">
+          <span>To Pay</span>
+          <span id="billGrandTotal" style="color: var(--primary);">40 BDT</span>
+        </div>
       </div>
+
+      <div class="form-group">
+        <label>Customer Full Name</label>
+        <input type="text" id="custName" class="form-control" placeholder="E.g., Tanvir Ahmed" />
+      </div>
+
+      <div class="form-group">
+        <label>Contact Mobile Number</label>
+        <input type="tel" id="custPhone" class="form-control" placeholder="E.g., 01711223344" />
+      </div>
+
+      <div class="form-group">
+        <label>Delivery Address & Landmark</label>
+        <textarea id="custAddress" class="form-control" rows="2" placeholder="House / Road / Floor / Landmark"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select id="custPaymentMethod" class="form-control">
+          <option value="COD">Cash on Delivery (COD)</option>
+          <option value="Online">Online Gateway (bKash / Nagad / Cards)</option>
+        </select>
+      </div>
+
+      <label class="consent-wrap">
+        <input type="checkbox" id="complianceCheck" checked />
+        <span>I have read and agree to Kwiky's <a onclick="showPolicy('terms')">Terms</a>, <a onclick="showPolicy('privacy')">Privacy</a>, and <a onclick="showPolicy('refund')">Refund & Cancellation Policy</a>.</span>
+      </label>
+
+      <button class="btn-submit-order" onclick="submitFinalOrder()">Confirm & Place Order</button>
     </div>
   </div>
 
-  <!-- Checkout Bottom Sheet Modal -->
-  <div class="modal-backdrop" id="checkoutModal">
-    <div class="bottom-sheet">
-      <div class="sheet-title-bar">
-        <h3>Checkout & Delivery</h3>
-        <button class="close-sheet-btn" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
+  <div class="modal-backdrop" id="policyModal" style="align-items: center;">
+    <div class="policy-modal-box">
+      <div class="modal-header">
+        <h3 id="policyModalTitle" style="font-size: 16px;">Policy Title</h3>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closePolicyModal()"></i>
       </div>
-
-      <!-- Logged-in Profile Banner -->
-      <div class="user-profile-badge" id="customerSavedProfileBox" style="display:none;">
-        <div>
-          <p id="profileBadgeName"><i class="fa-solid fa-circle-check"></i> Customer</p>
-          <span id="profileBadgePhone">017XXXXXXXX</span>
-        </div>
-        <button type="button" class="edit-profile-btn" onclick="openAuthModal()">Change</button>
-      </div>
-
-      <!-- Interactive Map & GPS Detection -->
-      <div class="map-preview-card">
-        <div id="interactiveMap"></div>
-        <div class="gps-card-bar">
-          <div class="gps-details">
-            <strong><i class="fa-solid fa-location-crosshairs"></i> Delivery Location</strong>
-            <span id="gpsPinStatus">Click detect to pin GPS position</span>
-          </div>
-          <button type="button" class="detect-gps-btn" onclick="detectUserLocation()">Detect GPS</button>
-        </div>
-      </div>
-
-      <!-- Bill Breakdown -->
-      <div class="bill-receipt-box" id="billSummaryBox"></div>
-
-      <!-- Bangladeshi Structured Address Form -->
-      <form id="orderCheckoutForm" onsubmit="submitCustomerOrder(event)">
-        <div id="manualContactInputs">
-          <div class="input-row">
-            <div class="form-unit">
-              <label for="custName">Full Name</label>
-              <input type="text" id="custName" placeholder="e.g. Tanvir Ahmed" required />
-            </div>
-
-            <div class="form-unit">
-              <label for="custPhone">Mobile Number</label>
-              <input type="tel" id="custPhone" placeholder="01XXXXXXXXX" maxlength="11" required />
-            </div>
-          </div>
-        </div>
-
-        <div class="form-unit">
-          <label for="flatHouse">House / Holding / Flat No</label>
-          <input type="text" id="flatHouse" placeholder="e.g. Holding #45, 2nd Floor" required />
-        </div>
-
-        <div class="form-unit">
-          <label for="villageRoad">Area / Village / Road Name</label>
-          <input type="text" id="villageRoad" placeholder="e.g. Katbunia, Main Bazar Road" required />
-        </div>
-
-        <div class="form-unit">
-          <label for="landmark">Landmark / Well-known Place</label>
-          <input type="text" id="landmark" placeholder="e.g. Near College Moor / Central Mosque" />
-        </div>
-
-        <!-- Address Tag Selector -->
-        <div class="type-pill-group">
-          <label style="font-size: 11px; font-weight: 800; color: var(--kwiky-gray); text-transform: uppercase;">Save Address As</label>
-          <div class="pills-container">
-            <button type="button" class="pill-btn active" onclick="chooseAddressTag(this, 'Home')">
-              <i class="fa-solid fa-house"></i> Home
-            </button>
-            <button type="button" class="pill-btn" onclick="chooseAddressTag(this, 'Work')">
-              <i class="fa-solid fa-briefcase"></i> Work
-            </button>
-            <button type="button" class="pill-btn" onclick="chooseAddressTag(this, 'Other')">
-              <i class="fa-solid fa-location-dot"></i> Other
-            </button>
-          </div>
-        </div>
-
-        <input type="hidden" id="mapLocationLink" />
-        <button type="submit" class="btn-place-final-order" id="orderSubmitBtn">Confirm & Place Order</button>
-      </form>
+      <div id="policyModalBody"></div>
     </div>
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    let allCatalog = [];
     let cart = [];
-    let catalogItems = [];
-    let selectedAddressTag = "Home";
-    let mapInstance = null;
-    let markerInstance = null;
-    let countdownInterval = null;
-    let currentAuthPhone = "";
-    let currentAuthName = "";
+    const DELIVERY_FEE = 40;
 
-    // 1. Swiggy OTP Login System
-    function checkCustomerAuth() {
-      const savedUser = JSON.parse(localStorage.getItem('kwiky_customer'));
-      const headerName = document.getElementById('headerUserName');
-      const profileBox = document.getElementById('customerSavedProfileBox');
-      const manualInputs = document.getElementById('manualContactInputs');
-
-      if (savedUser && savedUser.phone) {
-        headerName.innerText = savedUser.name.split(' ')[0];
-        profileBox.style.display = 'flex';
-        document.getElementById('profileBadgeName').innerHTML = `<i class="fa-solid fa-circle-check"></i> ${savedUser.name}`;
-        document.getElementById('profileBadgePhone').innerText = savedUser.phone;
-        
-        document.getElementById('custName').value = savedUser.name;
-        document.getElementById('custPhone').value = savedUser.phone;
-        manualInputs.style.display = 'none';
-      } else {
-        headerName.innerText = "Login";
-        profileBox.style.display = 'none';
-        manualInputs.style.display = 'block';
-      }
-    }
-
-    function openAuthModal() {
-      document.getElementById('otpPhoneStep').style.display = 'block';
-      document.getElementById('otpVerifyStep').style.display = 'none';
-      document.getElementById('authStepTitle').innerText = "Login or Sign up";
-      document.getElementById('authModal').style.display = 'flex';
-    }
-
-    function closeAuthModal() {
-      document.getElementById('authModal').style.display = 'none';
-      clearInterval(countdownInterval);
-    }
-
-    function backToPhoneStep() {
-      document.getElementById('otpPhoneStep').style.display = 'block';
-      document.getElementById('otpVerifyStep').style.display = 'none';
-      document.getElementById('authStepTitle').innerText = "Login or Sign up";
-      clearInterval(countdownInterval);
-    }
-
-    async function handleSendOtp(e) {
-      if (e) e.preventDefault();
-      currentAuthName = document.getElementById('custAuthName').value.trim();
-      currentAuthPhone = document.getElementById('custAuthPhone').value.trim();
-
-      const btn = document.getElementById('sendOtpBtn');
-      btn.innerText = "Sending code...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch('/api/auth/send-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: currentAuthPhone })
-        });
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          document.getElementById('sentPhoneDisplay').innerText = currentAuthPhone;
-          document.getElementById('otpPhoneStep').style.display = 'none';
-          document.getElementById('otpVerifyStep').style.display = 'block';
-          document.getElementById('authStepTitle').innerText = "Verify Mobile";
-          
-          startTimer();
-          
-          ['otp1','otp2','otp3','otp4'].forEach(id => document.getElementById(id).value = '');
-          setTimeout(() => document.getElementById('otp1').focus(), 300);
-
-          if (data.testOtp) {
-            alert(`[Kwiky Verification Code]: ${data.testOtp}`);
-          }
-        } else {
-          alert(data.message || "Failed to send OTP");
-        }
-      } catch (err) {
-        alert("Server error: " + err.message);
-      } finally {
-        btn.innerText = "Send OTP";
-        btn.disabled = false;
-      }
-    }
-
-    function moveToNext(current, nextIndex) {
-      if (current.value.length >= 1 && nextIndex < 4) {
-        document.getElementById(`otp${nextIndex + 1}`).focus();
-      }
-    }
-
-    function startTimer() {
-      clearInterval(countdownInterval);
-      let sec = 30;
-      document.getElementById('countdownSec').innerText = sec;
-      document.getElementById('timerText').style.display = 'inline';
-      document.getElementById('resendBtn').style.display = 'none';
-
-      countdownInterval = setInterval(() => {
-        sec--;
-        document.getElementById('countdownSec').innerText = sec;
-        if (sec <= 0) {
-          clearInterval(countdownInterval);
-          document.getElementById('timerText').style.display = 'none';
-          document.getElementById('resendBtn').style.display = 'inline';
-        }
-      }, 1000);
-    }
-
-    function resendOtp() {
-      handleSendOtp(null);
-    }
-
-    async function handleVerifyOtp() {
-      const o1 = document.getElementById('otp1').value;
-      const o2 = document.getElementById('otp2').value;
-      const o3 = document.getElementById('otp3').value;
-      const o4 = document.getElementById('otp4').value;
-      const otp = `${o1}${o2}${o3}${o4}`;
-
-      if (otp.length !== 4) {
-        alert("Please enter the 4-digit code");
-        return;
-      }
-
-      const btn = document.getElementById('verifyOtpBtn');
-      btn.innerText = "Verifying...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch('/api/auth/verify-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: currentAuthPhone, otp, name: currentAuthName })
-        });
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          localStorage.setItem('kwiky_customer', JSON.stringify(data.user));
-          checkCustomerAuth();
-          closeAuthModal();
-          alert(`Welcome, ${data.user.name}! Login successful.`);
-        } else {
-          alert(data.message || "Invalid OTP code");
-        }
-      } catch (err) {
-        alert("Verification error: " + err.message);
-      } finally {
-        btn.innerText = "Verify & Login";
-        btn.disabled = false;
-      }
-    }
-
-    // 2. Live Map & GPS Detection
-    function initMap(lat, lon) {
-      if (!mapInstance) {
-        mapInstance = L.map('interactiveMap').setView([lat, lon], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap'
-        }).addTo(mapInstance);
-        markerInstance = L.marker([lat, lon], { draggable: true }).addTo(mapInstance);
-        markerInstance.on('dragend', function (e) {
-          const pos = e.target.getLatLng();
-          updateCoordinates(pos.lat, pos.lng);
-        });
-      } else {
-        mapInstance.setView([lat, lon], 15);
-        markerInstance.setLatLng([lat, lon]);
-        setTimeout(() => mapInstance.invalidateSize(), 300);
-      }
-    }
-
-    function updateCoordinates(lat, lon) {
-      document.getElementById('mapLocationLink').value = `https://www.google.com/maps?q=${lat},${lon}`;
-      document.getElementById('gpsPinStatus').innerText = `Pinned: ${lat.toFixed(4)}, ${lon.toFixed(4)}`;
-      document.getElementById('gpsPinStatus').style.color = "var(--kwiky-green)";
-
-      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.address) {
-            const area = data.address.suburb || data.address.neighbourhood || data.address.town || data.address.village || data.address.county || data.address.city || "My Location";
-            document.getElementById('locationAreaText').innerText = area;
-            document.getElementById('villageRoad').value = area + (data.address.road ? ", " + data.address.road : "");
-          }
-        }).catch(err => console.log(err));
-    }
-
-    function detectUserLocation() {
-      const areaText = document.getElementById('locationAreaText');
-      if (!navigator.geolocation) {
-        areaText.innerText = "GPS Not Supported";
-        return;
-      }
-      areaText.innerText = "Locating...";
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          updateCoordinates(pos.coords.latitude, pos.coords.longitude);
-          initMap(pos.coords.latitude, pos.coords.longitude);
-        },
-        () => {
-          areaText.innerText = "Set Location";
-          initMap(22.7185, 89.0705);
-        },
-        { enableHighAccuracy: true, timeout: 8000 }
-      );
-    }
-
-    // 3. Dynamic Catalog
-    async function loadPublicCatalog() {
-      const container = document.getElementById('dynamicDishesList');
+    async function loadCatalog() {
       try {
         const res = await fetch('/api/public-menu');
         const data = await res.json();
-        catalogItems = data.catalog || [];
-        renderCatalog(catalogItems);
+        allCatalog = data.catalog || [];
+        renderItems(allCatalog);
       } catch (err) {
-        container.innerHTML = '<p style="padding:20px; text-align:center; color:red;">Failed to load items.</p>';
+        document.getElementById('itemsGrid').innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 30px;">
+            <p style="color: #e74c3c;">Failed to load items.</p>
+            <a href="/api/seed-now" style="display:inline-block; margin-top:10px; background:var(--primary); color:white; padding:8px 16px; border-radius:6px; text-decoration:none; font-weight:bold;">Load 200 Menu Items</a>
+          </div>
+        `;
       }
     }
 
-    function renderCatalog(items) {
-      const container = document.getElementById('dynamicDishesList');
-      if (!items || items.length === 0) {
-        container.innerHTML = `
-          <div style="padding: 30px 16px; text-align: center; color: var(--kwiky-gray);">
-            <i class="fa-solid fa-store-slash" style="font-size: 32px; color: #dcdde1; margin-bottom: 10px;"></i>
-            <p style="font-weight: 700; font-size: 15px; color: var(--kwiky-dark);">No items available right now</p>
-            <p style="font-size: 12px; margin-top: 4px; margin-bottom: 14px;">Are you a local restaurant or merchant?</p>
-            <a href="/partner.html" style="background: var(--kwiky-orange); color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: 800; display: inline-block;">
-              + Register & Add Items
-            </a>
-          </div>`;
+    function renderItems(items) {
+      const grid = document.getElementById('itemsGrid');
+      if (items.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 40px 0; color: #888;">No items found matching your filter.</p>`;
         return;
       }
 
-      container.innerHTML = items.map(item => `
-        <div class="dish-card">
-          <div class="dish-info">
-            <div class="badge-icon"></div>
-            <div class="dish-store-tag"><i class="fa-solid fa-shop"></i> ${item.storeName}</div>
-            <h3 class="dish-title">${item.name}</h3>
-            <div class="dish-cost">${item.price} BDT</div>
-            <p class="dish-desc">${item.description || 'Freshly packed upon your order.'}</p>
+      grid.innerHTML = items.map(item => `
+        <div class="food-card">
+          <div class="food-img-holder">
+            <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300'}" alt="${item.name}" loading="lazy" />
+            <span class="store-badge">${item.storeName || 'Kwiky Express'}</span>
           </div>
-          <div class="dish-action-box">
-            <img class="dish-thumb" src="${item.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&q=80'}" alt="${item.name}" />
-            <div class="add-action-wrap">
-              ${item.isAvailable ? 
-                `<button class="swiggy-add-btn" onclick="addToCart('${item.name.replace(/'/g, "\\'")}', ${item.price})">ADD</button>` :
-                `<button class="swiggy-add-btn btn-out-of-stock" disabled>OUT OF STOCK</button>`
-              }
+          <div class="card-info">
+            <div>
+              <div class="item-title">${item.name}</div>
+              <div class="item-price">${item.price} BDT</div>
             </div>
+            <button class="btn-add-cart" onclick="addToCart('${item._id}', '${escape(item.name)}', ${item.price})">+ ADD</button>
           </div>
         </div>
       `).join('');
     }
 
-    function filterItems() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = catalogItems.filter(i => 
-        i.name.toLowerCase().includes(q) || 
-        (i.description && i.description.toLowerCase().includes(q)) ||
-        (i.storeName && i.storeName.toLowerCase().includes(q))
-      );
-      renderCatalog(filtered);
-    }
+    function filterCategory(cat, btn) {
+      document.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
-    function filterByCategory(cat) {
-      if (cat === 'All') renderCatalog(catalogItems);
-      else {
-        const filtered = catalogItems.filter(i => i.category && i.category.toLowerCase().includes(cat.toLowerCase()));
-        renderCatalog(filtered.length ? filtered : catalogItems);
-      }
-    }
-
-    // 4. Cart & Checkout
-    function addToCart(name, price) {
-      cart.push({ name, price });
-      renderCartBar();
-    }
-
-    function renderCartBar() {
-      const cartBar = document.getElementById('cartFloatBar');
-      if (cart.length > 0) {
-        const total = cart.reduce((acc, curr) => acc + curr.price, 0);
-        document.getElementById('cartItemCount').innerText = cart.length;
-        document.getElementById('cartGrandTotal').innerText = total;
-        cartBar.style.display = 'flex';
+      if (cat === 'All') {
+        renderItems(allCatalog);
       } else {
-        cartBar.style.display = 'none';
+        const filtered = allCatalog.filter(i => (i.category || '').toLowerCase() === cat.toLowerCase());
+        renderItems(filtered);
       }
     }
 
-    function openCheckoutModal() {
-      if (cart.length === 0) return;
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allCatalog.filter(i => 
+        i.name.toLowerCase().includes(query) || 
+        (i.storeName && i.storeName.toLowerCase().includes(query)) ||
+        (i.category && i.category.toLowerCase().includes(query))
+      );
+      renderItems(filtered);
+    }
 
-      const savedUser = JSON.parse(localStorage.getItem('kwiky_customer'));
-      if (!savedUser) {
-        openAuthModal();
+    function addToCart(id, rawName, price) {
+      const name = unescape(rawName);
+      cart.push({ id, name, price });
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      document.getElementById('cartCount').innerText = cart.length;
+      document.getElementById('cartModalCount').innerText = cart.length;
+
+      const itemsList = document.getElementById('cartItemsList');
+      if (cart.length === 0) {
+        itemsList.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 15px 0;">Cart is empty.</p>`;
+      } else {
+        itemsList.innerHTML = cart.map((item, idx) => `
+          <div class="cart-item-row">
+            <div>
+              <strong>${item.name}</strong>
+              <div style="font-size: 11px; color: var(--text-muted);">${item.price} BDT</div>
+            </div>
+            <i class="fa-solid fa-trash" style="color: #e74c3c; cursor: pointer;" onclick="removeFromCart(${idx})"></i>
+          </div>
+        `).join('');
+      }
+
+      const subtotal = cart.reduce((sum, i) => sum + i.price, 0);
+      const grandTotal = subtotal > 0 ? subtotal + DELIVERY_FEE : 0;
+
+      document.getElementById('billSubtotal').innerText = `${subtotal} BDT`;
+      document.getElementById('billGrandTotal').innerText = `${grandTotal} BDT`;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function openCartModal() {
+      document.getElementById('cartModal').style.display = 'flex';
+    }
+
+    function closeCartModal() {
+      document.getElementById('cartModal').style.display = 'none';
+    }
+
+    async function submitFinalOrder() {
+      if (cart.length === 0) {
+        alert("Please add at least one item to your cart.");
         return;
       }
 
-      const receiptBox = document.getElementById('billSummaryBox');
-      let total = 0;
-      let summaryHtml = `<div style="font-weight:800; margin-bottom:10px;">Bill Summary</div>`;
-      cart.forEach(item => {
-        summaryHtml += `<div class="receipt-item-line"><span>${item.name}</span><span>${item.price} BDT</span></div>`;
-        total += item.price;
-      });
-      summaryHtml += `<div class="receipt-grand-total"><span>TO PAY</span><span>${total} BDT</span></div>`;
-      receiptBox.innerHTML = summaryHtml;
-      
-      document.getElementById('checkoutModal').style.display = 'flex';
-      setTimeout(() => {
-        if (mapInstance) mapInstance.invalidateSize();
-        else detectUserLocation();
-      }, 300);
-    }
-
-    function closeCheckoutModal() {
-      document.getElementById('checkoutModal').style.display = 'none';
-    }
-
-    function chooseAddressTag(button, tag) {
-      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-      selectedAddressTag = tag;
-    }
-
-    async function submitCustomerOrder(event) {
-      event.preventDefault();
-
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
-      const house = document.getElementById('flatHouse').value.trim();
-      const village = document.getElementById('villageRoad').value.trim();
-      const landmark = document.getElementById('landmark').value.trim();
-      const mapLocation = document.getElementById('mapLocationLink').value;
+      const address = document.getElementById('custAddress').value.trim();
+      const compliance = document.getElementById('complianceCheck').checked;
 
-      let fullAddress = `[${selectedAddressTag}] ${house}, ${village}`;
-      if (landmark) fullAddress += ` (Landmark: ${landmark})`;
+      if (!name || !phone || !address) {
+        alert("Please provide Name, Phone Number, and Delivery Address.");
+        return;
+      }
 
-      const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
-      const payload = { name, phone, address: fullAddress, mapLocation, items: cart, total: totalAmount };
+      if (!compliance) {
+        alert("Please agree to the Terms & Conditions and Refund Policy.");
+        return;
+      }
 
-      const submitBtn = document.getElementById('orderSubmitBtn');
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Placing Order...";
+      const subtotal = cart.reduce((sum, i) => sum + i.price, 0);
+      const total = subtotal + DELIVERY_FEE;
 
       try {
-        const response = await fetch('/api/orders', {
+        const res = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            name,
+            phone,
+            address,
+            items: cart,
+            total,
+            storeLat: 22.5726,
+            storeLng: 88.3639
+          })
         });
 
-        if (response.ok) {
-          alert("🎉 Order placed successfully on Kwiky!");
+        const data = await res.json();
+        if (data.success) {
+          alert(`Order Placed Successfully! Order #${data.order._id.slice(-6)}. A nearby rider is being assigned.`);
           cart = [];
-          renderCartBar();
-          closeCheckoutModal();
-          document.getElementById('orderCheckoutForm').reset();
+          updateCartUI();
+          closeCartModal();
         } else {
-          alert("Order submission failed. Please try again.");
+          alert("Order placement failed: " + data.message);
         }
       } catch (err) {
-        alert("Server error: " + err.message);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Confirm & Place Order";
+        alert("Error connecting to server. Please try again.");
       }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      checkCustomerAuth();
-      loadPublicCatalog();
-      detectUserLocation();
-    });
+    const policyContent = {
+      terms: {
+        title: "Terms & Conditions",
+        body: `
+          <p><strong>1. Introduction:</strong> Welcome to Kwiky. By placing an order, you agree to comply with our platform terms.</p>
+          <p><strong>2. Orders & Deliveries:</strong> Delivery timelines are estimates (standard 30-45 minutes). Food preparation and quality are maintained by our verified partner merchants.</p>
+          <p><strong>3. Payment & Pricing:</strong> All prices listed are in Bangladeshi Taka (BDT). Prices include applicable taxes.</p>
+        `
+      },
+      privacy: {
+        title: "Privacy Policy",
+        body: `
+          <p><strong>1. Information We Collect:</strong> We collect name, contact number, and delivery location strictly to fulfill orders.</p>
+          <p><strong>2. Security:</strong> All user credentials and payment sessions are handled over secure encrypted HTTPS channels.</p>
+        `
+      },
+      refund: {
+        title: "Refund & Cancellation Policy",
+        body: `
+          <p><strong>1. Cancellation:</strong> Orders can be cancelled within 5 minutes of placement without fee.</p>
+          <p><strong>2. Refund Settlement:</strong> Verified refunds are processed back to source account within <strong>5 to 7 business days</strong>.</p>
+        `
+      },
+      contact: {
+        title: "Contact & Support",
+        body: `
+          <p><strong>Helpline:</strong> +880 1700-000000</p>
+          <p><strong>Support Email:</strong> support@kwiky-delivery.com</p>
+          <p><strong>Headquarters:</strong> Plot 12, Block C, Banani Commercial Area, Dhaka 1213</p>
+        `
+      }
+    };
+
+    function showPolicy(type) {
+      const p = policyContent[type];
+      if (p) {
+        document.getElementById('policyModalTitle').innerText = p.title;
+        document.getElementById('policyModalBody').innerHTML = p.body;
+        document.getElementById('policyModal').style.display = 'flex';
+      }
+    }
+
+    function closePolicyModal() {
+      document.getElementById('policyModal').style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', loadCatalog);
   </script>
 </body>
 </html>
