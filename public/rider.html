@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Kwiky Delivery Partner</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --swiggy-orange: #fc8019;
+      --swiggy-black: #171a29;
+      --swiggy-dark-card: #282c3f;
+      --swiggy-green: #60b244;
+      --swiggy-blue: #0984e3;
+      --swiggy-red: #e74c3c;
+      --bg-gray: #f2f2f6;
+      --text-muted: #93959f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-gray);
+      color: #282c3f;
+      padding-bottom: 40px;
+    }
+
+    /* Swiggy Partner Top Bar */
+    .partner-topbar {
+      background-color: var(--swiggy-black);
+      color: #ffffff;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .partner-id-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .partner-avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--swiggy-orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .partner-details h2 {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .partner-details p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Duty Switch Button */
+    .duty-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #282c3f;
+      padding: 8px 14px;
+      border-radius: 24px;
+      cursor: pointer;
+      border: 1.5px solid #3d4152;
+      transition: all 0.2s ease;
+    }
+
+    .duty-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #7e818c;
+    }
+
+    .duty-pill.active {
+      background: #11361b;
+      border-color: var(--swiggy-green);
+    }
+
+    .duty-pill.active .duty-indicator {
+      background: var(--swiggy-green);
+      box-shadow: 0 0 8px var(--swiggy-green);
+    }
+
+    .duty-pill span {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #fff;
+    }
+
+    /* Floating Earnings Summary */
+    .earning-card {
+      margin: 14px 16px;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-around;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+
+    .metric-unit {
+      text-align: center;
+    }
+
+    .metric-unit small {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .metric-unit h3 {
+      font-size: 19px;
+      font-weight: 900;
+      color: var(--swiggy-black);
+      margin-top: 2px;
+    }
+
+    /* Active Orders Container */
+    .order-feed-container {
+      padding: 0 16px;
+    }
+
+    .feed-header {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--swiggy-black);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .order-ticket {
+      background: #ffffff;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      overflow: hidden;
+      border: 1px solid #e9e9eb;
+      animation: popTicket 0.3s ease-out;
+    }
+
+    .ticket-header {
+      background: #fafafb;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f0f0f2;
+    }
+
+    .ticket-id {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--swiggy-black);
+    }
+
+    .ticket-status {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .status-pending { background: #fff3e6; color: var(--swiggy-orange); }
+    .status-accepted { background: #ebf5fb; color: var(--swiggy-blue); }
+    .status-picked { background: #eafaf1; color: var(--swiggy-green); }
+
+    .ticket-body {
+      padding: 14px;
+    }
+
+    .location-step {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .step-icon {
+      font-size: 16px;
+      margin-top: 2px;
+    }
+
+    .step-info strong {
+      display: block;
+      font-size: 13px;
+      color: var(--swiggy-black);
+      margin-bottom: 2px;
+    }
+
+    .step-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .items-tag-box {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 12px;
+      color: #3e4152;
+      margin-bottom: 14px;
+      border-left: 3px solid var(--swiggy-orange);
+    }
+
+    /* Buttons Row */
+    .button-grid {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-sub-btn {
+      flex: 1;
+      padding: 11px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 1px solid #dfe4ea;
+      background: #f1f2f6;
+      color: #2f3542;
+    }
+
+    .action-flow-btn {
+      flex: 2;
+      padding: 11px;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+
+    .flow-accept { background: var(--swiggy-orange); }
+    .flow-picked { background: var(--swiggy-blue); }
+    .flow-deliver { background: var(--swiggy-green); }
+
+    .offline-placeholder {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .offline-placeholder i {
+      font-size: 48px;
+      color: #ccc;
+      margin-bottom: 14px;
+    }
+
+    @keyframes popTicket {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header class="partner-topbar">
+    <div class="partner-id-box">
+      <div class="partner-avatar">
+        <i class="fa-solid fa-motorcycle"></i>
+      </div>
+      <div class="partner-details">
+        <h2>Kwiky Fleet</h2>
+        <p id="fleetRiderName">Rider ID: #KW-884</p>
+      </div>
+    </div>
+
+    <!-- Go Online / Offline Toggle -->
+    <div class="duty-pill" id="dutyBtn" onclick="toggleDuty()">
+      <div class="duty-indicator"></div>
+      <span id="dutyText">GO ONLINE</span>
+    </div>
+  </header>
+
+  <!-- Payout & Performance Overview -->
+  <section class="earning-card">
+    <div class="metric-unit">
+      <small>Completed Trips</small>
+      <h3 id="tripsCount">0</h3>
+    </div>
+    <div style="border-right: 1px solid #eee;"></div>
+    <div class="metric-unit">
+      <small>Today's Payout</small>
+      <h3 id="earningsAmount">0 BDT</h3>
+    </div>
+  </section>
+
+  <!-- Order List Feed -->
+  <main class="order-feed-container">
+    <div class="feed-header">
+      <span>LIVE ASSIGNMENTS</span>
+      <span id="liveBadge" style="font-size: 11px; color: var(--swiggy-green); display:none;">● Radar Active</span>
+    </div>
+
+    <div id="ordersContainer">
+      <div class="offline-placeholder">
+        <i class="fa-solid fa-power-off"></i>
+        <h4 style="color: #282c3f; margin-bottom: 4px;">You are currently Offline</h4>
+        <p style="font-size: 12px;">Toggle 'GO ONLINE' above to start receiving delivery tasks.</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let isOnline = false;
+    let pollTimer = null;
+    let completedTrips = 0;
+    let totalEarnings = 0;
+    const DELIVERY_PAY_PER_TRIP = 40; // প্রতি অর্ডারে রাইডারের আয় ৪০ টাকা
+
+    function toggleDuty() {
+      isOnline = !isOnline;
+      const btn = document.getElementById('dutyBtn');
+      const text = document.getElementById('dutyText');
+      const badge = document.getElementById('liveBadge');
+
+      if (isOnline) {
+        btn.classList.add('active');
+        text.innerText = "ONLINE";
+        badge.style.display = "inline";
+        fetchFleetOrders();
+        pollTimer = setInterval(fetchFleetOrders, 8000); // ৮ সেকেন্ড পরপর নতুন অর্ডারের জন্য রিফ্রেশ
+      } else {
+        btn.classList.remove('active');
+        text.innerText = "GO ONLINE";
+        badge.style.display = "none";
+        clearInterval(pollTimer);
+        document.getElementById('ordersContainer').innerHTML = `
+          <div class="offline-placeholder">
+            <i class="fa-solid fa-power-off"></i>
+            <h4 style="color: #282c3f; margin-bottom: 4px;">You are currently Offline</h4>
+            <p style="font-size: 12px;">Toggle 'GO ONLINE' above to start receiving delivery tasks.</p>
+          </div>
+        `;
+      }
+    }
+
+    async function fetchFleetOrders() {
+      if (!isOnline) return;
+
+      try {
+        const res = await fetch('/api/rider/orders');
+        const data = await res.json();
+        renderOrders(data.orders || []);
+      } catch (err) {
+        console.error("Error fetching fleet assignments:", err);
+      }
+    }
+
+    function renderOrders(orders) {
+      const container = document.getElementById('ordersContainer');
+
+      if (orders.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px 14px; color: var(--text-muted);">
+            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 30px; color: var(--swiggy-orange); margin-bottom: 12px;"></i>
+            <p style="font-weight: 700; color: #282c3f; font-size: 14px;">Searching for nearby orders...</p>
+            <p style="font-size: 11px; margin-top: 4px;">Orders placed by local customers will pop up here instantly.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(order => {
+        const itemsSummary = (order.items || []).map(i => i.name).join(', ') || 'Package order';
+        const mapsUrl = order.mapLocation || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}`;
+        
+        let statusClass = 'status-pending';
+        let actionBtn = '';
+
+        if (!order.status || order.status === 'Pending') {
+          statusClass = 'status-pending';
+          actionBtn = `<button class="action-flow-btn flow-accept" onclick="updateOrderStatus('${order._id}', 'Accepted')">Accept Order</button>`;
+        } else if (order.status === 'Accepted') {
+          statusClass = 'status-accepted';
+          actionBtn = `<button class="action-flow-btn flow-picked" onclick="updateOrderStatus('${order._id}', 'Picked Up')">Confirm Pickup</button>`;
+        } else if (order.status === 'Picked Up') {
+          statusClass = 'status-picked';
+          actionBtn = `<button class="action-flow-btn flow-deliver" onclick="updateOrderStatus('${order._id}', 'Delivered')">Deliver & Collect ${order.total} BDT</button>`;
+        }
+
+        return `
+          <div class="order-ticket">
+            <div class="ticket-header">
+              <span class="ticket-id">ORDER #${order._id.slice(-6)}</span>
+              <span class="ticket-status ${statusClass}">${order.status || 'Pending'}</span>
+            </div>
+            
+            <div class="ticket-body">
+              <div class="items-tag-box">
+                <strong><i class="fa-solid fa-bag-shopping"></i> Items:</strong> ${itemsSummary}
+                <div style="margin-top: 3px; font-weight: 800; color: var(--swiggy-black);">Total Bill: ${order.total} BDT (Cash on Delivery)</div>
+              </div>
+
+              <!-- Customer Drop Details -->
+              <div class="location-step">
+                <i class="fa-solid fa-location-dot step-icon" style="color: var(--swiggy-red);"></i>
+                <div class="step-info">
+                  <strong>${order.name}</strong>
+                  <p>${order.address}</p>
+                </div>
+              </div>
+
+              <!-- Action Row -->
+              <div class="button-grid">
+                <a href="${mapsUrl}" target="_blank" class="action-sub-btn">
+                  <i class="fa-solid fa-diamond-turn-right" style="color: var(--swiggy-blue);"></i> Map
+                </a>
+                <a href="tel:${order.phone}" class="action-sub-btn">
+                  <i class="fa-solid fa-phone" style="color: var(--swiggy-green);"></i> Call
+                </a>
+                ${actionBtn}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function updateOrderStatus(orderId, nextStatus) {
+      try {
+        const res = await fetch(`/api/rider/order/${orderId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: nextStatus, riderName: "Kwiky Rider #884" })
+        });
+
+        if (res.ok) {
+          if (nextStatus === 'Delivered') {
+            completedTrips++;
+            totalEarnings += DELIVERY_PAY_PER_TRIP;
+            document.getElementById('tripsCount').innerText = completedTrips;
+            document.getElementById('earningsAmount').innerText = `${totalEarnings} BDT`;
+            alert(" Deliver সম্পন্ন হয়েছে! নগদ টাকা কালেক্ট করা নিশ্চিত করুন।");
+          }
+          fetchFleetOrders();
+        } else {
+          alert("Could not update order status.");
+        }
+      } catch (err) {
+        alert("Server error: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
