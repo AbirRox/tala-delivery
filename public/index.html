@@ -97,7 +97,7 @@
     }
     .main-cat-item.active i { color: var(--primary); }
 
-    /* Subcategory Pills Bar (10 Options per Category) */
+    /* Subcategory Pills Bar */
     .subcategory-bar {
       display: flex;
       gap: 8px;
@@ -139,34 +139,85 @@
     }
 
     .section-title-wrap {
-      padding: 6px 16px 10px;
+      padding: 10px 16px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .section-title-wrap h3 { font-size: 15px; font-weight: 900; }
+    .section-title-wrap h3 { font-size: 16px; font-weight: 900; }
+    .back-btn-pill {
+      background: #e2e8f0;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
 
-    /* Swiggy Restaurant Grid */
+    /* Swiggy Style Restaurant Cards */
     .restaurants-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 14px;
-      padding: 0 16px 16px;
+      gap: 16px;
+      padding: 0 16px 20px;
     }
     .restaurant-card {
       background: white;
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
       border: 1px solid var(--border);
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: transform 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: all 0.25s ease;
     }
-    .restaurant-card:hover { transform: translateY(-2px); }
-    .res-banner { width: 100%; height: 130px; object-fit: cover; }
-    .res-details { padding: 12px; }
-    .res-details h4 { font-size: 15px; font-weight: 800; color: var(--dark); }
-    .res-details p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .restaurant-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .res-banner-box {
+      width: 100%;
+      height: 140px;
+      position: relative;
+      background: #e2e8f0;
+    }
+    .res-banner-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .res-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(23, 26, 41, 0.85);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .res-badge i { color: #f1c40f; }
+    .res-details { padding: 14px; }
+    .res-details h4 { font-size: 16px; font-weight: 900; color: var(--dark); }
+    .res-details p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .res-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+    }
 
     /* Flipkart Style Products Grid */
     .items-grid {
@@ -183,6 +234,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
     .prod-img-holder {
       width: 100%;
@@ -218,6 +270,7 @@
       font-weight: 800;
       cursor: pointer;
       text-transform: uppercase;
+      transition: all 0.2s;
     }
     .btn-add:active { background: var(--primary); color: white; }
 
@@ -358,7 +411,7 @@
 </head>
 <body>
 
-  <!-- Top App Navbar -->
+  <!-- Top Navigation -->
   <header class="navbar">
     <a href="/" class="brand-box">
       <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
@@ -398,28 +451,31 @@
     </div>
   </nav>
 
-  <!-- Dynamic Subcategory Pills (10 Options Each) -->
+  <!-- Dynamic Subcategory Pills Bar -->
   <div class="subcategory-bar" id="subcatBar"></div>
 
-  <!-- Search Box -->
+  <!-- Search -->
   <div class="search-wrap">
-    <input type="text" id="searchInput" class="search-input" placeholder="Search 400+ items across all categories..." onkeyup="handleSearch()" />
+    <input type="text" id="searchInput" class="search-input" placeholder="Search restaurants, dishes, fashion, medicine..." onkeyup="handleSearch()" />
   </div>
 
-  <!-- Content Section -->
+  <!-- Main View Container -->
   <section>
     <div class="section-title-wrap">
       <h3 id="sectionHeading">Top Partner Restaurants</h3>
+      <button class="back-btn-pill" id="backToResBtn" style="display: none;" onclick="resetToAllRestaurants()">
+        <i class="fa-solid fa-arrow-left"></i> All Restaurants
+      </button>
     </div>
 
-    <!-- Swiggy-Style Restaurant Listing (For Food Category) -->
+    <!-- Swiggy Restaurant Listing View -->
     <div class="restaurants-grid" id="restaurantView"></div>
 
-    <!-- Flipkart-Style Products Grid (For Fashion, Medicine, Grocery & Food Dishes) -->
+    <!-- Product Grid View -->
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
-  <!-- Payment Trust Badges -->
+  <!-- Trust Badges -->
   <section class="payment-trust-bar">
     <h4>100% Secure Payments & Compliance</h4>
     <div class="partner-logos-row">
@@ -439,7 +495,7 @@
       <a onclick="showPolicy('refund')">Refund & Cancellation</a>
       <a onclick="showPolicy('contact')">Customer Support</a>
     </div>
-    <p>© 2026 Kwiky Online Platform. All rights reserved.</p>
+    <p>© 2026 Kwiky Online Delivery Platform</p>
   </footer>
 
   <!-- Cart Modal -->
@@ -468,7 +524,7 @@
       </div>
       <div class="form-group">
         <label>Delivery Address</label>
-        <textarea id="custAddress" class="form-control" rows="2" placeholder="House, Road, Area, Landmark"></textarea>
+        <textarea id="custAddress" class="form-control" rows="2" placeholder="House, Road, Landmark"></textarea>
       </div>
       <div class="form-group">
         <label>Payment Mode</label>
@@ -487,7 +543,7 @@
     </div>
   </div>
 
-  <!-- Policy View Modal -->
+  <!-- Policy Modal -->
   <div class="modal-backdrop" id="policyModal" style="align-items: center;">
     <div class="policy-modal-box">
       <div class="modal-header">
@@ -506,7 +562,52 @@
     let cart = [];
     const DELIVERY_FEE = 40;
 
-    // 10 Options for each Category
+    // Guaranteed Partner Restaurants List with High Quality Photos
+    const defaultRestaurants = [
+      {
+        name: "Sultan's Dine",
+        cuisine: "Kacchi Biryani, Mutton Rezala, Shahi Borhani",
+        rating: "4.8",
+        time: "30-35 mins",
+        image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop&q=60"
+      },
+      {
+        name: "Takeout Burgers",
+        cuisine: "Gourmet Beef Burgers, Zinger, Cheesy Fries",
+        rating: "4.7",
+        time: "25-30 mins",
+        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=60"
+      },
+      {
+        name: "Star Kabab & Restaurant",
+        cuisine: "Beef Boti Kebab, Chicken Tikka, Garlic Naan",
+        rating: "4.6",
+        time: "25-35 mins",
+        image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop&q=60"
+      },
+      {
+        name: "Chillox",
+        cuisine: "Crispy Burgers, Naga Wings, Milkshakes",
+        rating: "4.6",
+        time: "30-40 mins",
+        image: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&auto=format&fit=crop&q=60"
+      },
+      {
+        name: "Kacchi Bhai",
+        cuisine: "Basmati Kacchi, Morog Polao, Beef Tehari",
+        rating: "4.7",
+        time: "30-35 mins",
+        image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&auto=format&fit=crop&q=60"
+      },
+      {
+        name: "Kasturi Kitchen",
+        cuisine: "Shorshe Ilish, Chingri Malai, Bhorta Thali",
+        rating: "4.5",
+        time: "35-45 mins",
+        image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop&q=60"
+      }
+    ];
+
     const subcategoryMap = {
       Food: [
         "All Restaurants",
@@ -566,17 +667,13 @@
       try {
         const res = await fetch('/api/public-menu');
         const data = await res.json();
-        rawCatalog = data.catalog || [];
-        renderSubcategoryTabs();
-        displayCurrentView();
+        rawCatalog = (data && data.catalog) ? data.catalog : [];
       } catch (err) {
-        document.getElementById('productsView').innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 30px;">
-            <p style="color: #ef4444;">Could not load items.</p>
-            <a href="/api/seed-now" style="display:inline-block; margin-top:10px; background:var(--primary); color:white; padding:8px 16px; border-radius:6px; text-decoration:none;">Seed 400 Items Now</a>
-          </div>
-        `;
+        console.warn("Using local display while API connects");
       }
+
+      renderSubcategoryTabs();
+      displayCurrentView();
     }
 
     function switchMainCategory(cat, el) {
@@ -610,9 +707,11 @@
       const heading = document.getElementById('sectionHeading');
       const resView = document.getElementById('restaurantView');
       const prodView = document.getElementById('productsView');
+      const backBtn = document.getElementById('backToResBtn');
 
       if (currentCategory === 'Food' && (currentSubcategory === 'All Restaurants' || currentSubcategory === 'All') && !selectedRestaurant) {
         heading.innerText = "Top Partner Restaurants";
+        backBtn.style.display = 'none';
         resView.style.display = 'grid';
         prodView.style.display = 'none';
         renderRestaurants();
@@ -621,9 +720,11 @@
         prodView.style.display = 'grid';
 
         if (selectedRestaurant) {
-          heading.innerText = `${selectedRestaurant} (Dishes)`;
+          heading.innerText = `${selectedRestaurant} (Menu)`;
+          backBtn.style.display = 'inline-flex';
         } else {
-          heading.innerText = `${currentCategory} - ${currentSubcategory}`;
+          heading.innerText = `${currentCategory} • ${currentSubcategory}`;
+          backBtn.style.display = 'none';
         }
         renderProducts();
       }
@@ -631,46 +732,77 @@
 
     function renderRestaurants() {
       const resView = document.getElementById('restaurantView');
-      const foodItems = rawCatalog.filter(i => i.category === 'Food');
-      const uniqueStores = [...new Set(foodItems.map(i => i.storeName))];
+      
+      // Extract from rawCatalog or use default restaurants
+      const foodItems = rawCatalog.filter(i => (i.category || '').toLowerCase() === 'food');
+      let storesToRender = [];
 
-      const storeBanners = {
-        "Sultan's Dine": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500",
-        "Takeout Burgers": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500",
-        "Star Kabab & Restaurant": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=500",
-        "Chillox": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=500",
-        "Kacchi Bhai": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500",
-        "Kasturi Kitchen": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500"
-      };
+      if (foodItems.length > 0) {
+        const uniqueStoreNames = [...new Set(foodItems.map(i => i.storeName))];
+        storesToRender = uniqueStoreNames.map(name => {
+          const matched = defaultRestaurants.find(d => d.name.toLowerCase() === name.toLowerCase());
+          const sampleItem = foodItems.find(i => i.storeName === name);
+          return {
+            name: name,
+            cuisine: matched ? matched.cuisine : (sampleItem ? sampleItem.subcategory : "Delicious Food"),
+            rating: matched ? matched.rating : "4.7",
+            time: matched ? matched.time : "30-35 mins",
+            image: matched ? matched.image : (sampleItem && sampleItem.imageUrl ? sampleItem.imageUrl : "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600")
+          };
+        });
+      } else {
+        storesToRender = defaultRestaurants;
+      }
 
-      resView.innerHTML = uniqueStores.map(store => `
-        <div class="restaurant-card" onclick="openRestaurant('${store}')">
-          <img class="res-banner" src="${storeBanners[store] || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500'}" alt="${store}" />
+      resView.innerHTML = storesToRender.map(store => `
+        <div class="restaurant-card" onclick="openRestaurant('${escape(store.name)}')">
+          <div class="res-banner-box">
+            <img src="${store.image}" alt="${store.name}" loading="lazy" />
+            <div class="res-badge"><i class="fa-solid fa-star"></i> ${store.rating}</div>
+          </div>
           <div class="res-details">
-            <h4>${store}</h4>
-            <p>⭐ 4.6 (500+ ratings) • 30-35 mins</p>
+            <h4>${store.name}</h4>
+            <p>${store.cuisine}</p>
+            <div class="res-footer">
+              <span><i class="fa-solid fa-clock"></i> ${store.time}</span>
+              <span style="color: var(--primary);">View Dishes <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
           </div>
         </div>
       `).join('');
     }
 
-    function openRestaurant(store) {
-      selectedRestaurant = store;
+    function openRestaurant(escapedName) {
+      selectedRestaurant = unescape(escapedName);
+      displayCurrentView();
+    }
+
+    function resetToAllRestaurants() {
+      selectedRestaurant = null;
+      currentSubcategory = 'All Restaurants';
+      renderSubcategoryTabs();
       displayCurrentView();
     }
 
     function renderProducts() {
       const prodView = document.getElementById('productsView');
-      let items = rawCatalog.filter(i => i.category === currentCategory);
+      let items = rawCatalog.filter(i => (i.category || '').toLowerCase() === currentCategory.toLowerCase());
 
       if (selectedRestaurant) {
-        items = items.filter(i => i.storeName === selectedRestaurant);
+        items = items.filter(i => (i.storeName || '').toLowerCase() === selectedRestaurant.toLowerCase());
       } else if (currentSubcategory !== 'All' && currentSubcategory !== 'All Restaurants') {
         items = items.filter(i => (i.subcategory || '').toLowerCase() === currentSubcategory.toLowerCase());
       }
 
       if (items.length === 0) {
-        prodView.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No items found in this section.</p>`;
+        prodView.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px 14px;">
+            <i class="fa-solid fa-cloud-arrow-down" style="font-size: 32px; color: var(--primary); margin-bottom: 10px;"></i>
+            <h4 style="font-size: 15px; margin-bottom: 6px;">Catalog Loading or Empty</h4>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Click below to initialize 400 verified items across all categories.</p>
+            <a href="/api/seed-now" style="display:inline-block; padding:10px 18px; background:var(--primary); color:white; border-radius:8px; text-decoration:none; font-weight:800; font-size:13px;">1-Click Database Seed</a>
+          </div>
+        `;
         return;
       }
 
@@ -678,7 +810,7 @@
         <div class="product-card">
           <div class="prod-img-holder">
             <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300'}" alt="${item.name}" loading="lazy" />
-            <span class="store-badge">${item.storeName}</span>
+            <span class="store-badge">${item.storeName || 'Kwiky Store'}</span>
           </div>
           <div class="prod-body">
             <div>
@@ -693,14 +825,14 @@
     }
 
     function handleSearch() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
       if (!query) {
         displayCurrentView();
         return;
       }
 
       const filtered = rawCatalog.filter(i => 
-        i.name.toLowerCase().includes(query) ||
+        (i.name && i.name.toLowerCase().includes(query)) ||
         (i.category && i.category.toLowerCase().includes(query)) ||
         (i.subcategory && i.subcategory.toLowerCase().includes(query)) ||
         (i.storeName && i.storeName.toLowerCase().includes(query))
@@ -709,7 +841,13 @@
       document.getElementById('restaurantView').style.display = 'none';
       const prodView = document.getElementById('productsView');
       prodView.style.display = 'grid';
+      document.getElementById('backToResBtn').style.display = 'inline-flex';
       document.getElementById('sectionHeading').innerText = `Search results for "${query}" (${filtered.length})`;
+
+      if (filtered.length === 0) {
+        prodView.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No matching items found for "${query}".</p>`;
+        return;
+      }
 
       prodView.innerHTML = filtered.map(item => `
         <div class="product-card">
@@ -776,8 +914,8 @@
       const paymentMethod = document.getElementById('custPaymentMethod').value;
       const compliance = document.getElementById('complianceCheck').checked;
 
-      if (!name || !phone || !address) return alert("Please fill Name, Phone and Address.");
-      if (!compliance) return alert("Please agree to our Terms & Conditions to place order.");
+      if (!name || !phone || !address) return alert("Please provide Name, Phone, and Address.");
+      if (!compliance) return alert("Please agree to the Terms & Conditions.");
 
       const subtotal = cart.reduce((sum, i) => sum + i.price, 0);
       const total = subtotal + DELIVERY_FEE;
@@ -807,22 +945,22 @@
           alert("Order failed: " + data.message);
         }
       } catch (err) {
-        alert("Server connection error. Please try again.");
+        alert("Server error. Please try again.");
       }
     }
 
     const policyContent = {
       terms: {
         title: "Terms & Conditions",
-        body: `<p>1. Orders are processed instantly. Deliveries take standard 30-45 mins.</p><p>2. Pricing includes applicable taxes.</p>`
+        body: `<p>1. Orders are processed instantly. Deliveries take standard 30-45 mins.</p><p>2. Pricing includes all applicable taxes.</p>`
       },
       privacy: {
         title: "Privacy Policy",
-        body: `<p>1. Customer personal information is strictly encrypted and used only for fulfilling deliveries.</p>`
+        body: `<p>1. Personal data is encrypted and used exclusively for fulfilling deliveries.</p>`
       },
       refund: {
         title: "Refund & Cancellation Policy",
-        body: `<p>1. Cancellation is allowed within 5 minutes of order placement.</p><p>2. Verified online refund is settled to original payment method within 5 to 7 business days.</p>`
+        body: `<p>1. Cancellation is allowed within 5 minutes of order placement.</p><p>2. Approved online refund will be credited back within 5 to 7 business days.</p>`
       },
       contact: {
         title: "Customer Support",
