@@ -9,7 +9,7 @@
     :root {
       --swiggy-orange: #fc8019;
       --swiggy-black: #171a29;
-      --swiggy-green: #60b244;
+      --swiggy-green: #2ecc71;
       --swiggy-blue: #0984e3;
       --swiggy-red: #e74c3c;
       --bg-gray: #f2f2f6;
@@ -31,7 +31,6 @@
       z-index: 100;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-
     .partner-id-box { display: flex; align-items: center; gap: 10px; }
     .partner-avatar {
       width: 42px;
@@ -44,9 +43,6 @@
       font-size: 19px;
       color: #fff;
     }
-
-    .partner-details h2 { font-size: 15px; font-weight: 800; }
-    .partner-details p { font-size: 11px; color: var(--text-muted); }
 
     .duty-pill {
       display: flex;
@@ -72,35 +68,9 @@
       text-align: center;
       font-weight: 900;
       font-size: 13px;
-      animation: pulseAlert 0.8s infinite alternate;
-    }
-    @keyframes pulseAlert { from { background-color: #d63031; } to { background-color: #e17055; } }
-
-    .earning-card {
-      margin: 14px 16px;
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 16px;
-      display: flex;
-      justify-content: space-around;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-      position: relative;
-    }
-    .metric-unit { text-align: center; }
-    .metric-unit small { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    .metric-unit h3 { font-size: 19px; font-weight: 900; color: var(--swiggy-black); margin-top: 2px; }
-
-    .order-feed-container { padding: 0 16px; }
-    .feed-header {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--swiggy-black);
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
 
+    .order-feed-container { padding: 14px 16px; }
     .order-ticket {
       background: #ffffff;
       border-radius: 14px;
@@ -109,11 +79,6 @@
       overflow: hidden;
       border: 1px solid #e9e9eb;
     }
-    .order-ticket.new-incoming {
-      border: 2px solid var(--swiggy-orange);
-      box-shadow: 0 0 15px rgba(252, 128, 25, 0.4);
-    }
-
     .ticket-header {
       background: #fafafb;
       padding: 12px 14px;
@@ -122,52 +87,12 @@
       align-items: center;
       border-bottom: 1px solid #f0f0f2;
     }
-    .ticket-id { font-size: 14px; font-weight: 900; color: var(--swiggy-black); }
-    .ticket-status {
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 8px;
-      border-radius: 6px;
-      text-transform: uppercase;
-    }
-    .status-assigned { background: #fff3e6; color: var(--swiggy-orange); animation: blink 1s infinite; }
-    .status-accepted { background: #ebf5fb; color: var(--swiggy-blue); }
-    .status-picked { background: #eafaf1; color: var(--swiggy-green); }
-    @keyframes blink { 50% { opacity: 0.5; } }
-
     .ticket-body { padding: 14px; }
-    .items-tag-box {
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 12px;
-      color: #3e4152;
-      margin-bottom: 14px;
-      border-left: 3px solid var(--swiggy-orange);
-    }
+    .button-grid { display: flex; gap: 8px; margin-top: 12px; }
 
-    .location-step { display: flex; gap: 12px; margin-bottom: 12px; }
-    .step-info strong { display: block; font-size: 13px; color: var(--swiggy-black); }
-    .step-info p { font-size: 12px; color: var(--text-muted); }
-
-    .button-grid { display: flex; gap: 8px; }
-    .action-sub-btn {
-      flex: 1;
-      padding: 11px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: #f1f2f6;
-      color: #2f3542;
-    }
     .action-flow-btn {
       flex: 2;
-      padding: 11px;
+      padding: 12px;
       border-radius: 8px;
       border: none;
       font-size: 13px;
@@ -178,9 +103,8 @@
     }
     .flow-accept { background: var(--swiggy-orange); }
     .flow-picked { background: var(--swiggy-blue); }
+    .flow-out { background: #8e44ad; }
     .flow-deliver { background: var(--swiggy-green); }
-
-    .offline-placeholder { text-align: center; padding: 60px 20px; color: var(--text-muted); }
   </style>
 </head>
 <body>
@@ -188,9 +112,9 @@
   <header class="partner-topbar">
     <div class="partner-id-box">
       <div class="partner-avatar"><i class="fa-solid fa-motorcycle"></i></div>
-      <div class="partner-details">
-        <h2>Kwiky Fleet</h2>
-        <p id="riderDisplayId">Rider ID: #KW-884</p>
+      <div>
+        <h2 style="font-size: 15px;">Kwiky Partner</h2>
+        <p id="riderDisplayId" style="font-size: 11px; color: var(--text-muted);">ID: #KW-884</p>
       </div>
     </div>
 
@@ -200,285 +124,119 @@
     </div>
   </header>
 
-  <div class="alert-banner" id="alertBanner">
-    🚨 NEW ORDER ASSIGNED! ACCEPT NOW! 🚨
-  </div>
-
-  <section class="earning-card">
-    <div class="metric-unit">
-      <small>Completed</small>
-      <h3 id="tripsCount">0</h3>
-    </div>
-    <div style="border-right: 1px solid #eee;"></div>
-    <div class="metric-unit">
-      <small>Earnings</small>
-      <h3 id="earningsAmount">0 BDT</h3>
-    </div>
-  </section>
+  <div class="alert-banner" id="alertBanner">🚨 NEW ORDER WAITING! ACCEPT NOW! 🚨</div>
 
   <main class="order-feed-container">
-    <div class="feed-header">
-      <span>LIVE ASSIGNMENTS</span>
-      <span id="liveBadge" style="font-size: 11px; color: var(--swiggy-green); display:none;">● GPS Active</span>
-    </div>
-
     <div id="ordersContainer">
-      <div class="offline-placeholder">
-        <i class="fa-solid fa-power-off" style="font-size: 40px; margin-bottom: 10px;"></i>
-        <h4>You are currently Offline</h4>
-        <p style="font-size: 12px; margin-top: 5px;">Toggle 'GO ONLINE' to receive nearby orders.</p>
-      </div>
+      <p style="text-align: center; color: var(--text-muted); padding: 40px;">Toggle ONLINE to start duty</p>
     </div>
   </main>
 
   <script>
-    let riderId = localStorage.getItem('kwiky_rider_id');
-    if (!riderId) {
-      riderId = 'KW-' + Math.floor(100 + Math.random() * 900);
-      localStorage.setItem('kwiky_rider_id', riderId);
-    }
-    document.getElementById('riderDisplayId').innerText = `Rider ID: #${riderId}`;
+    let riderId = localStorage.getItem('kwiky_rider_id') || ('KW-' + Math.floor(100 + Math.random() * 900));
+    localStorage.setItem('kwiky_rider_id', riderId);
+    document.getElementById('riderDisplayId').innerText = `ID: #${riderId}`;
 
-    const TRIP_PAY = 40;
     let pollInterval = null;
-    let locationWatchId = null;
-    let audioContext = null;
-    let alertSoundInterval = null;
-    let lastKnownLat = 22.5726;
-    let lastKnownLng = 88.3639;
-
-    function playSwiggyTone() {
-      try {
-        if (!audioContext) {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (audioContext.state === 'suspended') {
-          audioContext.resume();
-        }
-
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        osc.connect(gain);
-        gain.connect(audioContext.destination);
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(750, audioContext.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1100, audioContext.currentTime + 0.15);
-
-        gain.gain.setValueAtTime(0.8, audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25);
-
-        osc.start();
-        osc.stop(audioContext.currentTime + 0.25);
-
-        if ('vibrate' in navigator) {
-          navigator.vibrate([200, 100, 200]);
-        }
-      } catch (e) {
-        console.log("Audio play error", e);
-      }
-    }
-
-    function startOrderAlarm() {
-      document.getElementById('alertBanner').style.display = 'block';
-      if (!alertSoundInterval) {
-        playSwiggyTone();
-        alertSoundInterval = setInterval(playSwiggyTone, 1000);
-      }
-    }
-
-    function stopOrderAlarm() {
-      document.getElementById('alertBanner').style.display = 'none';
-      if (alertSoundInterval) {
-        clearInterval(alertSoundInterval);
-        alertSoundInterval = null;
-      }
-    }
+    let lastLat = 22.5726, lastLng = 88.3639;
 
     function init() {
-      const savedTrips = localStorage.getItem('kwiky_rider_trips') || 0;
-      const savedPay = localStorage.getItem('kwiky_rider_earnings') || 0;
-      document.getElementById('tripsCount').innerText = savedTrips;
-      document.getElementById('earningsAmount').innerText = `${savedPay} BDT`;
-
       if (localStorage.getItem('kwiky_rider_duty') === 'ONLINE') {
         setDutyUI(true);
-        startTrackingAndPolling();
+        startDuty();
       }
     }
 
     function toggleDuty() {
       const isOnline = localStorage.getItem('kwiky_rider_duty') === 'ONLINE';
-      const newState = !isOnline;
-      localStorage.setItem('kwiky_rider_duty', newState ? 'ONLINE' : 'OFFLINE');
-      setDutyUI(newState);
-
-      if (newState) {
-        if (!audioContext) {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        startTrackingAndPolling();
-      } else {
-        stopTrackingAndPolling();
-        stopOrderAlarm();
-      }
+      const nextState = !isOnline;
+      localStorage.setItem('kwiky_rider_duty', nextState ? 'ONLINE' : 'OFFLINE');
+      setDutyUI(nextState);
+      if (nextState) startDuty();
+      else stopDuty();
     }
 
-    function setDutyUI(isOnline) {
+    function setDutyUI(online) {
       const btn = document.getElementById('dutyBtn');
-      const text = document.getElementById('dutyText');
-      const badge = document.getElementById('liveBadge');
-
-      if (isOnline) {
+      const txt = document.getElementById('dutyText');
+      if (online) {
         btn.classList.add('active');
-        text.innerText = "ONLINE";
-        badge.style.display = "inline";
+        txt.innerText = "ONLINE";
       } else {
         btn.classList.remove('active');
-        text.innerText = "GO ONLINE";
-        badge.style.display = "none";
-        document.getElementById('ordersContainer').innerHTML = `
-          <div class="offline-placeholder">
-            <i class="fa-solid fa-power-off" style="font-size: 40px; margin-bottom: 10px;"></i>
-            <h4>You are currently Offline</h4>
-            <p style="font-size: 12px; margin-top: 5px;">Toggle 'GO ONLINE' to receive nearby orders.</p>
-          </div>
-        `;
+        txt.innerText = "GO ONLINE";
+        document.getElementById('ordersContainer').innerHTML = '<p style="text-align:center; padding:40px; color:#888;">You are Offline</p>';
       }
     }
 
-    function startTrackingAndPolling() {
+    function startDuty() {
       if (navigator.geolocation) {
-        locationWatchId = navigator.geolocation.watchPosition(
-          (pos) => {
-            lastKnownLat = pos.coords.latitude;
-            lastKnownLng = pos.coords.longitude;
-            sendRiderPing();
-          },
-          () => sendRiderPing(),
-          { enableHighAccuracy: true, maximumAge: 5000 }
-        );
+        navigator.geolocation.watchPosition(pos => {
+          lastLat = pos.coords.latitude;
+          lastLng = pos.coords.longitude;
+          pingServer();
+        });
       } else {
-        sendRiderPing();
+        pingServer();
       }
 
-      fetchAssignedOrders();
-      if (!pollInterval) {
-        pollInterval = setInterval(() => {
-          sendRiderPing();
-          fetchAssignedOrders();
-        }, 5000);
-      }
+      fetchOrders();
+      if (!pollInterval) pollInterval = setInterval(fetchOrders, 4000);
     }
 
-    function stopTrackingAndPolling() {
-      if (locationWatchId) navigator.geolocation.clearWatch(locationWatchId);
+    function stopDuty() {
       if (pollInterval) clearInterval(pollInterval);
       pollInterval = null;
+    }
+
+    async function pingServer() {
       fetch('/api/rider/ping', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ riderId, isOnline: false })
+        body: JSON.stringify({ riderId, name: "Rider " + riderId, phone: "01711223344", isOnline: true, lat: lastLat, lng: lastLng })
       }).catch(() => {});
     }
 
-    async function sendRiderPing() {
-      try {
-        await fetch('/api/rider/ping', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            riderId,
-            name: "Rider #" + riderId,
-            phone: "01700000000",
-            isOnline: true,
-            lat: lastKnownLat,
-            lng: lastKnownLng
-          })
-        });
-      } catch (err) {
-        console.error("Ping error:", err);
-      }
-    }
-
-    async function fetchAssignedOrders() {
+    async function fetchOrders() {
       if (localStorage.getItem('kwiky_rider_duty') !== 'ONLINE') return;
-
+      pingServer();
       try {
         const res = await fetch(`/api/rider/assigned-orders?riderId=${riderId}`);
         const data = await res.json();
-        const orders = data.orders || [];
-
-        renderOrders(orders);
-
-        const hasIncomingOrder = orders.some(o => o.status === 'Assigned' || o.status === 'Pending');
-        if (hasIncomingOrder) {
-          startOrderAlarm();
-        } else {
-          stopOrderAlarm();
-        }
-      } catch (err) {
-        console.error("Fetch orders error:", err);
-      }
+        renderOrders(data.orders || []);
+      } catch (err) {}
     }
 
     function renderOrders(orders) {
-      const container = document.getElementById('ordersContainer');
+      const cont = document.getElementById('ordersContainer');
       if (orders.length === 0) {
-        container.innerHTML = `
-          <div style="text-align: center; padding: 40px 14px; color: var(--text-muted);">
-            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 28px; color: var(--swiggy-orange); margin-bottom: 12px;"></i>
-            <p style="font-weight: 700; color: #282c3f; font-size: 14px;">Radar Active: Waiting for orders near you...</p>
-            <p style="font-size: 11px; margin-top: 4px;">Orders will beep with high-priority tone when assigned.</p>
-          </div>
-        `;
+        cont.innerHTML = '<p style="text-align:center; padding:40px; color:#888;">Waiting for orders near your radar...</p>';
         return;
       }
 
-      container.innerHTML = orders.map(order => {
-        const itemsText = (order.items || []).map(i => i.name).join(', ') || 'Package items';
-        const mapsUrl = order.mapLocation || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}`;
-        
+      cont.innerHTML = orders.map(ord => {
         let actionBtn = '';
-        let isNew = false;
-
-        if (order.status === 'Pending' || order.status === 'Assigned') {
-          isNew = true;
-          actionBtn = `<button class="action-flow-btn flow-accept" onclick="updateOrderStatus('${order._id}', 'Accepted')">Accept Order</button>`;
-        } else if (order.status === 'Accepted') {
-          actionBtn = `<button class="action-flow-btn flow-picked" onclick="updateOrderStatus('${order._id}', 'Picked Up')">Confirm Picked Up</button>`;
-        } else if (order.status === 'Picked Up') {
-          actionBtn = `<button class="action-flow-btn flow-deliver" onclick="updateOrderStatus('${order._id}', 'Delivered')">Deliver & Cash Collect</button>`;
+        if (ord.status === 'Pending' || ord.status === 'Assigned') {
+          actionBtn = `<button class="action-flow-btn flow-accept" onclick="updateStatus('${ord._id}', 'Accepted')">Accept Order</button>`;
+        } else if (ord.status === 'Accepted') {
+          actionBtn = `<button class="action-flow-btn flow-picked" onclick="updateStatus('${ord._id}', 'Picked Up')">Confirm Picked Up</button>`;
+        } else if (ord.status === 'Picked Up') {
+          actionBtn = `<button class="action-flow-btn flow-out" onclick="updateStatus('${ord._id}', 'Out for Delivery')">Out for Delivery</button>`;
+        } else if (ord.status === 'Out for Delivery') {
+          actionBtn = `<button class="action-flow-btn flow-deliver" onclick="updateStatus('${ord._id}', 'Delivered')">Deliver & Collect Cash</button>`;
         }
 
         return `
-          <div class="order-ticket ${isNew ? 'new-incoming' : ''}">
+          <div class="order-ticket">
             <div class="ticket-header">
-              <span class="ticket-id">ORDER #${order._id.slice(-6)}</span>
-              <span class="ticket-status status-${order.status ? order.status.toLowerCase() : 'assigned'}">${order.status || 'Assigned'}</span>
+              <strong>ORDER #${ord._id.slice(-6)}</strong>
+              <span style="font-size:11px; font-weight:800; color:var(--swiggy-orange);">${ord.status}</span>
             </div>
-            
             <div class="ticket-body">
-              <div class="items-tag-box">
-                <strong><i class="fa-solid fa-bag-shopping"></i> Items:</strong> ${itemsText}
-                <div style="margin-top: 3px; font-weight: 800;">Collect: ${order.total} BDT (${order.paymentMethod || 'COD'})</div>
-              </div>
-
-              <div class="location-step">
-                <i class="fa-solid fa-location-dot" style="color: var(--swiggy-red); font-size: 16px; margin-top: 2px;"></i>
-                <div class="step-info">
-                  <strong>${order.name} (${order.phone})</strong>
-                  <p>${order.address}</p>
-                </div>
-              </div>
-
+              <p><strong>Customer:</strong> ${ord.name} (${ord.phone})</p>
+              <p style="font-size:12px; color:#666; margin:4px 0;"><strong>Address:</strong> ${ord.address}</p>
+              <p><strong>Collect Cash:</strong> ${ord.total} BDT</p>
               <div class="button-grid">
-                <a href="${mapsUrl}" target="_blank" class="action-sub-btn">
-                  <i class="fa-solid fa-diamond-turn-right" style="color: var(--swiggy-blue);"></i> Map
-                </a>
-                <a href="tel:${order.phone}" class="action-sub-btn">
-                  <i class="fa-solid fa-phone" style="color: var(--swiggy-green);"></i> Call
-                </a>
                 ${actionBtn}
               </div>
             </div>
@@ -487,35 +245,13 @@
       }).join('');
     }
 
-    async function updateOrderStatus(orderId, nextStatus) {
-      stopOrderAlarm();
-      try {
-        const res = await fetch(`/api/rider/order/${orderId}/status`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            status: nextStatus,
-            riderId,
-            riderName: "Rider #" + riderId,
-            riderPhone: "01700000000"
-          })
-        });
-
-        if (res.ok) {
-          if (nextStatus === 'Delivered') {
-            let trips = parseInt(localStorage.getItem('kwiky_rider_trips') || 0) + 1;
-            let pay = parseInt(localStorage.getItem('kwiky_rider_earnings') || 0) + TRIP_PAY;
-            localStorage.setItem('kwiky_rider_trips', trips);
-            localStorage.setItem('kwiky_rider_earnings', pay);
-            document.getElementById('tripsCount').innerText = trips;
-            document.getElementById('earningsAmount').innerText = `${pay} BDT`;
-            alert("Order delivered successfully! Earned 40 BDT.");
-          }
-          fetchAssignedOrders();
-        }
-      } catch (err) {
-        alert("Status update failed");
-      }
+    async function updateStatus(id, st) {
+      await fetch(`/api/rider/order/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: st, riderId, riderName: "Rider #" + riderId, riderPhone: "01711223344" })
+      });
+      fetchOrders();
     }
 
     window.addEventListener('DOMContentLoaded', init);

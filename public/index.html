@@ -17,12 +17,13 @@
       --text-muted: #686b78;
       --border: #e2e8f0;
       --green: #2ecc71;
+      --blue: #0984e3;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 90px; }
 
-    /* Top Navigation Bar */
+    /* Top Navigation */
     .navbar {
       background: #ffffff;
       position: sticky;
@@ -52,7 +53,6 @@
 
     .nav-actions { display: flex; align-items: center; gap: 12px; }
 
-    /* Customer Profile Button */
     .profile-btn-pill {
       background: #f1f5f9;
       color: #334155;
@@ -65,11 +65,6 @@
       align-items: center;
       gap: 6px;
       cursor: pointer;
-      transition: all 0.2s;
-    }
-    .profile-btn-pill:hover {
-      background: #e2e8f0;
-      color: var(--primary);
     }
 
     .cart-btn-pill {
@@ -199,12 +194,7 @@
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
-    .res-banner-box {
-      width: 100%;
-      height: 140px;
-      position: relative;
-      background: #e2e8f0;
-    }
+    .res-banner-box { width: 100%; height: 140px; position: relative; background: #e2e8f0; }
     .res-banner-box img { width: 100%; height: 100%; object-fit: cover; }
     .res-badge {
       position: absolute;
@@ -220,21 +210,9 @@
       align-items: center;
       gap: 4px;
     }
-    .res-badge i { color: #f1c40f; }
     .res-details { padding: 14px; }
     .res-details h4 { font-size: 16px; font-weight: 900; color: var(--dark); }
     .res-details p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-    .res-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid #f1f5f9;
-      font-size: 11px;
-      font-weight: 700;
-      color: #475569;
-    }
 
     /* Product Grid */
     .items-grid {
@@ -253,12 +231,7 @@
       justify-content: space-between;
       box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
-    .prod-img-holder {
-      width: 100%;
-      height: 135px;
-      background: #f8fafc;
-      position: relative;
-    }
+    .prod-img-holder { width: 100%; height: 135px; background: #f8fafc; position: relative; }
     .prod-img-holder img { width: 100%; height: 100%; object-fit: cover; }
     .store-badge {
       position: absolute;
@@ -305,19 +278,115 @@
       font-weight: 800;
       font-size: 13px;
     }
-    .stepper-btn {
-      background: none;
-      border: none;
-      color: white;
-      padding: 6px 12px;
-      font-size: 14px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-    .stepper-btn:active { background: rgba(0,0,0,0.15); }
+    .stepper-btn { background: none; border: none; color: white; padding: 6px 12px; font-size: 14px; font-weight: 900; cursor: pointer; }
     .stepper-count { padding: 0 4px; }
 
-    /* Modals & Cart */
+    /* ==================== SWIGGY LIVE ORDER TRACKING MODAL ==================== */
+    .tracking-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    }
+
+    .eta-banner {
+      background: linear-gradient(135deg, #171a29 0%, #282c3f 100%);
+      color: white;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .eta-banner h2 { font-size: 22px; font-weight: 900; color: #ffb142; }
+    .eta-banner p { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+
+    /* Swiggy Timeline Steps */
+    .tracking-steps {
+      position: relative;
+      margin-left: 20px;
+      border-left: 3px solid #e2e8f0;
+      padding-left: 18px;
+      margin-bottom: 20px;
+    }
+
+    .step-item {
+      position: relative;
+      margin-bottom: 22px;
+    }
+    .step-item:last-child { margin-bottom: 0; }
+
+    .step-icon-dot {
+      position: absolute;
+      left: -28px;
+      top: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      border: 3px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .step-item.active .step-icon-dot {
+      background: var(--primary);
+      box-shadow: 0 0 10px rgba(252, 128, 25, 0.6);
+    }
+    .step-item.completed .step-icon-dot {
+      background: var(--green);
+    }
+
+    .step-title { font-size: 13px; font-weight: 800; color: var(--dark); }
+    .step-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Rider Information Card */
+    .rider-profile-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .rider-avatar {
+      width: 48px;
+      height: 48px;
+      background: var(--primary);
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .rider-info h4 { font-size: 14px; font-weight: 900; }
+    .rider-info p { font-size: 11px; color: var(--text-muted); }
+
+    .call-rider-btn {
+      background: var(--green);
+      color: white;
+      text-decoration: none;
+      padding: 9px 16px;
+      border-radius: 25px;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 8px rgba(46, 204, 113, 0.3);
+    }
+
+    /* Standard Modals */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -374,17 +443,6 @@
       padding-top: 6px;
     }
 
-    .consent-wrap {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin: 12px 0;
-      font-size: 11px;
-      color: #555;
-      line-height: 1.4;
-    }
-    .consent-wrap a { color: var(--primary); text-decoration: underline; cursor: pointer; }
-
     .btn-checkout {
       width: 100%;
       background: var(--primary);
@@ -397,31 +455,7 @@
       cursor: pointer;
     }
 
-    /* Trust Badges & Footer */
-    .payment-trust-bar {
-      margin-top: 30px;
-      padding: 20px 16px;
-      background: #ffffff;
-      text-align: center;
-      border-top: 1px solid var(--border);
-    }
-    .payment-trust-bar h4 {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .partner-logos-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      font-size: 22px;
-      color: #576574;
-    }
-
+    /* Trust Footer */
     .compliance-footer {
       background: var(--dark);
       color: #94a3b8;
@@ -437,19 +471,6 @@
       margin-bottom: 14px;
     }
     .footer-links-grid a { color: #cbd5e1; text-decoration: none; cursor: pointer; font-weight: 600; }
-
-    .policy-modal-box {
-      background: white;
-      width: 90%;
-      max-width: 550px;
-      max-height: 80vh;
-      border-radius: 14px;
-      padding: 20px;
-      overflow-y: auto;
-      margin: auto;
-      line-height: 1.6;
-      font-size: 13px;
-    }
   </style>
 </head>
 <body>
@@ -464,10 +485,15 @@
       </div>
     </a>
     <div class="nav-actions">
+      <!-- Live Track Button (Jodi order active thake) -->
+      <button id="navTrackBtn" style="display: none; background: #eafaf1; color: var(--green); border: 1px solid var(--green); padding: 7px 12px; border-radius: 20px; font-weight: 800; font-size: 11px; cursor: pointer;" onclick="openTrackingModal()">
+        <i class="fa-solid fa-location-arrow fa-spin"></i> Live Track
+      </button>
+
       <!-- Customer Profile Icon -->
       <button class="profile-btn-pill" onclick="openProfileModal()">
         <i class="fa-regular fa-user" style="font-size: 14px;"></i>
-        <span id="navUserName">Account</span>
+        <span>Account</span>
       </button>
 
       <!-- Cart Button -->
@@ -515,57 +541,85 @@
       </button>
     </div>
 
-    <!-- Restaurant Grid -->
     <div class="restaurants-grid" id="restaurantView"></div>
-
-    <!-- Products Grid -->
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
-  <!-- Trust Badges -->
-  <section class="payment-trust-bar">
-    <h4>100% Secure Payments & Compliance</h4>
-    <div class="partner-logos-row">
-      <i class="fa-brands fa-cc-visa" title="Visa"></i>
-      <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
-      <span style="font-size: 14px; font-weight: 800; color: #e2136e;">bKash</span>
-      <span style="font-size: 14px; font-weight: 800; color: #f7941d;">Nagad</span>
-      <i class="fa-solid fa-money-bill-wave" style="color: #2ecc71;" title="Cash on Delivery"></i>
-    </div>
-  </section>
-
-  <!-- Compliance Footer (Delivery Partner link placed here safely) -->
+  <!-- Compliance Footer -->
   <footer class="compliance-footer">
     <div class="footer-links-grid">
-      <a onclick="showPolicy('terms')">Terms & Conditions</a>
-      <a onclick="showPolicy('privacy')">Privacy Policy</a>
-      <a onclick="showPolicy('refund')">Refund & Cancellation</a>
-      <a onclick="showPolicy('contact')">Customer Support</a>
       <a href="/rider.html" style="color: var(--primary);">Delivery Partner Portal</a>
     </div>
     <p>© 2026 Kwiky Online Delivery Platform</p>
   </footer>
 
-  <!-- Customer Account / Profile Modal -->
-  <div class="modal-backdrop" id="profileModal" style="align-items: center;">
-    <div class="policy-modal-box" style="text-align: center;">
+  <!-- ==================== SWIGGY LIVE ORDER TRACKING MODAL ==================== -->
+  <div class="modal-backdrop" id="trackingModal" style="align-items: center;">
+    <div class="modal-box" style="border-radius: 20px; max-width: 480px;">
       <div class="modal-header">
-        <h3 style="font-size: 16px;">Customer Account</h3>
-        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeProfileModal()"></i>
+        <h3 style="font-size: 16px;"><i class="fa-solid fa-motorcycle" style="color: var(--primary);"></i> Live Order Tracking</h3>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeTrackingModal()"></i>
       </div>
-      <div style="padding: 15px 0;">
-        <div style="width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 12px;">
-          <i class="fa-solid fa-user"></i>
+
+      <!-- Live ETA Banner -->
+      <div class="eta-banner">
+        <div>
+          <p>ESTIMATED ARRIVAL</p>
+          <h2 id="trackEta">15 Mins</h2>
         </div>
-        <h4 id="userDisplayName" style="font-size: 16px; margin-bottom: 4px;">Welcome to Kwiky!</h4>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Instant 30-min delivery platform</p>
-        
-        <div style="text-align: left; background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 14px; font-size: 12px;">
-          <p><strong><i class="fa-solid fa-bag-shopping" style="color: var(--primary);"></i> Orders:</strong> Active tracking available at checkout</p>
-          <p style="margin-top: 6px;"><strong><i class="fa-solid fa-location-dot" style="color: var(--green);"></i> Delivery:</strong> Live GPS Fleet Integration</p>
+        <div style="text-align: right;">
+          <p>DISTANCE</p>
+          <h3 id="trackDist" style="font-size: 16px; font-weight: 800;">1.8 KM</h3>
         </div>
-        
-        <button class="btn-checkout" style="padding: 10px; margin-top: 0;" onclick="closeProfileModal()">Continue Shopping</button>
+      </div>
+
+      <!-- Swiggy Stepper Flow -->
+      <div class="tracking-steps">
+        <div class="step-item completed" id="stepPlaced">
+          <div class="step-icon-dot"></div>
+          <div class="step-title">Order Confirmed</div>
+          <div class="step-desc">Store has received and accepted your order.</div>
+        </div>
+
+        <div class="step-item" id="stepAssigned">
+          <div class="step-icon-dot"></div>
+          <div class="step-title">Delivery Hero Assigned</div>
+          <div class="step-desc" id="stepAssignedDesc">A nearby partner is heading to the store.</div>
+        </div>
+
+        <div class="step-item" id="stepPicked">
+          <div class="step-icon-dot"></div>
+          <div class="step-title">Order Picked Up</div>
+          <div class="step-desc">Items verified and packed securely in thermal bag.</div>
+        </div>
+
+        <div class="step-item" id="stepOut">
+          <div class="step-icon-dot"></div>
+          <div class="step-title">Out for Delivery</div>
+          <div class="step-desc">Rider is on the way to your delivery location.</div>
+        </div>
+
+        <div class="step-item" id="stepDelivered">
+          <div class="step-icon-dot"></div>
+          <div class="step-title">Delivered</div>
+          <div class="step-desc">Enjoy your fresh food and items!</div>
+        </div>
+      </div>
+
+      <!-- Rider Profile & Direct Call -->
+      <div class="rider-profile-box">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="rider-avatar">
+            <i class="fa-solid fa-user-ninja"></i>
+          </div>
+          <div class="rider-info">
+            <h4 id="trackRiderName">Hero: Searching...</h4>
+            <p><i class="fa-solid fa-shield-heart" style="color: var(--green);"></i> Vaccinated & Verified Partner</p>
+          </div>
+        </div>
+        <a href="tel:01700000000" id="trackRiderCall" class="call-rider-btn">
+          <i class="fa-solid fa-phone"></i> Call
+        </a>
       </div>
     </div>
   </div>
@@ -598,31 +652,8 @@
         <label>Delivery Address</label>
         <textarea id="custAddress" class="form-control" rows="2" placeholder="House, Road, Landmark"></textarea>
       </div>
-      <div class="form-group">
-        <label>Payment Mode</label>
-        <select id="custPaymentMethod" class="form-control">
-          <option value="COD">Cash on Delivery (COD)</option>
-          <option value="Online">Online Payment (bKash / Nagad / Cards)</option>
-        </select>
-      </div>
 
-      <label class="consent-wrap">
-        <input type="checkbox" id="complianceCheck" checked />
-        <span>I agree to Kwiky's <a onclick="showPolicy('terms')">Terms</a> & <a onclick="showPolicy('refund')">Refund Policy</a>.</span>
-      </label>
-
-      <button class="btn-checkout" onclick="submitOrder()">Place Order Now</button>
-    </div>
-  </div>
-
-  <!-- Policy Modal -->
-  <div class="modal-backdrop" id="policyModal" style="align-items: center;">
-    <div class="policy-modal-box">
-      <div class="modal-header">
-        <h3 id="policyModalTitle" style="font-size: 16px;">Policy</h3>
-        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closePolicyModal()"></i>
-      </div>
-      <div id="policyModalBody"></div>
+      <button class="btn-checkout" style="margin-top: 15px;" onclick="submitOrder()">Confirm & Place Order</button>
     </div>
   </div>
 
@@ -634,104 +665,23 @@
     let cart = {};
     const DELIVERY_FEE = 40;
 
+    let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
+    let trackPollTimer = null;
+
     const defaultRestaurants = [
-      {
-        name: "Sultan's Dine",
-        cuisine: "Kacchi Biryani, Mutton Rezala, Shahi Borhani",
-        rating: "4.8",
-        time: "30-35 mins",
-        image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop&q=60"
-      },
-      {
-        name: "Takeout Burgers",
-        cuisine: "Gourmet Beef Burgers, Zinger, Cheesy Fries",
-        rating: "4.7",
-        time: "25-30 mins",
-        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=60"
-      },
-      {
-        name: "Star Kabab & Restaurant",
-        cuisine: "Beef Boti Kebab, Chicken Tikka, Garlic Naan",
-        rating: "4.6",
-        time: "25-35 mins",
-        image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600&auto=format&fit=crop&q=60"
-      },
-      {
-        name: "Chillox",
-        cuisine: "Crispy Burgers, Naga Wings, Milkshakes",
-        rating: "4.6",
-        time: "30-40 mins",
-        image: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&auto=format&fit=crop&q=60"
-      },
-      {
-        name: "Kacchi Bhai",
-        cuisine: "Basmati Kacchi, Morog Polao, Beef Tehari",
-        rating: "4.7",
-        time: "30-35 mins",
-        image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&auto=format&fit=crop&q=60"
-      },
-      {
-        name: "Kasturi Kitchen",
-        cuisine: "Shorshe Ilish, Chingri Malai, Bhorta Thali",
-        rating: "4.5",
-        time: "35-45 mins",
-        image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop&q=60"
-      }
+      { name: "Sultan's Dine", cuisine: "Kacchi Biryani, Mutton Rezala", rating: "4.8", time: "30-35 mins", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600" },
+      { name: "Takeout Burgers", cuisine: "Gourmet Beef Burgers, Cheesy Fries", rating: "4.7", time: "25-30 mins", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600" },
+      { name: "Star Kabab & Restaurant", cuisine: "Beef Boti Kebab, Chicken Tikka", rating: "4.6", time: "25-35 mins", image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600" },
+      { name: "Chillox", cuisine: "Crispy Burgers, Naga Wings", rating: "4.6", time: "30-40 mins", image: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600" },
+      { name: "Kacchi Bhai", cuisine: "Basmati Kacchi, Beef Tehari", rating: "4.7", time: "30-35 mins", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600" },
+      { name: "Kasturi Kitchen", cuisine: "Shorshe Ilish, Chingri Malai", rating: "4.5", time: "35-45 mins", image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600" }
     ];
 
     const subcategoryMap = {
-      Food: [
-        "All Restaurants",
-        "Biryani & Polao",
-        "Burgers & Sandwiches",
-        "Kebabs & Tandoor",
-        "Bengali Curries",
-        "Chinese & Chowmein",
-        "Pizza & Pasta",
-        "Desserts & Sweets",
-        "Juices & Shakes",
-        "Tea & Coffee",
-        "Rolls & Street Food"
-      ],
-      Fashion: [
-        "All",
-        "Men's Casual Shirts",
-        "Men's T-Shirts",
-        "Men's Jeans & Trousers",
-        "Women's Sarees & Kurtis",
-        "Women's Western Dresses",
-        "Winter Wear & Jackets",
-        "Footwear & Sneakers",
-        "Formal Leather Shoes",
-        "Bags & Backpacks",
-        "Watches & Accessories"
-      ],
-      Medicine: [
-        "All",
-        "Fever & Pain Relief",
-        "Gastric & Digestion",
-        "Cough Cold & Allergy",
-        "First Aid & Antiseptics",
-        "Vitamins & Minerals",
-        "Diabetes & Blood Pressure",
-        "Baby Care Essentials",
-        "Skin & Hair Care",
-        "Medical Equipment & Devices",
-        "Eye & Dental Care"
-      ],
-      Grocery: [
-        "All",
-        "Rice Dal & Flour",
-        "Cooking Oil & Ghee",
-        "Spices & Masala",
-        "Dairy Milk & Eggs",
-        "Fresh Vegetables & Potatoes",
-        "Breakfast & Cereals",
-        "Tea Coffee & Sugar",
-        "Snacks & Biscuits",
-        "Soft Drinks & Beverages",
-        "Cleaning & Household"
-      ]
+      Food: ["All Restaurants", "Biryani & Polao", "Burgers & Sandwiches", "Kebabs & Tandoor", "Bengali Curries"],
+      Fashion: ["All", "Men's Casual Shirts", "Men's T-Shirts", "Women's Sarees & Kurtis"],
+      Medicine: ["All", "Fever & Pain Relief", "Gastric & Digestion", "First Aid & Antiseptics"],
+      Grocery: ["All", "Rice Dal & Flour", "Cooking Oil & Ghee", "Dairy Milk & Eggs"]
     };
 
     async function initCatalog() {
@@ -739,12 +689,15 @@
         const res = await fetch('/api/public-menu');
         const data = await res.json();
         rawCatalog = (data && data.catalog) ? data.catalog : [];
-      } catch (err) {
-        console.warn("Using local display while API connects");
-      }
+      } catch (err) {}
 
       renderSubcategoryTabs();
       displayCurrentView();
+
+      if (activeOrderId) {
+        document.getElementById('navTrackBtn').style.display = 'inline-block';
+        startTrackingPoll();
+      }
     }
 
     function switchMainCategory(cat, el) {
@@ -803,27 +756,7 @@
 
     function renderRestaurants() {
       const resView = document.getElementById('restaurantView');
-      const foodItems = rawCatalog.filter(i => (i.category || '').toLowerCase() === 'food');
-      let storesToRender = [];
-
-      if (foodItems.length > 0) {
-        const uniqueStoreNames = [...new Set(foodItems.map(i => i.storeName))];
-        storesToRender = uniqueStoreNames.map(name => {
-          const matched = defaultRestaurants.find(d => d.name.toLowerCase() === name.toLowerCase());
-          const sampleItem = foodItems.find(i => i.storeName === name);
-          return {
-            name: name,
-            cuisine: matched ? matched.cuisine : (sampleItem ? sampleItem.subcategory : "Delicious Food"),
-            rating: matched ? matched.rating : "4.7",
-            time: matched ? matched.time : "30-35 mins",
-            image: matched ? matched.image : (sampleItem && sampleItem.imageUrl ? sampleItem.imageUrl : "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600")
-          };
-        });
-      } else {
-        storesToRender = defaultRestaurants;
-      }
-
-      resView.innerHTML = storesToRender.map(store => `
+      resView.innerHTML = defaultRestaurants.map(store => `
         <div class="restaurant-card" onclick="openRestaurant('${escape(store.name)}')">
           <div class="res-banner-box">
             <img src="${store.image}" alt="${store.name}" loading="lazy" />
@@ -832,10 +765,6 @@
           <div class="res-details">
             <h4>${store.name}</h4>
             <p>${store.cuisine}</p>
-            <div class="res-footer">
-              <span><i class="fa-solid fa-clock"></i> ${store.time}</span>
-              <span style="color: var(--primary);">View Dishes <i class="fa-solid fa-arrow-right"></i></span>
-            </div>
           </div>
         </div>
       `).join('');
@@ -864,9 +793,7 @@
           </div>
         `;
       } else {
-        return `
-          <button class="btn-add" onclick="updateItemQty('${id}', '${rawName}', ${price}, 1)">+ ADD</button>
-        `;
+        return `<button class="btn-add" onclick="updateItemQty('${id}', '${rawName}', ${price}, 1)">+ ADD</button>`;
       }
     }
 
@@ -876,19 +803,10 @@
 
       if (selectedRestaurant) {
         items = items.filter(i => (i.storeName || '').toLowerCase() === selectedRestaurant.toLowerCase());
-      } else if (currentSubcategory !== 'All' && currentSubcategory !== 'All Restaurants') {
-        items = items.filter(i => (i.subcategory || '').toLowerCase() === currentSubcategory.toLowerCase());
       }
 
       if (items.length === 0) {
-        prodView.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 40px 14px;">
-            <i class="fa-solid fa-cloud-arrow-down" style="font-size: 32px; color: var(--primary); margin-bottom: 10px;"></i>
-            <h4 style="font-size: 15px; margin-bottom: 6px;">Catalog Loading or Empty</h4>
-            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Click below to initialize 400 verified items across all categories.</p>
-            <a href="/api/seed-now" style="display:inline-block; padding:10px 18px; background:var(--primary); color:white; border-radius:8px; text-decoration:none; font-weight:800; font-size:13px;">1-Click Database Seed</a>
-          </div>
-        `;
+        prodView.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No items found.</p>`;
         return;
       }
 
@@ -912,68 +830,14 @@
       `).join('');
     }
 
-    function handleSearch() {
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
-      if (!query) {
-        displayCurrentView();
-        return;
-      }
-
-      const filtered = rawCatalog.filter(i => 
-        (i.name && i.name.toLowerCase().includes(query)) ||
-        (i.category && i.category.toLowerCase().includes(query)) ||
-        (i.subcategory && i.subcategory.toLowerCase().includes(query)) ||
-        (i.storeName && i.storeName.toLowerCase().includes(query))
-      );
-
-      document.getElementById('restaurantView').style.display = 'none';
-      const prodView = document.getElementById('productsView');
-      prodView.style.display = 'grid';
-      document.getElementById('backToResBtn').style.display = 'inline-flex';
-      document.getElementById('sectionHeading').innerText = `Search results for "${query}" (${filtered.length})`;
-
-      if (filtered.length === 0) {
-        prodView.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No matching items found for "${query}".</p>`;
-        return;
-      }
-
-      prodView.innerHTML = filtered.map(item => `
-        <div class="product-card">
-          <div class="prod-img-holder">
-            <img src="${item.imageUrl}" alt="${item.name}" />
-            <span class="store-badge">${item.storeName}</span>
-          </div>
-          <div class="prod-body">
-            <div>
-              <div class="prod-title">${item.name}</div>
-              <div class="prod-subcat">${item.category} • ${item.subcategory}</div>
-              <div class="prod-price">${item.price} BDT</div>
-            </div>
-            <div class="cart-btn-container" id="btn-container-${item._id}">
-              ${getActionButtonHtml(item._id, escape(item.name), item.price)}
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
     function updateItemQty(id, rawName, price, delta) {
       const name = unescape(rawName);
-      if (!cart[id]) {
-        cart[id] = { id, name, price, qty: 0 };
-      }
-
+      if (!cart[id]) cart[id] = { id, name, price, qty: 0 };
       cart[id].qty += delta;
-
-      if (cart[id].qty <= 0) {
-        delete cart[id];
-      }
+      if (cart[id].qty <= 0) delete cart[id];
 
       const container = document.getElementById(`btn-container-${id}`);
-      if (container) {
-        container.innerHTML = getActionButtonHtml(id, escape(name), price);
-      }
-
+      if (container) container.innerHTML = getActionButtonHtml(id, escape(name), price);
       updateCartUI();
     }
 
@@ -992,14 +856,12 @@
           <div class="cart-row">
             <div>
               <strong>${item.name}</strong>
-              <div style="font-size: 11px; color: var(--text-muted);">${item.price} BDT × ${item.qty} = ${item.price * item.qty} BDT</div>
+              <div style="font-size: 11px; color: var(--text-muted);">${item.price} BDT × ${item.qty}</div>
             </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <div class="stepper-box" style="font-size: 11px;">
-                <button class="stepper-btn" style="padding: 3px 8px;" onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, -1)">-</button>
-                <span class="stepper-count">${item.qty}</span>
-                <button class="stepper-btn" style="padding: 3px 8px;" onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, 1)">+</button>
-              </div>
+            <div class="stepper-box" style="font-size: 11px;">
+              <button class="stepper-btn" style="padding: 3px 8px;" onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, -1)">-</button>
+              <span class="stepper-count">${item.qty}</span>
+              <button class="stepper-btn" style="padding: 3px 8px;" onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, 1)">+</button>
             </div>
           </div>
         `).join('');
@@ -1013,9 +875,8 @@
 
     function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
     function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
-
-    function openProfileModal() { document.getElementById('profileModal').style.display = 'flex'; }
-    function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+    function openTrackingModal() { document.getElementById('trackingModal').style.display = 'flex'; }
+    function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
     async function submitOrder() {
       const cartItems = Object.values(cart);
@@ -1024,11 +885,8 @@
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
-      const paymentMethod = document.getElementById('custPaymentMethod').value;
-      const compliance = document.getElementById('complianceCheck').checked;
 
       if (!name || !phone || !address) return alert("Please fill Name, Phone, and Address.");
-      if (!compliance) return alert("Please agree to the Terms & Conditions.");
 
       const orderItems = [];
       cartItems.forEach(item => {
@@ -1044,62 +902,88 @@
         const res = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name,
-            phone,
-            address,
-            items: orderItems,
-            total,
-            paymentMethod,
-            storeLat: 22.5726,
-            storeLng: 88.3639
-          })
+          body: JSON.stringify({ name, phone, address, items: orderItems, total })
         });
         const data = await res.json();
         if (data.success) {
-          alert(`Order Placed Successfully! Order #${data.order._id.slice(-6)}. A nearby rider is being assigned.`);
+          activeOrderId = data.order._id;
+          localStorage.setItem('kwiky_active_order_id', activeOrderId);
+          document.getElementById('navTrackBtn').style.display = 'inline-block';
+          
           cart = {};
           updateCartUI();
-          displayCurrentView();
           closeCartModal();
-        } else {
-          alert("Order failed: " + data.message);
+          openTrackingModal();
+          startTrackingPoll();
         }
       } catch (err) {
         alert("Server error. Please try again.");
       }
     }
 
-    const policyContent = {
-      terms: {
-        title: "Terms & Conditions",
-        body: `<p>1. Orders are processed instantly. Deliveries take standard 30-45 mins.</p><p>2. Pricing includes all applicable taxes.</p>`
-      },
-      privacy: {
-        title: "Privacy Policy",
-        body: `<p>1. Personal data is encrypted and used exclusively for fulfilling deliveries.</p>`
-      },
-      refund: {
-        title: "Refund & Cancellation Policy",
-        body: `<p>1. Cancellation is allowed within 5 minutes of order placement.</p><p>2. Approved online refund will be credited back within 5 to 7 business days.</p>`
-      },
-      contact: {
-        title: "Customer Support",
-        body: `<p>Helpline: +880 1700-000000</p><p>Email: support@kwiky-delivery.com</p><p>Address: Dhaka, Bangladesh</p>`
-      }
-    };
-
-    function showPolicy(type) {
-      const p = policyContent[type];
-      if (p) {
-        document.getElementById('policyModalTitle').innerText = p.title;
-        document.getElementById('policyModalBody').innerHTML = p.body;
-        document.getElementById('policyModal').style.display = 'flex';
-      }
+    // ==================== Real-time Tracking Poller ==================== //
+    function startTrackingPoll() {
+      if (trackPollTimer) clearInterval(trackPollTimer);
+      pollTrackingData();
+      trackPollTimer = setInterval(pollTrackingData, 4000); // 4 sec live polling
     }
 
-    function closePolicyModal() {
-      document.getElementById('policyModal').style.display = 'none';
+    async function pollTrackingData() {
+      if (!activeOrderId) return;
+      try {
+        const res = await fetch(`/api/order/${activeOrderId}/track`);
+        const data = await res.json();
+        if (!data.success) return;
+
+        const ord = data.order;
+        document.getElementById('trackDist').innerText = `${ord.distanceKm} KM`;
+        document.getElementById('trackEta').innerText = `${ord.etaMinutes} Mins`;
+        document.getElementById('trackRiderName').innerText = ord.riderName || "Searching hero...";
+        
+        if (ord.riderPhone) {
+          document.getElementById('trackRiderCall').href = `tel:${ord.riderPhone}`;
+          document.getElementById('trackRiderCall').style.display = 'inline-flex';
+        } else {
+          document.getElementById('trackRiderCall').style.display = 'none';
+        }
+
+        // Stepper State Logic
+        const stepPlaced = document.getElementById('stepPlaced');
+        const stepAssigned = document.getElementById('stepAssigned');
+        const stepPicked = document.getElementById('stepPicked');
+        const stepOut = document.getElementById('stepOut');
+        const stepDelivered = document.getElementById('stepDelivered');
+
+        // Reset
+        [stepPlaced, stepAssigned, stepPicked, stepOut, stepDelivered].forEach(s => s.className = 'step-item');
+
+        if (ord.status === 'Pending') {
+          stepPlaced.className = 'step-item active';
+        } else if (ord.status === 'Assigned' || ord.status === 'Accepted') {
+          stepPlaced.className = 'step-item completed';
+          stepAssigned.className = 'step-item active';
+          document.getElementById('stepAssignedDesc').innerText = `${ord.riderName} accepted and heading to store.`;
+        } else if (ord.status === 'Picked Up') {
+          stepPlaced.className = 'step-item completed';
+          stepAssigned.className = 'step-item completed';
+          stepPicked.className = 'step-item active';
+        } else if (ord.status === 'Out for Delivery') {
+          stepPlaced.className = 'step-item completed';
+          stepAssigned.className = 'step-item completed';
+          stepPicked.className = 'step-item completed';
+          stepOut.className = 'step-item active';
+        } else if (ord.status === 'Delivered') {
+          stepPlaced.className = 'step-item completed';
+          stepAssigned.className = 'step-item completed';
+          stepPicked.className = 'step-item completed';
+          stepOut.className = 'step-item completed';
+          stepDelivered.className = 'step-item completed';
+          document.getElementById('trackEta').innerText = "Arrived!";
+          clearInterval(trackPollTimer);
+        }
+      } catch (e) {
+        console.warn("Tracking fetch error", e);
+      }
     }
 
     window.addEventListener('DOMContentLoaded', initCatalog);
