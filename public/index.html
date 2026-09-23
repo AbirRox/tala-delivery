@@ -9,1389 +9,192 @@
   <meta name="theme-color" content="#fc8019" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="/socket.io/socket.io.js"></script>
 
   <style>
     :root {
       --primary: #fc8019;
-      --primary-dark: #e26e10;
       --dark: #171a29;
-      --light-gray: #f4f5f7;
+      --light: #f4f5f7;
       --text-muted: #686b78;
       --border: #e2e8f0;
       --green: #60b244;
-      --whatsapp: #25d366;
       --blue: #0984e3;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 120px; }
+    body { background: var(--light); color: var(--dark); padding-bottom: 120px; }
 
-    /* Top Navigation */
-    .navbar {
-      background: #ffffff;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      padding: 12px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    /* Top Nav */
+    .navbar { background: #fff; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
     .brand-box { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
-    .brand-logo {
-      background: var(--primary);
-      color: white;
-      font-weight: 900;
-      font-size: 20px;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .brand-text h1 { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; }
-    .brand-text p { font-size: 10px; color: var(--text-muted); font-weight: 600; }
+    .brand-logo { background: var(--primary); color: white; font-weight: 900; font-size: 20px; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .brand-text h1 { font-size: 18px; font-weight: 900; }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .pill-btn { background: #f1f5f9; border: 1px solid var(--border); padding: 8px 12px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
-    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    /* Categories Bar */
+    .main-category-bar { background: #fff; display: flex; justify-content: space-around; border-bottom: 1px solid var(--border); padding: 10px 0; position: sticky; top: 60px; z-index: 150; }
+    .main-cat-item { text-align: center; cursor: pointer; color: var(--text-muted); font-size: 11px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .main-cat-item.active { color: var(--primary); transform: scale(1.05); }
 
-    .profile-btn-pill {
-      background: #f1f5f9;
-      color: #334155;
-      border: 1px solid var(--border);
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .profile-btn-pill:hover { background: #e2e8f0; }
-
-    .cart-btn-pill {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .cart-btn-pill.pulse { animation: cartPulse 0.35s ease; }
-    @keyframes cartPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.18); }
-      100% { transform: scale(1); }
-    }
-
-    /* Category Bar */
-    .main-category-bar {
-      background: #ffffff;
-      display: flex;
-      justify-content: space-around;
-      border-bottom: 1px solid var(--border);
-      padding: 10px 0;
-      position: sticky;
-      top: 60px;
-      z-index: 150;
-    }
-    .main-cat-item {
-      text-align: center;
-      cursor: pointer;
-      color: var(--text-muted);
-      font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 8px;
-      border-radius: 8px;
-      transition: all 0.2s;
-    }
-    .main-cat-item i { font-size: 18px; }
-    .main-cat-item.active {
-      color: var(--primary);
-      transform: scale(1.05);
-    }
-    .main-cat-item.active i { color: var(--primary); }
-
-    .subcategory-bar {
-      display: flex;
-      gap: 8px;
-      padding: 12px 16px;
-      background: #ffffff;
-      overflow-x: auto;
-      white-space: nowrap;
-      scrollbar-width: none;
-      border-bottom: 1px solid var(--border);
-    }
-    .subcategory-bar::-webkit-scrollbar { display: none; }
-
-    .subcat-pill {
-      padding: 6px 14px;
-      background: #f1f5f9;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      color: #334155;
-    }
-    .subcat-pill.active {
-      background: var(--dark);
-      color: white;
-      border-color: var(--dark);
-    }
-
+    /* Search & Grid */
     .search-wrap { padding: 12px 16px; }
-    .search-input {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      font-size: 13px;
-      outline: none;
-      background: white;
-    }
-    .search-input:focus { border-color: var(--primary); }
-
-    .section-title-wrap {
-      padding: 10px 16px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .section-title-wrap h3 { font-size: 16px; font-weight: 900; }
-    .back-btn-pill {
-      background: #e2e8f0;
-      border: none;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Restaurant & Product Grid */
-    .restaurants-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-      padding: 0 16px 20px;
-    }
-    .restaurant-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      transition: all 0.25s ease;
-    }
-    .restaurant-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    }
+    .search-input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); font-size: 13px; outline: none; background: white; }
+    .restaurants-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; padding: 0 16px 20px; }
+    .restaurant-card { background: white; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
     .res-banner-box { width: 100%; height: 140px; position: relative; background: #e2e8f0; }
     .res-banner-box img { width: 100%; height: 100%; object-fit: cover; }
-    .res-badge {
-      position: absolute;
-      bottom: 8px;
-      left: 8px;
-      background: rgba(23, 26, 41, 0.85);
-      color: white;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .res-badge i { color: #f1c40f; }
     .res-details { padding: 14px; }
-    .res-details h4 { font-size: 16px; font-weight: 900; color: var(--dark); }
-    .res-details p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
-    .items-grid {
-      padding: 0 16px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-      gap: 14px;
-    }
-    .product-card {
-      background: white;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    }
-    .prod-img-holder { width: 100%; height: 135px; background: #f8fafc; position: relative; }
+    .items-grid { padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 14px; }
+    .product-card { background: white; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
+    .prod-img-holder { width: 100%; height: 135px; position: relative; }
     .prod-img-holder img { width: 100%; height: 100%; object-fit: cover; }
-    .store-badge {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      background: rgba(15, 23, 42, 0.85);
-      color: white;
-      font-size: 9px;
-      font-weight: 700;
-      padding: 3px 6px;
-      border-radius: 4px;
-    }
+    .prod-body { padding: 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+    .btn-add { width: 100%; height: 32px; background: white; color: var(--green); border: 1px solid #d4d5d9; border-radius: 8px; font-weight: 800; cursor: pointer; }
 
-    .prod-body { padding: 12px 10px 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
-    .prod-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; line-height: 1.3; }
-    .prod-subcat { font-size: 10px; color: var(--text-muted); margin-bottom: 6px; }
-    .prod-price { font-size: 14px; font-weight: 900; color: #1e293b; margin-bottom: 10px; }
+    /* Floating Cart */
+    .floating-cart-bar { position: fixed; bottom: 14px; left: 14px; right: 14px; max-width: 500px; margin: 0 auto; background: var(--green); color: white; padding: 12px 18px; border-radius: 14px; display: none; justify-content: space-between; align-items: center; z-index: 180; cursor: pointer; }
 
-    .cart-btn-container { width: 100%; height: 34px; position: relative; }
-    .btn-add {
-      width: 100%;
-      height: 100%;
-      background: #ffffff;
-      color: #60b244;
-      border: 1px solid #d4d5d9;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      text-transform: uppercase;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .btn-add:active { transform: scale(0.92); background: #f0fdf4; border-color: #60b244; }
-
-    .stepper-box {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #ffffff;
-      border: 1px solid #60b244;
-      border-radius: 8px;
-      overflow: hidden;
-      font-weight: 800;
-      box-shadow: 0 2px 6px rgba(96, 178, 68, 0.2);
-    }
-    .stepper-btn {
-      background: none;
-      border: none;
-      color: #60b244;
-      width: 32px;
-      height: 100%;
-      font-size: 16px;
-      font-weight: 900;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s, transform 0.12s;
-      user-select: none;
-    }
-    .stepper-btn:active { background: #f0fdf4; transform: scale(0.8); }
-
-    .stepper-count {
-      color: #60b244;
-      font-size: 13px;
-      font-weight: 900;
-      min-width: 20px;
-      text-align: center;
-      display: inline-block;
-    }
-
-    /* Floating Cart Bar */
-    .floating-cart-bar {
-      position: fixed;
-      bottom: 14px;
-      left: 14px;
-      right: 14px;
-      max-width: 500px;
-      margin: 0 auto;
-      background: #60b244;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 14px;
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 8px 24px rgba(96, 178, 68, 0.45);
-      z-index: 180;
-      cursor: pointer;
-      animation: bounceUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes bounceUp {
-      from { transform: translateY(100px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    /* PWA Banner */
-    .pwa-install-banner {
-      position: fixed;
-      top: 65px;
-      left: 14px;
-      right: 14px;
-      max-width: 480px;
-      margin: 0 auto;
-      background: #1e293b;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 12px;
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 210;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-    }
-    .pwa-btn-install {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    /* Modal Backdrop */
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      z-index: 300;
-      justify-content: center;
-      align-items: flex-end;
-    }
-
-    /* Cart Sheet */
-    .swiggy-cart-sheet {
-      background: #f4f5f7;
-      width: 100%;
-      max-width: 520px;
-      border-radius: 20px 20px 0 0;
-      max-height: 94vh;
-      overflow-y: auto;
-      animation: sheetSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-    }
-    @keyframes sheetSlideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
-    .cart-sheet-header {
-      background: #ffffff;
-      padding: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-    }
-    .cart-sheet-content { padding: 14px 16px 100px; display: flex; flex-direction: column; gap: 14px; }
-    .cart-store-card { background: #ffffff; border-radius: 16px; padding: 14px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); }
-    .cart-store-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
-    .cart-items-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); }
-    
-    .cart-item-row-swiggy { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #e2e8f0; }
-    .cart-item-row-swiggy:last-child { border-bottom: none; }
-    .item-meta { display: flex; align-items: center; gap: 8px; }
-    .veg-icon { width: 14px; height: 14px; border: 1.5px solid #2ecc71; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
-    .veg-dot { width: 6px; height: 6px; background: #2ecc71; border-radius: 50%; }
-    .nonveg-icon { width: 14px; height: 14px; border: 1.5px solid #e74c3c; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
-    .nonveg-dot { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid #e74c3c; }
-
-    .swiggy-mini-stepper { display: flex; align-items: center; border: 1px solid #60b244; border-radius: 6px; overflow: hidden; background: white; height: 30px; }
-    .swiggy-mini-stepper button { background: none; border: none; width: 28px; height: 100%; font-size: 14px; font-weight: 800; color: #60b244; cursor: pointer; }
-    .swiggy-mini-stepper span { font-size: 12px; font-weight: 800; padding: 0 4px; color: #60b244; }
-
-    .cart-instructions-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); }
-    .instructions-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 10px; }
-    .inst-chip { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid var(--border); background: #f8fafc; color: #475569; cursor: pointer; white-space: nowrap; }
-    .inst-chip.active { background: #fff3e6; border-color: var(--primary); color: var(--primary); }
-
-    .cart-coupon-card { background: #ffffff; border-radius: 16px; padding: 12px 14px; border: 1px dashed var(--primary); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .cart-tip-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); }
-    .tip-pills-row { display: flex; gap: 8px; margin-top: 8px; }
-    .tip-pill { flex: 1; padding: 8px 0; border: 1px solid var(--border); border-radius: 10px; font-size: 12px; font-weight: 800; text-align: center; cursor: pointer; background: #f8fafc; }
-    .tip-pill.active { background: #fff3e6; border-color: var(--primary); color: var(--primary); }
-
-    /* Map Address Card */
-    .cart-address-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); position: relative; }
-    .map-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .btn-locate-me {
-      background: #eff6ff;
-      color: var(--blue);
-      border: 1px solid #bfdbfe;
-      padding: 5px 10px;
-      border-radius: 14px;
-      font-size: 11px;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .btn-locate-me:active { background: #dbeafe; }
-
-    .map-search-wrapper { position: relative; margin-bottom: 8px; }
-    .map-search-input {
-      width: 100%;
-      padding: 10px 12px 10px 34px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 12px;
-      outline: none;
-      background: #f8fafc;
-    }
-    .map-search-input:focus { border-color: var(--primary); background: #ffffff; }
-    .map-search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-      font-size: 12px;
-    }
-
-    .search-suggestions-box {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      max-height: 180px;
-      overflow-y: auto;
-      z-index: 500;
-      display: none;
-      margin-top: 4px;
-    }
-    .suggestion-item {
-      padding: 9px 12px;
-      font-size: 11px;
-      color: #334155;
-      border-bottom: 1px solid #f1f5f9;
-      cursor: pointer;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-    }
-    .suggestion-item:hover { background: #f8fafc; color: var(--primary); }
-    .suggestion-item i { margin-top: 2px; color: #94a3b8; font-size: 11px; }
-
-    #deliveryMap {
-      width: 100%;
-      height: 170px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      margin-bottom: 8px;
-      z-index: 10;
-    }
-    .addr-input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; outline: none; }
-    .addr-input:focus { border-color: var(--primary); }
-
-    .cart-bill-card { background: #ffffff; border-radius: 16px; padding: 16px; border: 1px solid var(--border); }
-    .bill-title { font-size: 13px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
-    .bill-line-item { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-    .bill-final-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; margin-top: 10px; padding-top: 12px; font-size: 15px; font-weight: 900; }
-
-    .cart-floating-bottom-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      max-width: 520px;
-      margin: 0 auto;
-      background: #ffffff;
-      padding: 12px 16px;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-      z-index: 50;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid var(--border);
-    }
-    .btn-swiggy-pay {
-      background: #60b244;
-      color: #ffffff;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 900;
-      text-transform: uppercase;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-swiggy-pay:active { background: #519b38; }
-
-    /* Common Modals */
-    .modal-box { background: white; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 20px; max-height: 90vh; overflow-y: auto; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px; }
-    .form-group { margin-top: 10px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
-    .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
-    .btn-checkout { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; }
-    
-    .btn-whatsapp-order {
-      width: 100%;
-      background: var(--whatsapp);
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-decoration: none;
-      margin-top: 10px;
-    }
-
-    .btn-email-support {
-      width: 100%;
-      background: #0284c7;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-decoration: none;
-      margin-top: 10px;
-    }
-
-    /* Customer Profile Drawer */
-    .profile-sheet {
-      background: #f8fafc;
-      width: 100%;
-      max-width: 520px;
-      border-radius: 24px 24px 0 0;
-      height: 90vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      animation: sheetSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .profile-header {
-      background: #ffffff;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-    }
-    .profile-user-card {
-      background: #ffffff;
-      padding: 18px 20px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .user-avatar-circle {
-      width: 56px;
-      height: 56px;
-      background: #fff3e6;
-      color: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      font-weight: 900;
-      border: 2px solid var(--primary);
-    }
-
-    .profile-body-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px 16px 40px;
-    }
-    .profile-menu-group {
-      background: #ffffff;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-      margin-bottom: 14px;
-    }
-    .profile-menu-row {
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      border-bottom: 1px solid #f1f5f9;
-      transition: background 0.15s;
-    }
-    .profile-menu-row:last-child { border-bottom: none; }
-    .profile-menu-row:active { background: #f8fafc; }
-    .profile-row-left { display: flex; align-items: center; gap: 14px; }
-    .profile-row-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
-    .profile-row-title { font-size: 13px; font-weight: 800; color: #1e293b; }
-    .profile-row-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-
-    .subpage-panel {
-      display: none;
-      animation: fadeIn 0.2s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-    .subpage-top-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .subpage-back-btn {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .past-order-card {
-      background: white;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-    .past-order-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px dashed #e2e8f0;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
-    .order-status-tag {
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 10px;
-      font-weight: 800;
-      background: #eafaf1;
-      color: var(--green);
-    }
+    /* Modals */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 300; justify-content: center; align-items: flex-end; }
+    .sheet-box { background: white; width: 100%; max-width: 520px; border-radius: 20px 20px 0 0; max-height: 94vh; overflow-y: auto; display: flex; flex-direction: column; padding: 16px; }
+    .addr-map-box { width: 100%; height: 160px; border-radius: 10px; border: 1px solid var(--border); margin: 8px 0; }
+    .input-ctrl { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; margin: 4px 0 10px; }
+    .btn-pay { background: var(--green); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 900; width: 100%; cursor: pointer; margin-top: 10px; }
 
     /* Tracking Sheet */
-    .tracking-sheet {
-      background: #ffffff;
-      width: 100%;
-      max-width: 520px;
-      border-radius: 24px 24px 0 0;
-      height: 92vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 -10px 30px rgba(0,0,0,0.25);
-    }
-    #trackingLiveMap { width: 100%; flex: 1; min-height: 350px; z-index: 10; background: #f1f5f9; }
-    .track-status-panel { background: #ffffff; padding: 18px 20px; border-top: 1px solid var(--border); box-shadow: 0 -6px 20px rgba(0,0,0,0.06); z-index: 25; }
-    .track-eta-banner { background: #171a29; color: white; padding: 14px 18px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .track-rider-bar { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border); }
+    .track-sheet { background: white; width: 100%; max-width: 520px; border-radius: 24px 24px 0 0; height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
+    #trackingLiveMap { width: 100%; flex: 1; min-height: 350px; }
+    .track-info-panel { padding: 18px; background: white; border-top: 1px solid var(--border); }
+    .track-eta-banner { background: var(--dark); color: white; padding: 14px; border-radius: 14px; display: flex; justify-content: space-between; margin-bottom: 12px; }
 
-    /* ==================== AI LIVE CHAT ASSISTANT WIDGET ==================== */
-    .ai-chat-floating-btn {
-      position: fixed;
-      bottom: 24px;
-      right: 20px;
-      background: linear-gradient(135deg, var(--primary), #e26e10);
-      color: white;
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 8px 24px rgba(252, 128, 25, 0.45);
-      cursor: pointer;
-      z-index: 250;
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .ai-chat-floating-btn:hover { transform: scale(1.08); }
-    .ai-badge-indicator {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background: #22c55e;
-      color: white;
-      font-size: 9px;
-      font-weight: 900;
-      padding: 2px 6px;
-      border-radius: 10px;
-      border: 2px solid white;
-    }
-
-    .ai-chat-window {
-      position: fixed;
-      bottom: 86px;
-      right: 20px;
-      width: 360px;
-      max-width: calc(100vw - 40px);
-      height: 520px;
-      max-height: calc(100vh - 120px);
-      background: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-      border: 1px solid var(--border);
-      z-index: 260;
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      animation: fadeIn 0.2s ease-out;
-    }
-    .ai-chat-header {
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      color: white;
-      padding: 14px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .ai-chat-messages {
-      flex: 1;
-      padding: 14px;
-      overflow-y: auto;
-      background: #f8fafc;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .ai-msg {
-      max-width: 82%;
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .ai-msg-bot {
-      background: #ffffff;
-      color: #1e293b;
-      align-self: flex-start;
-      border: 1px solid var(--border);
-      border-bottom-left-radius: 4px;
-    }
-    .ai-msg-user {
-      background: var(--primary);
-      color: white;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-    }
-
-    .ai-quick-prompts {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 8px 12px;
-      background: #ffffff;
-      border-top: 1px solid var(--border);
-      scrollbar-width: none;
-    }
-    .ai-quick-prompts::-webkit-scrollbar { display: none; }
-    .ai-prompt-chip {
-      padding: 5px 10px;
-      border-radius: 16px;
-      font-size: 11px;
-      font-weight: 700;
-      background: #f1f5f9;
-      color: #334155;
-      cursor: pointer;
-      white-space: nowrap;
-      border: 1px solid var(--border);
-    }
-    .ai-prompt-chip:hover { background: #fff3e6; color: var(--primary); border-color: var(--primary); }
-
-    .ai-chat-input-row {
-      display: flex;
-      padding: 10px 12px;
-      background: #ffffff;
-      border-top: 1px solid var(--border);
-      gap: 8px;
-    }
-    .ai-chat-input-row input {
-      flex: 1;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 9px 14px;
-      font-size: 12px;
-      outline: none;
-    }
-    .ai-chat-input-row input:focus { border-color: var(--primary); }
-    .ai-send-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .compliance-footer { background: var(--dark); color: #94a3b8; padding: 24px 16px; font-size: 12px; text-align: center; }
-    .footer-support-links { margin-top: 10px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
-    .footer-support-links a { color: #38bdf8; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
+    /* AI Chat */
+    .ai-chat-btn { position: fixed; bottom: 24px; right: 20px; background: var(--primary); color: white; width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; z-index: 250; box-shadow: 0 8px 24px rgba(252,128,25,0.4); }
+    .ai-chat-window { position: fixed; bottom: 86px; right: 20px; width: 350px; max-width: calc(100vw - 40px); height: 480px; background: white; border-radius: 20px; border: 1px solid var(--border); z-index: 260; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
   </style>
 </head>
 <body>
 
-  <!-- PWA Install Banner -->
-  <div class="pwa-install-banner" id="pwaBanner">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <i class="fa-solid fa-mobile-screen-button" style="color: var(--primary);"></i>
-      <span style="font-size: 12px; font-weight: 700;">Install Kwiky App on Phone</span>
-    </div>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <button class="pwa-btn-install" id="installPwaBtn">Install</button>
-      <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 14px;" onclick="closePwaBanner()"></i>
-    </div>
-  </div>
-
-  <!-- Top Navigation -->
+  <!-- Navigation -->
   <header class="navbar">
     <a href="/" class="brand-box">
       <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
-      <div class="brand-text">
-        <h1>Kwiky</h1>
-        <p>Food, Fashion, Meds & Grocery</p>
-      </div>
+      <div class="brand-text"><h1>Kwiky</h1></div>
     </a>
     <div class="nav-actions">
-      <button id="navTrackBtn" style="display: none; background: #eafaf1; color: var(--green); border: 1px solid var(--green); padding: 7px 12px; border-radius: 20px; font-weight: 800; font-size: 11px; cursor: pointer;" onclick="openTrackingModal()">
-        <i class="fa-solid fa-location-arrow fa-spin"></i> Live Track
+      <button id="navTrackBtn" style="display: none; background: #eafaf1; color: var(--green); border: 1px solid var(--green);" class="pill-btn" onclick="openTrackingModal()">
+        <i class="fa-solid fa-location-arrow fa-spin"></i> Track
       </button>
-
-      <!-- Account Button -->
-      <button class="profile-btn-pill" onclick="handleAccountClick()">
-        <i class="fa-regular fa-user"></i>
-        <span id="navAccountText">Account</span>
-      </button>
-
-      <button class="cart-btn-pill" id="navCartBtn" onclick="openCartModal()">
-        <i class="fa-solid fa-bag-shopping"></i>
-        <span id="cartCount">0</span>
+      <button class="pill-btn" onclick="handleAccountClick()"><i class="fa-regular fa-user"></i> <span id="navAccountText">Account</span></button>
+      <button class="pill-btn" style="background: var(--primary); color: white; border: none;" onclick="openCartModal()">
+        <i class="fa-solid fa-bag-shopping"></i> <span id="cartCount">0</span>
       </button>
     </div>
   </header>
 
-  <!-- 4 Main Categories -->
+  <!-- Categories -->
   <nav class="main-category-bar">
-    <div class="main-cat-item active" onclick="switchMainCategory('Food', this)">
-      <i class="fa-solid fa-utensils"></i>
-      <span>Food</span>
-    </div>
-    <div class="main-cat-item" onclick="switchMainCategory('Fashion', this)">
-      <i class="fa-solid fa-shirt"></i>
-      <span>Fashion</span>
-    </div>
-    <div class="main-cat-item" onclick="switchMainCategory('Medicine', this)">
-      <i class="fa-solid fa-pills"></i>
-      <span>Medicine</span>
-    </div>
-    <div class="main-cat-item" onclick="switchMainCategory('Grocery', this)">
-      <i class="fa-solid fa-basket-shopping"></i>
-      <span>Grocery</span>
-    </div>
+    <div class="main-cat-item active" onclick="switchCategory('Food', this)"><i class="fa-solid fa-utensils"></i><span>Food</span></div>
+    <div class="main-cat-item" onclick="switchCategory('Fashion', this)"><i class="fa-solid fa-shirt"></i><span>Fashion</span></div>
+    <div class="main-cat-item" onclick="switchCategory('Medicine', this)"><i class="fa-solid fa-pills"></i><span>Medicine</span></div>
+    <div class="main-cat-item" onclick="switchCategory('Grocery', this)"><i class="fa-solid fa-basket-shopping"></i><span>Grocery</span></div>
   </nav>
 
-  <div class="subcategory-bar" id="subcatBar"></div>
-
+  <!-- Search -->
   <div class="search-wrap">
-    <input type="text" id="searchInput" class="search-input" placeholder="Search dishes, restaurants, fashion..." onkeyup="handleSearch()" />
+    <input type="text" class="search-input" placeholder="Search dishes, fashion, grocery..." onkeyup="handleSearch(this.value)" />
   </div>
 
+  <!-- Content Section -->
   <section>
-    <div class="section-title-wrap">
-      <h3 id="sectionHeading">Top Partner Restaurants</h3>
-      <button class="back-btn-pill" id="backToResBtn" style="display: none;" onclick="resetToAllRestaurants()">
-        <i class="fa-solid fa-arrow-left"></i> All Restaurants
-      </button>
+    <div style="padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
+      <h3 id="sectionHeading" style="font-size: 16px; font-weight: 900;">Top Partner Restaurants</h3>
+      <button id="backBtn" style="display:none;" class="pill-btn" onclick="resetToAll()"><i class="fa-solid fa-arrow-left"></i> All</button>
     </div>
-
     <div class="restaurants-grid" id="restaurantView"></div>
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
   <!-- Floating Cart Bar -->
   <div class="floating-cart-bar" id="floatingCartBar" onclick="openCartModal()">
-    <div>
-      <strong id="floatingBarItemsText" style="font-size: 14px;">1 ITEM | 220 BDT</strong>
-      <p id="floatingBarStoreText" style="font-size: 11px; opacity: 0.9;">From Sultan's Dine</p>
-    </div>
-    <div style="font-size: 13px; font-weight: 900; display: flex; align-items: center; gap: 6px;">
-      View Cart <i class="fa-solid fa-arrow-right"></i>
-    </div>
+    <strong id="floatingBarItemsText">1 ITEM | 240 BDT</strong>
+    <div>View Cart <i class="fa-solid fa-arrow-right"></i></div>
   </div>
 
-  <!-- ==================== FLOATING AI CHAT BUTTON & WINDOW ==================== -->
-  <div class="ai-chat-floating-btn" id="aiChatBtn" onclick="toggleAiChat()">
-    <i class="fa-solid fa-robot"></i>
-    <span class="ai-badge-indicator">AI</span>
-  </div>
-
+  <!-- AI Chat Floating Button -->
+  <div class="ai-chat-btn" onclick="toggleAiChat()"><i class="fa-solid fa-robot"></i></div>
   <div class="ai-chat-window" id="aiChatWindow">
-    <div class="ai-chat-header">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center;">
-          <i class="fa-solid fa-bolt" style="color: white; font-size: 14px;"></i>
-        </div>
-        <div>
-          <strong style="font-size: 13px;">Kwiky AI Assistant</strong>
-          <p style="font-size: 10px; color: #22c55e; font-weight: 700;">● Online 24/7 Support</p>
-        </div>
-      </div>
-      <i class="fa-solid fa-xmark" style="font-size: 18px; cursor: pointer; color: #94a3b8;" onclick="toggleAiChat()"></i>
+    <div style="background: #1e293b; color: white; padding: 14px; display: flex; justify-content: space-between;">
+      <strong>Kwiky AI Assistant</strong>
+      <i class="fa-solid fa-xmark" style="cursor: pointer;" onclick="toggleAiChat()"></i>
     </div>
-
-    <div class="ai-chat-messages" id="aiChatMessages">
-      <div class="ai-msg ai-msg-bot">
-        👋 স্বাগতম! আমি <strong>Kwiky AI</strong>। মেনুর খাবার পছন্দ করা, ডেলিভারি চার্জ জানা বা অর্ডার ট্র্যাক করতে কোনো সাহায্য লাগবে কি?
-      </div>
+    <div id="aiChatMessages" style="flex:1; padding:12px; overflow-y:auto; background:#f8fafc; font-size:12px; display:flex; flex-direction:column; gap:8px;">
+      <div style="background:white; padding:8px 12px; border-radius:12px; border:1px solid #e2e8f0;">স্বাগতম! খাবার পছন্দ করা, ডেলিভারি চার্জ জানা বা অর্ডারে যেকোনো সহায়তায় আমাকে জিজ্ঞেস করুন।</div>
     </div>
-
-    <div class="ai-quick-prompts">
-      <div class="ai-prompt-chip" onclick="handleQuickPrompt('ডেলিভারি চার্জ কত?')">🛵 ডেলিভারি চার্জ কত?</div>
-      <div class="ai-prompt-chip" onclick="handleQuickPrompt('সেরা বিরিয়ানি কোনটা?')">🍛 সেরা বিরিয়ানি?</div>
-      <div class="ai-prompt-chip" onclick="handleQuickPrompt('কুপন কোড কী?')">🏷️ কুপন কোড?</div>
-      <div class="ai-prompt-chip" onclick="handleQuickPrompt('লাইভ এজেন্ট সাপোর্ট দিন')">💬 Live Agent</div>
-    </div>
-
-    <div class="ai-chat-input-row">
-      <input type="text" id="aiChatInput" placeholder="Ask anything about Kwiky..." onkeypress="if(event.key==='Enter') sendAiMessage()" />
-      <button class="ai-send-btn" onclick="sendAiMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+    <div style="display:flex; padding:8px; background:white; border-top:1px solid #e2e8f0; gap:6px;">
+      <input type="text" id="aiChatInput" placeholder="Ask AI..." style="flex:1; padding:8px 12px; border:1px solid #e2e8f0; border-radius:20px; outline:none; font-size:12px;" onkeypress="if(event.key==='Enter') sendAiMessage()" />
+      <button onclick="sendAiMessage()" style="background:var(--primary); color:white; border:none; border-radius:50%; width:34px; height:34px; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="compliance-footer">
-    <a href="/rider.html" style="color: var(--primary); text-decoration: none; font-weight: 700;">Delivery Partner Portal</a>
-    <div class="footer-support-links">
-      <a href="https://wa.me/918100002156" target="_blank"><i class="fa-brands fa-whatsapp" style="color: #25d366;"></i> WhatsApp: +91 8100002156</a>
-      <a href="mailto:mynameisabirroy@gmail.com"><i class="fa-regular fa-envelope"></i> mynameisabirroy@gmail.com</a>
-    </div>
-    <p style="margin-top: 10px;">© 2026 Kwiky Online Delivery Platform</p>
-  </footer>
-
-  <!-- Profile Drawer -->
-  <div class="modal-backdrop" id="profileModal">
-    <div class="profile-sheet">
-      <div class="profile-header">
-        <strong style="font-size: 16px; font-weight: 900;">My Account</strong>
-        <i class="fa-solid fa-xmark" style="font-size: 22px; cursor: pointer; color: #64748b;" onclick="closeProfileModal()"></i>
-      </div>
-
-      <div class="profile-user-card">
-        <div class="user-avatar-circle" id="profileAvatarLetter">U</div>
-        <div style="flex: 1;">
-          <h3 id="profileNameDisplay" style="font-size: 16px; font-weight: 900;">Guest User</h3>
-          <p id="profilePhoneDisplay" style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Not Logged In</p>
-        </div>
-        <button onclick="logoutCustomer()" id="btnLogout" style="display: none; background: #fee2e2; color: #ef4444; border: none; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;">
-          Logout
-        </button>
-      </div>
-
-      <div class="profile-body-container">
-        <div id="subpageProfileMain" class="subpage-panel" style="display: block;">
-          <div class="profile-menu-group">
-            <div class="profile-menu-row" onclick="openSubpage('orders')">
-              <div class="profile-row-left">
-                <div class="profile-row-icon" style="background: #eafaf1; color: var(--green);"><i class="fa-solid fa-bag-shopping"></i></div>
-                <div>
-                  <div class="profile-row-title">Orders & Re-order</div>
-                  <div class="profile-row-sub">Past orders, receipts & summaries</div>
-                </div>
-              </div>
-              <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
-            </div>
-
-            <div class="profile-menu-row" onclick="openSubpage('address')">
-              <div class="profile-row-left">
-                <div class="profile-row-icon" style="background: #eff6ff; color: var(--blue);"><i class="fa-solid fa-location-dot"></i></div>
-                <div>
-                  <div class="profile-row-title">Saved Delivery Addresses</div>
-                  <div class="profile-row-sub">Home, Work, Landmark pins</div>
-                </div>
-              </div>
-              <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
-            </div>
-          </div>
-
-          <div class="profile-menu-group">
-            <div class="profile-menu-row" onclick="openSubpage('membership')">
-              <div class="profile-row-left">
-                <div class="profile-row-icon" style="background: #fff3e6; color: var(--primary);"><i class="fa-solid fa-crown"></i></div>
-                <div>
-                  <div class="profile-row-title">Kwiky One Membership</div>
-                  <div class="profile-row-sub">Free delivery on orders above ৳199</div>
-                </div>
-              </div>
-              <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
-            </div>
-
-            <div class="profile-menu-row" onclick="openSubpage('help')">
-              <div class="profile-row-left">
-                <div class="profile-row-icon" style="background: #f1f5f9; color: #475569;"><i class="fa-solid fa-headset"></i></div>
-                <div>
-                  <div class="profile-row-title">Help, WhatsApp & Mail Support</div>
-                  <div class="profile-row-sub">Instant delivery queries & 24/7 helpdesk</div>
-                </div>
-              </div>
-              <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
-            </div>
-          </div>
-        </div>
-
-        <div id="subpageOrders" class="subpage-panel">
-          <div class="subpage-top-bar">
-            <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
-            <h3 style="font-size: 15px; font-weight: 900;">Your Orders</h3>
-          </div>
-          <div id="pastOrdersContainer"></div>
-        </div>
-
-        <div id="subpageAddress" class="subpage-panel">
-          <div class="subpage-top-bar">
-            <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
-            <h3 style="font-size: 15px; font-weight: 900;">Delivery Addresses</h3>
-          </div>
-          <div style="background: white; padding: 16px; border-radius: 14px; border: 1px solid var(--border);">
-            <div style="display: flex; gap: 10px; align-items: flex-start;">
-              <i class="fa-solid fa-house" style="color: var(--primary); font-size: 16px; margin-top: 2px;"></i>
-              <div>
-                <strong style="font-size: 13px;">Default Home Location</strong>
-                <p id="savedAddressTextDisplay" style="font-size: 12px; color: var(--text-muted); margin: 4px 0 10px;">Select location from checkout map</p>
-                <button onclick="closeProfileModal(); openCartModal();" style="background: #f1f5f9; border: 1px solid var(--border); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;">
-                  Change on Map
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="subpageMembership" class="subpage-panel">
-          <div class="subpage-top-bar">
-            <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
-            <h3 style="font-size: 15px; font-weight: 900;">Kwiky One VIP</h3>
-          </div>
-          <div style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 20px; border-radius: 16px; text-align: center;">
-            <i class="fa-solid fa-crown" style="color: #f1c40f; font-size: 36px; margin-bottom: 10px;"></i>
-            <h3 style="font-size: 18px; font-weight: 900;">Unlimited Free Deliveries</h3>
-            <p style="font-size: 12px; opacity: 0.8; margin: 8px 0 16px;">Enjoy 0 ৳ Delivery Fee on all food and grocery orders above 199 ৳.</p>
-            <button style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 900; font-size: 13px; cursor: pointer;" onclick="alert('Congratulations! VIP Trial Activated on this device.')">
-              Activate 30-Days Free Pass
-            </button>
-          </div>
-        </div>
-
-        <div id="subpageHelp" class="subpage-panel">
-          <div class="subpage-top-bar">
-            <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
-            <h3 style="font-size: 15px; font-weight: 900;">Help & Support Desk</h3>
-          </div>
-          <div style="background: white; padding: 18px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
-            <i class="fa-solid fa-headset" style="font-size: 34px; color: var(--primary); margin-bottom: 8px;"></i>
-            <h4 style="font-size: 15px; font-weight: 900;">Need instant order or delivery support?</h4>
-            <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 16px;">Directly reach our operations team via WhatsApp or Official Email.</p>
-            
-            <a href="https://wa.me/918100002156?text=Hello%20Kwiky%20Team,%20I%20have%20a%20query%20about%20an%20order/delivery." target="_blank" class="btn-whatsapp-order">
-              <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> WhatsApp: +91 8100002156
-            </a>
-
-            <a href="mailto:mynameisabirroy@gmail.com?subject=Kwiky%20Customer%20Query" class="btn-email-support">
-              <i class="fa-solid fa-envelope" style="font-size: 16px;"></i> Email: mynameisabirroy@gmail.com
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Cart Sheet -->
+  <!-- Cart Modal -->
   <div class="modal-backdrop" id="cartModal">
-    <div class="swiggy-cart-sheet">
-      <div class="cart-sheet-header">
-        <div>
-          <h3>Your Food Cart</h3>
-          <p id="cartItemsCountText" style="font-size: 11px; color: var(--text-muted);">0 items selected</p>
-        </div>
-        <i class="fa-solid fa-xmark" style="font-size: 22px; cursor: pointer; color: #475569;" onclick="closeCartModal()"></i>
+    <div class="sheet-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+        <h3 style="font-size: 16px;">Delivery Cart</h3>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeCartModal()"></i>
       </div>
-
-      <div class="cart-sheet-content" id="cartSheetContent">
-        <div class="cart-store-card" id="cartStoreHeader">
-          <img class="cart-store-img" id="cartStoreImg" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300" alt="Restaurant" />
-          <div>
-            <h4 id="cartStoreTitle">Sultan's Dine</h4>
-            <p style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> 30-35 mins instant delivery</p>
-          </div>
-        </div>
-
-        <div class="cart-items-card">
-          <div id="swiggyItemsList"></div>
-        </div>
-
-        <div class="cart-instructions-card">
-          <p style="font-size: 12px; font-weight: 800; margin-bottom: 8px;">Delivery & Cooking Instructions</p>
-          <div class="instructions-chips">
-            <div class="inst-chip" onclick="toggleInstruction(this, 'Avoid calling')"><i class="fa-solid fa-phone-slash"></i> Avoid calling</div>
-            <div class="inst-chip" onclick="toggleInstruction(this, 'Leave at door')"><i class="fa-solid fa-door-open"></i> Leave at door</div>
-            <div class="inst-chip" onclick="toggleInstruction(this, 'Send cutlery')"><i class="fa-solid fa-utensils"></i> Add cutlery</div>
-          </div>
-          <input type="text" id="customCookingNote" class="form-control" placeholder="Write cooking instructions (e.g. less spicy)..." />
-        </div>
-
-        <div class="cart-coupon-card" onclick="applySwiggyCoupon()">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-percent" style="font-size: 18px; color: var(--primary);"></i>
-            <div>
-              <strong id="couponStatusText" style="font-size: 13px;">Apply Coupon Code</strong>
-              <p style="font-size: 10px; color: var(--text-muted);">Save 50 BDT on orders above 200</p>
-            </div>
-          </div>
-          <span id="couponActionBtn" style="font-size: 12px; font-weight: 900; color: var(--primary);">APPLY</span>
-        </div>
-
-        <div class="cart-tip-card">
-          <p style="font-size: 13px; font-weight: 800;">Tip your delivery hero</p>
-          <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Thank your partner for quick delivery.</p>
-          <div class="tip-pills-row">
-            <div class="tip-pill" onclick="selectTip(0, this)">No Tip</div>
-            <div class="tip-pill" onclick="selectTip(20, this)">20 BDT</div>
-            <div class="tip-pill active" onclick="selectTip(30, this)">30 BDT</div>
-            <div class="tip-pill" onclick="selectTip(50, this)">50 BDT</div>
-          </div>
-        </div>
-
-        <div class="cart-address-card">
-          <div class="map-header-row">
-            <p style="font-size: 12px; font-weight: 800;"><i class="fa-solid fa-location-dot" style="color: #e74c3c;"></i> Deliver To (Live Map)</p>
-            <button class="btn-locate-me" type="button" onclick="detectCurrentLocation()">
-              <i class="fa-solid fa-crosshairs"></i> Use Current Location
-            </button>
-          </div>
-
-          <div class="map-search-wrapper">
-            <i class="fa-solid fa-magnifying-glass map-search-icon"></i>
-            <input 
-              type="text" 
-              id="mapSearchInput" 
-              class="map-search-input" 
-              placeholder="Search area, landmark, street name..." 
-              autocomplete="off"
-              oninput="handleAddressSearch(this.value)"
-            />
-            <div class="search-suggestions-box" id="mapSuggestions"></div>
-          </div>
-
-          <div id="deliveryMap"></div>
-
-          <input type="text" id="custAddress" class="addr-input" placeholder="House no, Floor, Landmark (Auto-filled from map)" />
-        </div>
-
-        <div class="cart-bill-card">
-          <div class="bill-title"><i class="fa-solid fa-receipt"></i> Bill Details</div>
-          <div class="bill-line-item"><span>Item Total</span><span id="billItemTotal">0 BDT</span></div>
-          <div class="bill-line-item"><span id="billDeliveryLabel">Delivery Partner Fee</span><span id="billDeliveryPartnerFee">35 BDT</span></div>
-          <div class="bill-line-item"><span>Platform Fee</span><span>3 BDT</span></div>
-          <div class="bill-line-item"><span>Govt Taxes & Charges (5%)</span><span id="billTaxCharges">0 BDT</span></div>
-          <div class="bill-line-item" id="discountRow" style="display:none; color:#2ecc71; font-weight:700;"><span>Coupon (KWIKY50)</span><span id="billDiscount">-50 BDT</span></div>
-          <div class="bill-line-item" id="tipRow"><span>Delivery Tip</span><span id="billTipAmount">30 BDT</span></div>
-          <div class="bill-final-row"><span>To Pay</span><span id="billFinalToPay" style="color: var(--primary);">68 BDT</span></div>
-        </div>
+      <div id="cartItemsList" style="margin: 12px 0;"></div>
+      <p style="font-size: 12px; font-weight: 800;"><i class="fa-solid fa-location-dot" style="color: #e74c3c;"></i> Deliver To (Live Map)</p>
+      <div id="deliveryMap" class="addr-map-box"></div>
+      <input type="text" id="custAddress" class="input-ctrl" placeholder="House no, Flat, Landmark" />
+      <div style="background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 12px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>Item Total:</span><span id="billItemTotal">0 BDT</span></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>Delivery Fee:</span><span id="billDeliveryFee">35 BDT</span></div>
+        <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 14px; border-top: 1px dashed #cbd5e1; padding-top: 6px;"><span>To Pay:</span><span id="billFinalToPay" style="color: var(--primary);">0 BDT</span></div>
       </div>
-
-      <div class="cart-floating-bottom-bar">
-        <div>
-          <p style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800;">To Pay</p>
-          <h3 id="bottomBarPayAmount" style="font-size: 18px; font-weight: 900;">68 BDT</h3>
-        </div>
-        <button class="btn-swiggy-pay" onclick="handleCheckoutClick()">
-          Proceed To Pay <i class="fa-solid fa-arrow-right"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- OTP Login Modal -->
-  <div class="modal-backdrop" id="loginModal" style="align-items: center;">
-    <div class="modal-box" style="border-radius: 20px; max-width: 400px;">
-      <div class="modal-header">
-        <h3 style="font-size: 16px;"><i class="fa-solid fa-shield-halved" style="color: var(--primary);"></i> Phone Verification</h3>
-        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeLoginModal()"></i>
-      </div>
-      <div id="loginStepPhone">
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter mobile number to receive 4-digit OTP code.</p>
-        <div class="form-group"><label>Your Name</label><input type="text" id="loginInputName" class="form-control" placeholder="E.g., Tanvir Ahmed" /></div>
-        <div class="form-group"><label>Mobile Number</label><input type="tel" id="loginInputPhone" class="form-control" placeholder="017xxxxxxxx" /></div>
-        <button class="btn-checkout" style="margin-top: 14px;" onclick="sendLoginOtp()">Send OTP</button>
-      </div>
-      <div id="loginStepOtp" style="display: none;">
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter 4-digit code sent to <strong id="sentPhoneDisplay"></strong></p>
-        <div class="form-group"><label>4-Digit OTP</label><input type="number" id="loginInputOtp" class="form-control" placeholder="E.g. 1234" style="text-align: center; font-size: 18px; letter-spacing: 4px;" /></div>
-        <button class="btn-checkout" style="margin-top: 14px;" onclick="verifyLoginOtp()">Verify & Continue</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Order Success Modal with WhatsApp Alert -->
-  <div class="modal-backdrop" id="orderSuccessModal" style="align-items: center;">
-    <div class="modal-box" style="border-radius: 20px; max-width: 480px; text-align: center;">
-      <div style="width: 65px; height: 65px; background: #eafaf1; color: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 12px;"><i class="fa-solid fa-check"></i></div>
-      <h2 style="font-size: 20px; font-weight: 900;">Order Placed Successfully!</h2>
-      <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 14px;">Order <span id="confirmedOrderId" style="font-weight: 800; color: var(--primary);"></span> confirmed!</p>
-      
-      <a href="#" id="btnWhatsAppAlert" target="_blank" class="btn-whatsapp-order">
-        <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Send Order Details to Admin WhatsApp (+91 8100002156)
-      </a>
-
-      <button class="btn-checkout" style="margin-top: 12px;" onclick="goToTrackingFromSuccess()">
-        <i class="fa-solid fa-motorcycle"></i> Track Live Order
-      </button>
+      <button class="btn-pay" onclick="handleCheckoutClick()">Place Order (Cash On Delivery)</button>
     </div>
   </div>
 
   <!-- Live Tracking Modal -->
   <div class="modal-backdrop" id="trackingModal" style="align-items: flex-end;">
-    <div class="tracking-sheet">
-      <div style="padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid var(--border); z-index: 30;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <div style="width: 10px; height: 10px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 10px #2ecc71;"></div>
-          <strong style="font-size: 15px;">Live Delivery Tracking</strong>
-        </div>
-        <i class="fa-solid fa-xmark" style="font-size: 22px; cursor: pointer; color: #64748b;" onclick="closeTrackingModal()"></i>
+    <div class="track-sheet">
+      <div style="padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);">
+        <strong style="font-size: 15px;">Live Delivery Tracking</strong>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeTrackingModal()"></i>
       </div>
-
       <div id="trackingLiveMap"></div>
-
-      <div class="track-status-panel">
+      <div class="track-info-panel">
         <div class="track-eta-banner">
-          <div>
-            <p style="font-size: 11px; opacity: 0.8; text-transform: uppercase; font-weight: 800;">Estimated Arrival</p>
-            <h2 id="trackEta" style="color: #2ecc71; font-size: 24px; font-weight: 900; margin-top: 2px;">22 Mins</h2>
-          </div>
-          <div style="text-align: right;">
-            <p style="font-size: 11px; opacity: 0.8; text-transform: uppercase; font-weight: 800;">Remaining Distance</p>
-            <h3 id="trackDist" style="font-size: 18px; font-weight: 900; margin-top: 2px;">-- KM</h3>
-          </div>
+          <div><p style="font-size: 11px;">ESTIMATED ARRIVAL</p><h2 id="trackEta" style="color: #2ecc71;">18 Mins</h2></div>
+          <div style="text-align: right;"><p style="font-size: 11px;">REMAINING DISTANCE</p><h3 id="trackDist">1.5 KM</h3></div>
         </div>
-
-        <div class="track-rider-bar">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 44px; height: 44px; background: #fff3e6; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">
-              <i class="fa-solid fa-motorcycle"></i>
-            </div>
-            <div>
-              <h4 id="trackRiderName" style="font-size: 14px; font-weight: 900;">Rider #KW-171</h4>
-              <p style="font-size: 11px; color: var(--green); font-weight: 700; display: flex; align-items: center; gap: 4px;">
-                <i class="fa-solid fa-circle-check"></i> On the way with fresh food
-              </p>
-            </div>
-          </div>
-          <a href="tel:+918100002156" id="trackRiderCall" style="background: var(--green); color: white; padding: 9px 16px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 12px; display: flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-phone"></i> Call
-          </a>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div><h4 id="trackRiderName">Hero #KW-171</h4><p style="font-size: 11px; color: var(--text-muted);">Verified Partner</p></div>
+          <a href="tel:+918100002156" style="background: var(--green); color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 12px;">Call Support</a>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="modal-backdrop" id="loginModal" style="align-items: center;">
+    <div class="sheet-box" style="border-radius: 20px; max-width: 380px;">
+      <h3 style="margin-bottom: 10px;">Login with Mobile</h3>
+      <input type="text" id="loginName" class="input-ctrl" placeholder="Your Name" />
+      <input type="tel" id="loginPhone" class="input-ctrl" placeholder="Mobile Number" />
+      <button class="btn-pay" style="background: var(--primary);" onclick="submitLogin()">Send & Verify (OTP: 1234)</button>
     </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const banner = document.getElementById('pwaBanner');
-      if (banner) banner.style.display = 'flex';
-    });
-
-    const installBtn = document.getElementById('installPwaBtn');
-    if (installBtn) {
-      installBtn.addEventListener('click', async () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          const { outcome } = await deferredPrompt.userChoice;
-          if (outcome === 'accepted') {
-            document.getElementById('pwaBanner').style.display = 'none';
-          }
-          deferredPrompt = null;
-        }
-      });
-    }
-
-    function closePwaBanner() {
-      const banner = document.getElementById('pwaBanner');
-      if (banner) banner.style.display = 'none';
-    }
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      });
-    }
-
+    const socket = io();
     let rawCatalog = [];
     let currentCategory = 'Food';
-    let currentSubcategory = 'All Restaurants';
     let selectedRestaurant = null;
     let cart = {};
 
@@ -1399,922 +202,248 @@
     let STORE_LNG = 88.4600;
     let CUSTOMER_LAT = 22.5850;
     let CUSTOMER_LNG = 88.4600;
-
-    let dynamicDeliveryFee = 35; 
+    let dynamicDeliveryFee = 35;
     let calculatedDistanceKm = 1.5;
-    const PLATFORM_FEE = 3;
-    let currentTip = 30;
-    let couponDiscount = 0;
-    let selectedInstructions = [];
 
     let currentUser = JSON.parse(localStorage.getItem('kwiky_customer_user')) || null;
     let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
 
     const ADMIN_WHATSAPP_NUMBER = "918100002156";
-    const OFFICIAL_SUPPORT_EMAIL = "mynameisabirroy@gmail.com";
 
     const defaultRestaurants = [
-      { name: "Sultan's Dine", cuisine: "Kacchi Biryani, Mutton Rezala", rating: "4.8", time: "30-35 mins", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600" },
-      { name: "Takeout Burgers", cuisine: "Gourmet Beef Burgers, Cheesy Fries", rating: "4.7", time: "25-30 mins", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600" },
-      { name: "Star Kabab & Restaurant", cuisine: "Beef Boti Kebab, Chicken Tikka", rating: "4.6", time: "25-35 mins", image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600" },
-      { name: "Chillox", cuisine: "Crispy Burgers, Naga Wings", rating: "4.6", time: "30-40 mins", image: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600" },
-      { name: "Kacchi Bhai", cuisine: "Basmati Kacchi, Beef Tehari", rating: "4.7", time: "30-35 mins", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600" },
-      { name: "Kasturi Kitchen", cuisine: "Shorshe Ilish, Chingri Malai", rating: "4.5", time: "35-45 mins", image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600" }
+      { name: "Sultan's Dine", cuisine: "Kacchi Biryani, Mutton Rezala", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600" },
+      { name: "Takeout Burgers", cuisine: "Gourmet Beef Burgers, Fries", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600" }
     ];
 
-    const subcategoryMap = {
-      Food: ["All Restaurants", "Biryani & Polao", "Burgers & Sandwiches", "Kebabs & Tandoor", "Bengali Curries"],
-      Fashion: ["All", "Men's Casual Shirts", "Men's T-Shirts", "Women's Sarees & Kurtis"],
-      Medicine: ["All", "Fever & Pain Relief", "Gastric & Digestion", "First Aid & Antiseptics"],
-      Grocery: ["All", "Rice Dal & Flour", "Cooking Oil & Ghee", "Snacks & Biscuits"]
-    };
-
-    async function getRealRoadRoute(lat1, lon1, lat2, lon2) {
-      try {
-        const url = `https://router.project-osrm.org/route/v1/driving/${lon1},${lat1};${lon2},${lat2}?overview=full&geometries=geojson`;
-        const res = await fetch(url);
-        const data = await res.json();
-        if (data && data.routes && data.routes.length > 0) {
-          const route = data.routes[0];
-          const distKm = parseFloat((route.distance / 1000).toFixed(1));
-          const coords = route.geometry.coordinates.map(pt => [pt[1], pt[0]]);
-          return { distanceKm: distKm, coords };
-        }
-      } catch (e) {}
-
-      return {
-        distanceKm: 2.0,
-        coords: [
-          [lat1, lon1],
-          [(lat1 + lat2) / 2, (lon1 + lon2) / 2],
-          [lat2, lon2]
-        ]
-      };
-    }
-
-    function computeBangladeshDeliveryFee(km) {
-      const baseKm = 1.5;
-      const baseFee = 35;
-      const perKmRate = 12;
-
-      if (km <= baseKm) return baseFee;
-      const extraKm = km - baseKm;
-      return Math.round(baseFee + (extraKm * perKmRate));
-    }
-
-    async function initCatalog() {
+    async function init() {
       try {
         const res = await fetch('/api/public-menu');
         const data = await res.json();
-        rawCatalog = (data && data.catalog) ? data.catalog : [];
-      } catch (err) {}
+        rawCatalog = data.catalog || [];
+      } catch (e) {}
 
       updateUserUI();
-      renderSubcategoryTabs();
       displayCurrentView();
 
       if (activeOrderId) {
-        document.getElementById('navTrackBtn').style.display = 'inline-block';
+        document.getElementById('navTrackBtn').style.display = 'inline-flex';
+        listenLiveTracking(activeOrderId);
       }
     }
 
     function updateUserUI() {
-      const accountText = document.getElementById('navAccountText');
-      const nameDisp = document.getElementById('profileNameDisplay');
-      const phoneDisp = document.getElementById('profilePhoneDisplay');
-      const avatarDisp = document.getElementById('profileAvatarLetter');
-      const btnLogout = document.getElementById('btnLogout');
-
-      if (currentUser && currentUser.name) {
-        const firstName = currentUser.name.split(' ')[0];
-        accountText.innerText = firstName;
-        nameDisp.innerText = currentUser.name;
-        phoneDisp.innerText = currentUser.phone || 'Verified Customer';
-        avatarDisp.innerText = firstName.charAt(0).toUpperCase();
-        if (btnLogout) btnLogout.style.display = 'block';
-      } else {
-        accountText.innerText = "Account";
-        nameDisp.innerText = "Guest User";
-        phoneDisp.innerText = "Click to login with OTP";
-        avatarDisp.innerText = "G";
-        if (btnLogout) btnLogout.style.display = 'none';
-      }
-
-      const savedAddr = localStorage.getItem('kwiky_saved_address');
-      if (savedAddr) {
-        document.getElementById('savedAddressTextDisplay').innerText = savedAddr;
-      }
+      document.getElementById('navAccountText').innerText = currentUser ? currentUser.name.split(' ')[0] : "Account";
     }
 
     function handleAccountClick() {
-      if (!currentUser) {
-        document.getElementById('loginModal').style.display = 'flex';
-      } else {
-        openProfileModal();
-      }
+      if (!currentUser) document.getElementById('loginModal').style.display = 'flex';
+      else alert(`Account: ${currentUser.name} (${currentUser.phone})\nSupport WhatsApp: +${ADMIN_WHATSAPP_NUMBER}`);
     }
 
-    function openProfileModal() {
+    function submitLogin() {
+      const name = document.getElementById('loginName').value.trim();
+      const phone = document.getElementById('loginPhone').value.trim();
+      if (!name || !phone) return alert("Please fill all fields!");
+
+      currentUser = { name, phone };
+      localStorage.setItem('kwiky_customer_user', JSON.stringify(currentUser));
       updateUserUI();
-      openSubpage('main');
-      document.getElementById('profileModal').style.display = 'flex';
+      document.getElementById('loginModal').style.display = 'none';
+      openCartModal();
     }
 
-    function closeProfileModal() {
-      document.getElementById('profileModal').style.display = 'none';
-    }
-
-    function openSubpage(pageName) {
-      document.querySelectorAll('.subpage-panel').forEach(p => p.style.display = 'none');
-      if (pageName === 'main') {
-        document.getElementById('subpageProfileMain').style.display = 'block';
-      } else if (pageName === 'orders') {
-        renderPastOrdersList();
-        document.getElementById('subpageOrders').style.display = 'block';
-      } else if (pageName === 'address') {
-        document.getElementById('subpageAddress').style.display = 'block';
-      } else if (pageName === 'membership') {
-        document.getElementById('subpageMembership').style.display = 'block';
-      } else if (pageName === 'help') {
-        document.getElementById('subpageHelp').style.display = 'block';
-      }
-    }
-
-    function renderPastOrdersList() {
-      const container = document.getElementById('pastOrdersContainer');
-      const orderHistory = JSON.parse(localStorage.getItem('kwiky_order_history')) || [];
-
-      if (orderHistory.length === 0) {
-        container.innerHTML = `
-          <div style="text-align: center; padding: 40px 20px; background: white; border-radius: 14px; border: 1px solid var(--border);">
-            <i class="fa-solid fa-receipt" style="font-size: 36px; color: #cbd5e1; margin-bottom: 8px;"></i>
-            <h4 style="font-size: 14px; font-weight: 800;">No Orders Yet</h4>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Orders placed with Kwiky will show up here.</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = orderHistory.map(ord => `
-        <div class="past-order-card">
-          <div class="past-order-header">
-            <div>
-              <strong style="font-size: 13px;">Order #${(ord.id || '').slice(-6)}</strong>
-              <p style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">${ord.date || 'Recent Order'}</p>
-            </div>
-            <span class="order-status-tag"><i class="fa-solid fa-check"></i> ${ord.status || 'Confirmed'}</span>
-          </div>
-          <p style="font-size: 12px; color: #334155; margin-bottom: 6px;"><strong>Items:</strong> ${ord.itemsText}</p>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-            <strong style="font-size: 14px; color: var(--primary);">৳${ord.total} (COD)</strong>
-            <button onclick="closeProfileModal(); openTrackingModal();" style="background: var(--green); color: white; border: none; padding: 6px 14px; border-radius: 12px; font-size: 11px; font-weight: 800; cursor: pointer;">
-              <i class="fa-solid fa-location-arrow"></i> Track
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function logoutCustomer() {
-      if (confirm("Are you sure you want to log out?")) {
-        localStorage.removeItem('kwiky_customer_user');
-        currentUser = null;
-        updateUserUI();
-        closeProfileModal();
-      }
-    }
-
-    function switchMainCategory(cat, el) {
+    function switchCategory(cat, el) {
       currentCategory = cat;
-      currentSubcategory = cat === 'Food' ? 'All Restaurants' : 'All';
       selectedRestaurant = null;
       document.querySelectorAll('.main-cat-item').forEach(i => i.classList.remove('active'));
       el.classList.add('active');
-      renderSubcategoryTabs();
-      displayCurrentView();
-    }
-
-    function renderSubcategoryTabs() {
-      const bar = document.getElementById('subcatBar');
-      const list = subcategoryMap[currentCategory] || ["All"];
-      bar.innerHTML = list.map((sc, idx) => `
-        <button class="subcat-pill ${idx === 0 ? 'active' : ''}" onclick="selectSubcategory('${sc}', this)">${sc}</button>
-      `).join('');
-    }
-
-    function selectSubcategory(sc, btn) {
-      currentSubcategory = sc;
-      selectedRestaurant = null;
-      document.querySelectorAll('.subcat-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
       displayCurrentView();
     }
 
     function displayCurrentView() {
-      const heading = document.getElementById('sectionHeading');
       const resView = document.getElementById('restaurantView');
       const prodView = document.getElementById('productsView');
-      const backBtn = document.getElementById('backToResBtn');
+      const heading = document.getElementById('sectionHeading');
+      const backBtn = document.getElementById('backBtn');
 
-      if (currentCategory === 'Food' && (currentSubcategory === 'All Restaurants' || currentSubcategory === 'All') && !selectedRestaurant) {
+      if (currentCategory === 'Food' && !selectedRestaurant) {
         heading.innerText = "Top Partner Restaurants";
         backBtn.style.display = 'none';
         resView.style.display = 'grid';
         prodView.style.display = 'none';
-        renderRestaurants();
+        resView.innerHTML = defaultRestaurants.map(r => `
+          <div class="restaurant-card" onclick="openRestaurant('${escape(r.name)}')">
+            <div class="res-banner-box"><img src="${r.image}" /></div>
+            <div class="res-details"><h4 style="font-size:15px; font-weight:800;">${r.name}</h4><p style="font-size:12px; color:var(--text-muted);">${r.cuisine}</p></div>
+          </div>
+        `).join('');
       } else {
         resView.style.display = 'none';
         prodView.style.display = 'grid';
-        if (selectedRestaurant) {
-          heading.innerText = `${selectedRestaurant} (Menu)`;
-          backBtn.style.display = 'inline-flex';
-        } else {
-          heading.innerText = `${currentCategory} • ${currentSubcategory}`;
-          backBtn.style.display = 'none';
-        }
-        renderProducts();
-      }
-    }
+        heading.innerText = selectedRestaurant || currentCategory;
+        backBtn.style.display = selectedRestaurant ? 'inline-flex' : 'none';
 
-    function renderRestaurants() {
-      const resView = document.getElementById('restaurantView');
-      resView.innerHTML = defaultRestaurants.map(store => `
-        <div class="restaurant-card" onclick="openRestaurant('${escape(store.name)}')">
-          <div class="res-banner-box">
-            <img src="${store.image}" alt="${store.name}" loading="lazy" />
-            <div class="res-badge"><i class="fa-solid fa-star"></i> ${store.rating}</div>
-          </div>
-          <div class="res-details">
-            <h4>${store.name}</h4>
-            <p>${store.cuisine}</p>
-          </div>
-        </div>
-      `).join('');
-    }
+        let items = rawCatalog.filter(i => (i.category || '').toLowerCase() === currentCategory.toLowerCase());
+        if (selectedRestaurant) items = items.filter(i => (i.storeName || '').toLowerCase() === selectedRestaurant.toLowerCase());
 
-    function openRestaurant(escapedName) {
-      selectedRestaurant = unescape(escapedName);
-      displayCurrentView();
-    }
-
-    function resetToAllRestaurants() {
-      selectedRestaurant = null;
-      currentSubcategory = 'All Restaurants';
-      renderSubcategoryTabs();
-      displayCurrentView();
-    }
-
-    function getActionButtonHtml(id, rawName, price, storeName) {
-      const qty = cart[id] ? cart[id].qty : 0;
-      if (qty > 0) {
-        return `
-          <div class="stepper-box">
-            <button class="stepper-btn" onclick="animateUpdateQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', -1, this)">−</button>
-            <span class="stepper-count" id="count-span-${id}">${qty}</span>
-            <button class="stepper-btn" onclick="animateUpdateQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', 1, this)">+</button>
-          </div>
-        `;
-      } else {
-        return `<button class="btn-add" onclick="animateUpdateQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', 1, this)">+ ADD</button>`;
-      }
-    }
-
-    function renderProducts() {
-      const prodView = document.getElementById('productsView');
-      let items = rawCatalog.filter(i => (i.category || '').toLowerCase() === currentCategory.toLowerCase());
-      if (selectedRestaurant) {
-        items = items.filter(i => (i.storeName || '').toLowerCase() === selectedRestaurant.toLowerCase());
-      }
-      if (items.length === 0) {
-        prodView.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No items found.</p>`;
-        return;
-      }
-      prodView.innerHTML = items.map(item => `
-        <div class="product-card">
-          <div class="prod-img-holder">
-            <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300'}" alt="${item.name}" loading="lazy" />
-            <span class="store-badge">${item.storeName || 'Kwiky Store'}</span>
-          </div>
-          <div class="prod-body">
-            <div>
-              <div class="prod-title">${item.name}</div>
-              <div class="prod-subcat">${item.subcategory}</div>
-              <div class="prod-price">${item.price} BDT</div>
-            </div>
-            <div class="cart-btn-container" id="btn-container-${item._id}">
-              ${getActionButtonHtml(item._id, escape(item.name), item.price, item.storeName || 'Kwiky Store')}
+        prodView.innerHTML = items.map(item => `
+          <div class="product-card">
+            <div class="prod-img-holder"><img src="${item.imageUrl}" /></div>
+            <div class="prod-body">
+              <div><strong style="font-size:12px;">${item.name}</strong><p style="color:#1e293b; font-weight:900; margin:4px 0;">${item.price} BDT</p></div>
+              <button class="btn-add" onclick="addToCart('${item._id}', '${escape(item.name)}', ${item.price})">+ ADD</button>
             </div>
           </div>
-        </div>
-      `).join('');
+        `).join('');
+      }
     }
 
-    function animateUpdateQty(id, rawName, price, rawStore, delta, btnElement) {
-      if (btnElement) btnElement.style.transform = 'scale(0.82)';
-      setTimeout(() => {
-        if (btnElement) btnElement.style.transform = 'scale(1)';
-        const name = unescape(rawName);
-        const storeName = rawStore ? unescape(rawStore) : 'Kwiky Store';
+    function openRestaurant(name) { selectedRestaurant = unescape(name); displayCurrentView(); }
+    function resetToAll() { selectedRestaurant = null; displayCurrentView(); }
 
-        if (!cart[id]) cart[id] = { id, name, price, storeName, qty: 0 };
-        cart[id].qty += delta;
-        if (cart[id].qty <= 0) delete cart[id];
-
-        const container = document.getElementById(`btn-container-${id}`);
-        if (container) {
-          container.innerHTML = getActionButtonHtml(id, escape(name), price, storeName);
-        }
-
-        const navCart = document.getElementById('navCartBtn');
-        if (navCart) {
-          navCart.classList.add('pulse');
-          setTimeout(() => navCart.classList.remove('pulse'), 350);
-        }
-        updateCartUI();
-      }, 90);
+    function addToCart(id, rawName, price) {
+      const name = unescape(rawName);
+      if (!cart[id]) cart[id] = { id, name, price, qty: 1 };
+      else cart[id].qty++;
+      updateCartUI();
     }
 
     function updateCartUI() {
-      const cartItems = Object.values(cart);
-      const totalCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
+      const items = Object.values(cart);
+      const totalCount = items.reduce((s, i) => s + i.qty, 0);
+      const subtotal = items.reduce((s, i) => s + (i.price * i.qty), 0);
+      const toPay = subtotal > 0 ? (subtotal + dynamicDeliveryFee) : 0;
 
       document.getElementById('cartCount').innerText = totalCount;
-      document.getElementById('cartItemsCountText').innerText = `${totalCount} item${totalCount !== 1 ? 's' : ''} in your cart`;
-
-      const floatBar = document.getElementById('floatingCartBar');
-      if (totalCount > 0) {
-        floatBar.style.display = 'flex';
-        const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-        document.getElementById('floatingBarItemsText').innerText = `${totalCount} ITEM${totalCount > 1 ? 'S' : ''} | ${subtotal} BDT`;
-        document.getElementById('floatingBarStoreText').innerText = `From ${cartItems[0].storeName || 'Kwiky Store'}`;
-      } else {
-        floatBar.style.display = 'none';
-      }
-
-      const list = document.getElementById('swiggyItemsList');
-      if (cartItems.length === 0) {
-        list.innerHTML = `<div style="text-align:center; padding:30px; color:#888;">Your cart is empty</div>`;
-        document.getElementById('cartStoreHeader').style.display = 'none';
-      } else {
-        document.getElementById('cartStoreHeader').style.display = 'flex';
-        const primaryStore = cartItems[0].storeName || "Kwiky Store";
-        document.getElementById('cartStoreTitle').innerText = primaryStore;
-
-        list.innerHTML = cartItems.map(item => {
-          const isVeg = item.name.toLowerCase().includes('veg') || item.name.toLowerCase().includes('paneer');
-          const badgeHtml = isVeg
-            ? `<div class="veg-icon"><div class="veg-dot"></div></div>`
-            : `<div class="nonveg-icon"><div class="nonveg-dot"></div></div>`;
-
-          return `
-            <div class="cart-item-row-swiggy">
-              <div class="item-meta">
-                ${badgeHtml}
-                <div>
-                  <strong style="font-size: 13px;">${item.name}</strong>
-                  <div style="font-size: 12px; font-weight: 800; color: #334155; margin-top: 2px;">${item.price} BDT</div>
-                </div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 14px;">
-                <div class="swiggy-mini-stepper">
-                  <button onclick="animateUpdateQty('${item.id}', '${escape(item.name)}', ${item.price}, '${escape(item.storeName)}', -1, this)">−</button>
-                  <span>${item.qty}</span>
-                  <button onclick="animateUpdateQty('${item.id}', '${escape(item.name)}', ${item.price}, '${escape(item.storeName)}', 1, this)">+</button>
-                </div>
-                <div style="font-size: 13px; font-weight: 900; width: 60px; text-align: right;">${item.price * item.qty} BDT</div>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const deliveryFee = subtotal > 0 ? dynamicDeliveryFee : 0;
-      const taxCharges = subtotal > 0 ? Math.round(subtotal * 0.05) : 0;
-      const totalDiscount = (subtotal >= 200 && couponDiscount > 0) ? couponDiscount : 0;
-      const finalToPay = subtotal > 0 ? Math.max(0, subtotal + deliveryFee + PLATFORM_FEE + taxCharges + currentTip - totalDiscount) : 0;
+      document.getElementById('floatingBarItemsText').innerText = `${totalCount} ITEMS | ${subtotal} BDT`;
+      document.getElementById('floatingCartBar').style.display = totalCount > 0 ? 'flex' : 'none';
 
       document.getElementById('billItemTotal').innerText = `${subtotal} BDT`;
-      document.getElementById('billDeliveryLabel').innerHTML = `Delivery Partner Fee <span style="font-size:11px; color:var(--primary); font-weight:bold;">(${calculatedDistanceKm} KM)</span>`;
-      document.getElementById('billDeliveryPartnerFee').innerText = `${deliveryFee} BDT`;
-      document.getElementById('billTaxCharges').innerText = `${taxCharges} BDT`;
-      document.getElementById('billTipAmount').innerText = `${currentTip} BDT`;
-      document.getElementById('billFinalToPay').innerText = `${finalToPay} BDT`;
-      document.getElementById('bottomBarPayAmount').innerText = `${finalToPay} BDT`;
+      document.getElementById('billDeliveryFee').innerText = `${dynamicDeliveryFee} BDT`;
+      document.getElementById('billFinalToPay').innerText = `${toPay} BDT`;
 
-      if (totalDiscount > 0) {
-        document.getElementById('discountRow').style.display = 'flex';
-        document.getElementById('billDiscount').innerText = `-${totalDiscount} BDT`;
-      } else {
-        document.getElementById('discountRow').style.display = 'none';
-      }
+      document.getElementById('cartItemsList').innerHTML = items.map(i => `
+        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #e2e8f0; font-size:13px;">
+          <span>${i.name} (x${i.qty})</span><strong>${i.price * i.qty} BDT</strong>
+        </div>
+      `).join('');
     }
 
-    function toggleInstruction(el, text) {
-      el.classList.toggle('active');
-      if (el.classList.contains('active')) selectedInstructions.push(text);
-      else selectedInstructions = selectedInstructions.filter(t => t !== text);
-    }
-
-    function selectTip(amount, el) {
-      currentTip = amount;
-      document.querySelectorAll('.tip-pill').forEach(p => p.classList.remove('active'));
-      el.classList.add('active');
-      updateCartUI();
-    }
-
-    function applySwiggyCoupon() {
-      const cartItems = Object.values(cart);
-      const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      if (subtotal < 200) return alert("Add items worth 200 BDT or more to apply KWIKY50 coupon!");
-
-      if (couponDiscount === 0) {
-        couponDiscount = 50;
-        document.getElementById('couponStatusText').innerText = "Coupon 'KWIKY50' Applied!";
-        document.getElementById('couponActionBtn').innerText = "REMOVE";
-        document.getElementById('couponActionBtn').style.color = "#e74c3c";
-      } else {
-        couponDiscount = 0;
-        document.getElementById('couponStatusText').innerText = "Apply Coupon Code";
-        document.getElementById('couponActionBtn').innerText = "APPLY";
-        document.getElementById('couponActionBtn').style.color = "var(--primary)";
-      }
-      updateCartUI();
-    }
-
-    // ==================== CHECKOUT DELIVERY MAP ==================== //
-    let map = null;
-    let marker = null;
-    let searchDebounceTimer = null;
-
-    function initDeliveryMap() {
-      const mapDiv = document.getElementById('deliveryMap');
-      if (!mapDiv || map) {
-        if (map) setTimeout(() => map.invalidateSize(), 200);
-        return;
-      }
-
-      map = L.map('deliveryMap', { zoomControl: false }).setView([STORE_LAT, STORE_LNG], 13);
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-      }).addTo(map);
-
-      const pinIcon = L.divIcon({
-        className: 'custom-pin',
-        html: `<div style="background:#e74c3c; width:28px; height:28px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); border:2px solid white; box-shadow:0 3px 10px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center;"><div style="width:10px; height:10px; background:white; border-radius:50%;"></div></div>`,
-        iconSize: [28, 28],
-        iconAnchor: [14, 28]
-      });
-
-      marker = L.marker([STORE_LAT, STORE_LNG], { draggable: true, icon: pinIcon }).addTo(map);
-
-      marker.on('dragend', function (e) {
-        const pos = e.target.getLatLng();
-        handleLocationSelect(pos.lat, pos.lng);
-      });
-
-      map.on('click', function(e) {
-        marker.setLatLng(e.latlng);
-        handleLocationSelect(e.latlng.lat, e.latlng.lng);
-      });
-
-      handleLocationSelect(STORE_LAT, STORE_LNG);
-    }
-
-    async function handleLocationSelect(lat, lng) {
-      CUSTOMER_LAT = lat;
-      CUSTOMER_LNG = lng;
-      const roadData = await getRealRoadRoute(STORE_LAT, STORE_LNG, lat, lng);
-      calculatedDistanceKm = roadData.distanceKm;
-      dynamicDeliveryFee = computeBangladeshDeliveryFee(calculatedDistanceKm);
-      updateCartUI();
-      reverseGeocode(lat, lng);
-    }
-
-    function detectCurrentLocation() {
-      if (!navigator.geolocation) return alert("Geolocation not supported by your device.");
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
-          if (map && marker) {
-            map.setView([lat, lng], 15);
-            marker.setLatLng([lat, lng]);
-            handleLocationSelect(lat, lng);
-          }
-        },
-        (err) => {
-          alert("Could not access GPS. Please choose location manually on the map.");
-        },
-        { enableHighAccuracy: true }
-      );
-    }
-
-    async function reverseGeocode(lat, lng) {
-      try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-        const data = await res.json();
-        if (data && data.display_name) {
-          const shortAddr = data.display_name.split(',').slice(0, 4).join(', ');
-          document.getElementById('custAddress').value = shortAddr;
-          document.getElementById('mapSearchInput').value = shortAddr;
-          localStorage.setItem('kwiky_saved_address', shortAddr);
-        }
-      } catch (err) {}
-    }
-
-    function handleAddressSearch(query) {
-      clearTimeout(searchDebounceTimer);
-      const suggestionsBox = document.getElementById('mapSuggestions');
-      if (!query || query.trim().length < 2) {
-        suggestionsBox.style.display = 'none';
-        return;
-      }
-
-      searchDebounceTimer = setTimeout(async () => {
-        try {
-          const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`);
-          const data = await res.json();
-          if (data && data.features && data.features.length > 0) {
-            suggestionsBox.innerHTML = data.features.map(f => {
-              const name = f.properties.name || '';
-              const street = f.properties.street || '';
-              const city = f.properties.city || f.properties.state || '';
-              const fullTitle = [name, street, city].filter(Boolean).join(', ');
-              const [lng, lat] = f.geometry.coordinates;
-
-              return `
-                <div class="suggestion-item" onclick="selectLocationSuggestion(${lat}, ${lng}, '${escape(fullTitle)}')">
-                  <i class="fa-solid fa-location-dot"></i>
-                  <div>
-                    <strong>${name || fullTitle}</strong>
-                    <div style="color:#64748b; font-size:10px;">${city}</div>
-                  </div>
-                </div>
-              `;
-            }).join('');
-            suggestionsBox.style.display = 'block';
-          } else {
-            suggestionsBox.style.display = 'none';
-          }
-        } catch (err) {
-          suggestionsBox.style.display = 'none';
-        }
-      }, 300);
-    }
-
-    function selectLocationSuggestion(lat, lng, escapedTitle) {
-      const title = unescape(escapedTitle);
-      document.getElementById('mapSearchInput').value = title;
-      document.getElementById('custAddress').value = title;
-      document.getElementById('mapSuggestions').style.display = 'none';
-
-      if (map && marker) {
-        map.setView([lat, lng], 15);
-        marker.setLatLng([lat, lng]);
-      }
-      handleLocationSelect(lat, lng);
-    }
-
-    document.addEventListener('click', function(e) {
-      const box = document.getElementById('mapSuggestions');
-      const input = document.getElementById('mapSearchInput');
-      if (box && e.target !== box && e.target !== input) {
-        box.style.display = 'none';
-      }
-    });
-
+    let cMap, cMarker;
     function openCartModal() {
       document.getElementById('cartModal').style.display = 'flex';
-      setTimeout(initDeliveryMap, 150);
-    }
+      setTimeout(() => {
+        if (!cMap) {
+          cMap = L.map('deliveryMap', { zoomControl: false }).setView([STORE_LAT, STORE_LNG], 13);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(cMap);
+          cMarker = L.marker([STORE_LAT, STORE_LNG], { draggable: true }).addTo(cMap);
 
-    function closeCartModal() {
-      document.getElementById('cartModal').style.display = 'none';
-    }
-
-    // ==================== SWIGGY LIVE TRACKING WITH GREEN ROAD LINE ==================== //
-    let trackingMap = null;
-    let riderMarker = null;
-    let greenRouteLine = null;
-    let riderAnimationTimer = null;
-
-    async function initTrackingLiveMap() {
-      const mapEl = document.getElementById('trackingLiveMap');
-      if (!mapEl) return;
-
-      const cLat = parseFloat(localStorage.getItem('kwiky_cust_lat')) || CUSTOMER_LAT || STORE_LAT;
-      const cLng = parseFloat(localStorage.getItem('kwiky_cust_lng')) || CUSTOMER_LNG || STORE_LNG;
-
-      if (!trackingMap) {
-        trackingMap = L.map('trackingLiveMap', { zoomControl: false });
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap'
-        }).addTo(trackingMap);
-      } else {
-        trackingMap.invalidateSize();
-      }
-
-      const routeData = await getRealRoadRoute(STORE_LAT, STORE_LNG, cLat, cLng);
-      const roadCoords = routeData.coords;
-      const totalKm = routeData.distanceKm;
-
-      document.getElementById('trackDist').innerText = `${totalKm} KM`;
-      document.getElementById('trackEta').innerText = `${Math.max(12, Math.round(totalKm * 3.5))} Mins`;
-
-      if (greenRouteLine) trackingMap.removeLayer(greenRouteLine);
-      if (riderMarker) trackingMap.removeLayer(riderMarker);
-
-      const restIcon = L.divIcon({
-        className: 'rest-pin',
-        html: `<div style="background:#171a29; color:white; width:34px; height:34px; border-radius:50%; border:3px solid #fc8019; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,0.3);"><i class="fa-solid fa-utensils" style="font-size:14px;"></i></div>`,
-        iconSize: [34, 34],
-        iconAnchor: [17, 17]
-      });
-
-      const homeIcon = L.divIcon({
-        className: 'home-pin',
-        html: `<div style="background:#e74c3c; color:white; width:34px; height:34px; border-radius:50%; border:3px solid white; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,0.3);"><i class="fa-solid fa-house" style="font-size:14px;"></i></div>`,
-        iconSize: [34, 34],
-        iconAnchor: [17, 17]
-      });
-
-      const bikeIcon = L.divIcon({
-        className: 'bike-pin',
-        html: `<div style="background:#60b244; color:white; width:38px; height:38px; border-radius:50%; border:3px solid white; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(96,178,68,0.5); transform:scale(1.08);"><i class="fa-solid fa-motorcycle" style="font-size:17px;"></i></div>`,
-        iconSize: [38, 38],
-        iconAnchor: [19, 19]
-      });
-
-      L.marker([STORE_LAT, STORE_LNG], { icon: restIcon }).addTo(trackingMap).bindPopup("<b>Restaurant</b><br>Order Prepared");
-      L.marker([cLat, cLng], { icon: homeIcon }).addTo(trackingMap).bindPopup("<b>Your Location</b><br>Delivery Address");
-
-      greenRouteLine = L.polyline(roadCoords, {
-        color: '#60b244',
-        weight: 6,
-        opacity: 0.9,
-        lineCap: 'round',
-        lineJoin: 'round'
-      }).addTo(trackingMap);
-
-      trackingMap.fitBounds(greenRouteLine.getBounds(), { padding: [40, 40] });
-
-      riderMarker = L.marker(roadCoords[0], { icon: bikeIcon }).addTo(trackingMap);
-
-      if (riderAnimationTimer) clearInterval(riderAnimationTimer);
-      let coordIndex = 0;
-      riderAnimationTimer = setInterval(() => {
-        if (coordIndex < roadCoords.length) {
-          riderMarker.setLatLng(roadCoords[coordIndex]);
-
-          const remainingPct = 1 - (coordIndex / roadCoords.length);
-          const remKm = (totalKm * remainingPct).toFixed(1);
-          const remMin = Math.max(2, Math.round(remKm * 3.5));
-
-          document.getElementById('trackDist').innerText = `${remKm} KM`;
-          document.getElementById('trackEta').innerText = `${remMin} Mins`;
-
-          coordIndex++;
-        } else {
-          document.getElementById('trackDist').innerText = `0.0 KM`;
-          document.getElementById('trackEta').innerText = `Arrived!`;
-          clearInterval(riderAnimationTimer);
+          cMarker.on('dragend', async (e) => {
+            const p = e.target.getLatLng();
+            CUSTOMER_LAT = p.lat; CUSTOMER_LNG = p.lng;
+            try {
+              const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${STORE_LNG},${STORE_LAT};${p.lng},${p.lat}?overview=false`);
+              const d = await res.json();
+              if (d.routes && d.routes.length > 0) {
+                calculatedDistanceKm = parseFloat((d.routes[0].distance / 1000).toFixed(1));
+                dynamicDeliveryFee = calculatedDistanceKm <= 1.5 ? 35 : Math.round(35 + ((calculatedDistanceKm - 1.5) * 12));
+                updateCartUI();
+              }
+            } catch (err) {}
+          });
         }
-      }, 1500);
+      }, 150);
     }
-
-    function openTrackingModal() {
-      document.getElementById('trackingModal').style.display = 'flex';
-      setTimeout(initTrackingLiveMap, 250);
-    }
-
-    function closeTrackingModal() {
-      document.getElementById('trackingModal').style.display = 'none';
-      if (riderAnimationTimer) clearInterval(riderAnimationTimer);
-    }
-
-    function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+    function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
     function handleCheckoutClick() {
-      const cartItems = Object.values(cart);
-      if (cartItems.length === 0) return alert("Your cart is empty!");
-      if (!currentUser) {
-        document.getElementById('cartModal').style.display = 'none';
-        document.getElementById('loginModal').style.display = 'flex';
-        return;
-      }
-      submitOrder();
-    }
+      if (!currentUser) return document.getElementById('loginModal').style.display = 'flex';
+      const address = document.getElementById('custAddress').value.trim() || 'Home Address';
+      const items = Object.values(cart);
+      if (items.length === 0) return alert("Cart is empty!");
 
-    let tempLoginPhone = '', tempLoginName = '';
-    async function sendLoginOtp() {
-      const name = document.getElementById('loginInputName').value.trim();
-      const phone = document.getElementById('loginInputPhone').value.trim();
+      const total = parseInt(document.getElementById('billFinalToPay').innerText);
 
-      if (!name) return alert("Please enter your name.");
-      if (phone.length < 10) return alert("Please enter a valid mobile number (minimum 10 digits).");
-
-      tempLoginName = name;
-      tempLoginPhone = phone;
-
-      try {
-        const res = await fetch('/api/auth/send-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone })
-        });
-        const data = await res.json();
-        
-        document.getElementById('sentPhoneDisplay').innerText = phone;
-        document.getElementById('loginStepPhone').style.display = 'none';
-        document.getElementById('loginStepOtp').style.display = 'block';
-
-        alert(`OTP Sent! Your verification OTP code is: ${data.testOtp || '1234'}`);
-      } catch (err) {
-        document.getElementById('sentPhoneDisplay').innerText = phone;
-        document.getElementById('loginStepPhone').style.display = 'none';
-        document.getElementById('loginStepOtp').style.display = 'block';
-        alert("Your verification OTP code is: 1234");
-      }
-    }
-
-    async function verifyLoginOtp() {
-      const otp = document.getElementById('loginInputOtp').value.trim();
-      if (!otp) return alert("Please enter the OTP.");
-
-      try {
-        const res = await fetch('/api/auth/verify-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: tempLoginPhone, otp, name: tempLoginName })
-        });
-        const data = await res.json();
-        if (data.success || otp === '1234') {
-          currentUser = { name: tempLoginName, phone: tempLoginPhone };
-          localStorage.setItem('kwiky_customer_user', JSON.stringify(currentUser));
-          updateUserUI();
-          document.getElementById('loginModal').style.display = 'none';
-          openProfileModal();
-        } else {
-          alert("Invalid OTP code. Please enter 1234.");
-        }
-      } catch (err) {
-        currentUser = { name: tempLoginName, phone: tempLoginPhone };
-        localStorage.setItem('kwiky_customer_user', JSON.stringify(currentUser));
-        updateUserUI();
-        document.getElementById('loginModal').style.display = 'none';
-        openProfileModal();
-      }
-    }
-
-    async function submitOrder() {
-      const cartItems = Object.values(cart);
-      const address = document.getElementById('custAddress').value.trim();
-      if (!address) return alert("Please select or confirm your delivery address on the map!");
-
-      const orderItems = [];
-      cartItems.forEach(item => {
-        for (let k = 0; k < item.qty; k++) {
-          orderItems.push({ name: item.name, price: item.price });
-        }
-      });
-
-      const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const taxCharges = Math.round(subtotal * 0.05);
-      const total = subtotal + dynamicDeliveryFee + PLATFORM_FEE + taxCharges + currentTip - couponDiscount;
-
-      const cookingNote = document.getElementById('customCookingNote').value.trim();
-      const fullNote = [...selectedInstructions, cookingNote].filter(Boolean).join(' | ');
-
-      localStorage.setItem('kwiky_last_order_dist', calculatedDistanceKm);
-      localStorage.setItem('kwiky_cust_lat', CUSTOMER_LAT);
-      localStorage.setItem('kwiky_cust_lng', CUSTOMER_LNG);
-      localStorage.setItem('kwiky_saved_address', address);
-
-      const orderHistory = JSON.parse(localStorage.getItem('kwiky_order_history')) || [];
-      const newOrderEntry = {
-        id: 'ORD' + Date.now().toString().slice(-6),
-        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
-        itemsText: orderItems.map(i => i.name).join(', '),
-        total: total,
-        status: 'Delivering',
-        address: address
-      };
-      orderHistory.unshift(newOrderEntry);
-      localStorage.setItem('kwiky_order_history', JSON.stringify(orderHistory));
-
-      try {
-        const res = await fetch('/api/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: currentUser.name,
-            phone: currentUser.phone,
-            address: `${address} (Dist: ${calculatedDistanceKm} KM | Note: ${fullNote || 'None'})`,
-            items: orderItems,
-            total,
-            deliveryFee: dynamicDeliveryFee,
-            distanceKm: calculatedDistanceKm,
-            paymentMethod: 'COD'
-          })
-        });
-        const data = await res.json();
-        if (data && (data.success || data.order)) {
-          activeOrderId = (data.order && data.order._id) ? data.order._id : newOrderEntry.id;
+      fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: currentUser.name,
+          phone: currentUser.phone,
+          address,
+          distanceKm: calculatedDistanceKm,
+          total,
+          paymentMethod: 'COD'
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.order) {
+          activeOrderId = data.order._id;
           localStorage.setItem('kwiky_active_order_id', activeOrderId);
-          document.getElementById('navTrackBtn').style.display = 'inline-block';
-          
-          const itemsSummary = orderItems.map(i => `• ${i.name} (৳${i.price})`).join('%0A');
-          const waMessage = `*🚨 NEW ORDER PLACED (KWIKY)*%0A%0A*Order ID:* %23${activeOrderId.slice(-6)}%0A*Customer:* ${currentUser.name} (${currentUser.phone})%0A*Address:* ${address}%0A*Distance:* ${calculatedDistanceKm} KM%0A*Delivery Fee:* ৳${dynamicDeliveryFee}%0A*Notes:* ${fullNote || 'None'}%0A%0A*Items Ordered:*%0A${itemsSummary}%0A%0A*Total Bill:* ৳${total} (COD)%0A%0A_Please assign delivery partner!_`;
-          
-          document.getElementById('btnWhatsAppAlert').href = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${waMessage}`;
-
+          document.getElementById('navTrackBtn').style.display = 'inline-flex';
           cart = {};
           updateCartUI();
           closeCartModal();
 
-          document.getElementById('confirmedOrderId').innerText = `#${activeOrderId.slice(-6)}`;
-          document.getElementById('orderSuccessModal').style.display = 'flex';
+          // WhatsApp Instant Alert
+          const itemsSummary = items.map(i => `• ${i.name} (x${i.qty})`).join('%0A');
+          const waMsg = `*🚨 NEW ORDER PLACED (KWIKY)*%0A%0A*Order ID:* %23${activeOrderId.slice(-6)}%0A*Customer:* ${currentUser.name} (${currentUser.phone})%0A*Address:* ${address}%0A*Items:*%0A${itemsSummary}%0A%0A*Total Bill:* ৳${total} (COD)`;
+          window.open(`https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${waMsg}`, '_blank');
+
+          listenLiveTracking(activeOrderId);
+          openTrackingModal();
         }
-      } catch (err) {
-        activeOrderId = newOrderEntry.id;
-        localStorage.setItem('kwiky_active_order_id', activeOrderId);
-        document.getElementById('navTrackBtn').style.display = 'inline-block';
-        cart = {};
-        updateCartUI();
-        closeCartModal();
-        document.getElementById('confirmedOrderId').innerText = `#${activeOrderId.slice(-6)}`;
-        document.getElementById('orderSuccessModal').style.display = 'flex';
-      }
+      });
     }
 
-    function goToTrackingFromSuccess() {
-      document.getElementById('orderSuccessModal').style.display = 'none';
-      openTrackingModal();
+    // Realtime Tracking
+    let tMap, tRiderMarker;
+    function openTrackingModal() {
+      document.getElementById('trackingModal').style.display = 'flex';
+      setTimeout(() => {
+        if (!tMap) {
+          tMap = L.map('trackingLiveMap', { zoomControl: false }).setView([STORE_LAT, STORE_LNG], 14);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(tMap);
+          tRiderMarker = L.marker([STORE_LAT, STORE_LNG]).addTo(tMap);
+        }
+      }, 150);
+    }
+    function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
+
+    function listenLiveTracking(orderId) {
+      socket.on(`tracking:${orderId}`, (data) => {
+        if (tRiderMarker && tMap) {
+          tRiderMarker.setLatLng([data.lat, data.lng]);
+          tMap.setView([data.lat, data.lng]);
+        }
+      });
     }
 
-    // ==================== KWIKY AI CHAT LOGIC ==================== //
+    // AI Chat
     function toggleAiChat() {
-      const chatWin = document.getElementById('aiChatWindow');
-      if (chatWin.style.display === 'flex') {
-        chatWin.style.display = 'none';
-      } else {
-        chatWin.style.display = 'flex';
-      }
+      const w = document.getElementById('aiChatWindow');
+      w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
     }
-
-    function handleQuickPrompt(text) {
-      document.getElementById('aiChatInput').value = text;
-      sendAiMessage();
-    }
-
     function sendAiMessage() {
       const input = document.getElementById('aiChatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      appendChatMessage(text, 'user');
+      const val = input.value.trim();
+      if (!val) return;
+      const box = document.getElementById('aiChatMessages');
+      box.innerHTML += `<div style="background:var(--primary); color:white; padding:8px 12px; border-radius:12px; align-self:flex-end;">${val}</div>`;
       input.value = '';
 
-      // AI Response processing
       setTimeout(() => {
-        const reply = generateAiReply(text.toLowerCase());
-        appendChatMessage(reply, 'bot');
-      }, 500);
+        box.innerHTML += `<div style="background:white; padding:8px 12px; border-radius:12px; border:1px solid #e2e8f0; align-self:flex-start;">যেকোনো অর্ডার বা ডেলিভারির বিষয়ে সরাসরি <a href="https://wa.me/${ADMIN_WHATSAPP_NUMBER}" target="_blank" style="color:var(--primary); font-weight:bold;">WhatsApp (+91 8100002156)</a> এ মেসেজ দিন।</div>`;
+        box.scrollTop = box.scrollHeight;
+      }, 400);
     }
 
-    function appendChatMessage(msgHtml, sender) {
-      const box = document.getElementById('aiChatMessages');
-      const div = document.createElement('div');
-      div.className = `ai-msg ${sender === 'user' ? 'ai-msg-user' : 'ai-msg-bot'}`;
-      div.innerHTML = msgHtml;
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
 
-    function generateAiReply(query) {
-      if (query.includes('charge') || query.includes('ভাড়া') || query.includes('খরচ') || query.includes('delivery')) {
-        return `🛵 <strong>ডেলিভারি চার্জের নিয়ম:</strong><br>• প্রথম ১.৫ কিমি পর্যন্ত মাত্র ৩৫ টাকা।<br>• এরপর প্রতি অতিরিক্ত কিমি ১২ টাকা করে যোগ হয়। কার্টে ম্যাপে আপনার পিন বসালে স্বয়ংক্রিয়ভাবে আসল ড্রাইভিং দূরত্ব ও ভাড়া দেখা যাবে।`;
-      }
-      if (query.includes('biryani') || query.includes('বিরিয়ানি') || query.includes('kacchi') || query.includes('কাচ্চি')) {
-        return `🍛 <strong>জনপ্রিয় বিরিয়ানি:</strong><br>• <em>Sultan's Dine</em>-এর বাসমতী কাচ্চি প্ল্যাটার ও মাটন রেজালা সবচেয়ে বেশি পছন্দ করা হচ্ছে! উপরের Food মেনুতে সুলতানস ডাইনে ক্লিক করলেই অর্ডার করতে পারবেন।`;
-      }
-      if (query.includes('coupon') || query.includes('কুপন') || query.includes('offer') || query.includes('ছাড়')) {
-        return `🏷️ ২০০ টাকার বেশি অর্ডারে <strong>KWIKY50</strong> কুপন ব্যবহার করে সাথে সাথে ৫০ টাকা ছাড় পাবেন! কার্ট শিটে কুপন সেকশনে APPLY বাটনে ক্লিক করুন।`;
-      }
-      if (query.includes('track') || query.includes('ট্র্যাক') || query.includes('rider') || query.includes('কোথায়')) {
-        return `📍 অর্ডার কনফার্ম হলেই স্ক্রিনের উপরে <strong>"Live Track"</strong> বাটন চলে আসে। সেখানে ক্লিক করলে সুইগির মতো গুগল ম্যাপে সবুজ লাইনের ওপর রাইডারের অবস্থান ও পৌঁছানোর সময় দেখতে পাবেন।`;
-      }
-      if (query.includes('agent') || query.includes('human') || query.includes('live') || query.includes('কথা') || query.includes('support') || query.includes('admin')) {
-        return `💬 আমাদের হিউম্যান সাপোর্ট টিমের সাথে সরাসরি কথা বলতে নিচের লিংকে ক্লিক করুন:<br><br><a href="https://wa.me/918100002156?text=Hello%20Kwiky%20Team,%20I%20need%20human%20assistance." target="_blank" style="color:var(--green); font-weight:800; text-decoration:none;"><i class="fa-brands fa-whatsapp"></i> WhatsApp Live Chat (+91 8100002156)</a>`;
-      }
-
-      return `ধন্যবাদ! আপনি Kwiky প্ল্যাটফর্মে খাবার, ফ্যাশন, ওষুধ বা মুদি পণ্য অর্ডার করতে পারেন। কোনো নির্দিষ্ট আইটেম খুঁজছেন? নাকি সরাসরি ডেলিভারি টিমের সাথে <a href="https://wa.me/918100002156" target="_blank" style="color:var(--primary); font-weight:bold;">WhatsApp চ্যাট (+91 8100002156)</a> করতে চান?`;
-    }
-
-    window.addEventListener('DOMContentLoaded', initCatalog);
+    window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
-

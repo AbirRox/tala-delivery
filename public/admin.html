@@ -5,339 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kwiky | Admin Command Center</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="/socket.io/socket.io.js"></script>
   <style>
-    :root {
-      --primary: #fc8019;
-      --dark: #0f172a;
-      --card-bg: #1e293b;
-      --text-muted: #94a3b8;
-      --green: #22c55e;
-      --blue: #38bdf8;
-      --border: #334155;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0b1120; color: #f8fafc; padding: 16px; min-height: 100vh; }
-
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 20px;
-      background: var(--card-bg);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      margin-bottom: 20px;
-    }
-    .brand-title { display: flex; align-items: center; gap: 10px; }
-    .brand-logo { background: var(--primary); color: white; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .stat-card {
-      background: var(--card-bg);
-      padding: 16px 20px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .stat-val { font-size: 24px; font-weight: 900; margin-top: 4px; }
-
-    .orders-section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-    .filter-tabs { display: flex; gap: 8px; }
-    .filter-btn {
-      background: var(--card-bg);
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-
-    .orders-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 16px;
-    }
-    .order-admin-card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: all 0.2s;
-    }
-    .order-admin-card:hover { border-color: var(--primary); }
-    .order-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      border-bottom: 1px dashed var(--border);
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
-    .badge-status {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-    .status-pending { background: #fef08a; color: #854d0e; }
-    .status-preparing { background: #fed7aa; color: #9a3412; }
-    .status-out { background: #bfdbfe; color: #1e40af; }
-    .status-delivered { background: #bbf7d0; color: #166534; }
-
-    .order-items-box {
-      background: #0b1120;
-      padding: 10px 12px;
-      border-radius: 10px;
-      margin: 10px 0;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-    .action-btn-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .btn-act {
-      flex: 1;
-      padding: 9px 0;
-      border: none;
-      border-radius: 8px;
-      font-size: 11px;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-    .btn-prep { background: #f59e0b; color: white; }
-    .btn-dispatch { background: var(--blue); color: #0b1120; }
-    .btn-complete { background: var(--green); color: white; }
-    .btn-call { background: #334155; color: white; text-decoration: none; padding: 9px 12px; border-radius: 8px; font-size: 12px; }
+    :root { --primary: #fc8019; --card: #1e293b; --green: #22c55e; --border: #334155; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+    body { background: #0b1120; color: white; padding: 16px; }
+    .header { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 14px 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+    .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+    .order-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .btn-act { padding: 8px 12px; border: none; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 11px; }
   </style>
 </head>
 <body>
 
-  <header class="header-bar">
-    <div class="brand-title">
-      <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
-      <div>
-        <h2 style="font-size: 18px; font-weight: 900;">Kwiky Admin Live Center</h2>
-        <p style="font-size: 11px; color: var(--text-muted);">Realtime Orders & Kitchen Management</p>
-      </div>
-    </div>
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 800;">
-        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--green);"></span> Live Syncing
-      </span>
-      <button onclick="fetchOrders()" style="background: #334155; color: white; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 800; font-size: 12px; cursor: pointer;">
-        <i class="fa-solid fa-rotate"></i> Refresh
-      </button>
-    </div>
-  </header>
-
-  <!-- Live Stats -->
-  <section class="stats-grid">
-    <div class="stat-card">
-      <div>
-        <p style="font-size: 11px; color: var(--text-muted); font-weight: 700;">TOTAL ORDERS</p>
-        <div class="stat-val" id="statTotalOrders">0</div>
-      </div>
-      <i class="fa-solid fa-bag-shopping" style="font-size: 26px; color: var(--primary);"></i>
-    </div>
-    <div class="stat-card">
-      <div>
-        <p style="font-size: 11px; color: var(--text-muted); font-weight: 700;">ACTIVE / PREPARING</p>
-        <div class="stat-val" style="color: #f59e0b;" id="statActiveOrders">0</div>
-      </div>
-      <i class="fa-solid fa-fire-burner" style="font-size: 26px; color: #f59e0b;"></i>
-    </div>
-    <div class="stat-card">
-      <div>
-        <p style="font-size: 11px; color: var(--text-muted); font-weight: 700;">OUT FOR DELIVERY</p>
-        <div class="stat-val" style="color: var(--blue);" id="statOutOrders">0</div>
-      </div>
-      <i class="fa-solid fa-motorcycle" style="font-size: 26px; color: var(--blue);"></i>
-    </div>
-    <div class="stat-card">
-      <div>
-        <p style="font-size: 11px; color: var(--text-muted); font-weight: 700;">TOTAL REVENUE (COD)</p>
-        <div class="stat-val" style="color: var(--green);" id="statRevenue">৳0</div>
-      </div>
-      <i class="fa-solid fa-receipt" style="font-size: 26px; color: var(--green);"></i>
-    </div>
-  </section>
-
-  <div class="orders-section-header">
-    <h3 style="font-size: 16px; font-weight: 900;">Incoming Orders Queue</h3>
-    <div class="filter-tabs">
-      <button class="filter-btn active" onclick="filterList('ALL', this)">All</button>
-      <button class="filter-btn" onclick="filterList('Active', this)">Active</button>
-      <button class="filter-btn" onclick="filterList('Delivered', this)">Completed</button>
-    </div>
+  <div class="header">
+    <h2><i class="fa-solid fa-bolt" style="color:var(--primary);"></i> Kwiky Admin Command</h2>
+    <span style="color:var(--green); font-weight:800;">● Live Realtime Sync</span>
   </div>
 
-  <main class="orders-grid" id="ordersListContainer">
-    <p style="color: var(--text-muted); font-size: 13px;">Loading orders...</p>
-  </main>
-
-  <!-- Sound Alert for New Orders -->
-  <audio id="orderAlertSound" preload="auto">
-    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
-  </audio>
+  <div class="orders-grid" id="ordersBox">Loading orders...</div>
 
   <script>
-    let allOrders = [];
-    let currentFilter = 'ALL';
-    let previousOrderCount = 0;
+    const socket = io();
 
-    async function fetchOrders() {
-      try {
-        const res = await fetch('/api/orders');
-        const data = await res.json();
-        allOrders = (data && data.orders) ? data.orders : [];
+    async function loadOrders() {
+      const res = await fetch('/api/orders');
+      const data = await res.json();
+      const container = document.getElementById('ordersBox');
+      const orders = data.orders || [];
 
-        // নতুন অর্ডার আসলে অডিও বাজবে
-        if (allOrders.length > previousOrderCount && previousOrderCount !== 0) {
-          const sound = document.getElementById('orderAlertSound');
-          if (sound) sound.play().catch(() => {});
-        }
-        previousOrderCount = allOrders.length;
-
-        updateStats();
-        renderOrders();
-      } catch (e) {
-        // Fallback demo data
-        const localHistory = JSON.parse(localStorage.getItem('kwiky_order_history')) || [];
-        allOrders = localHistory.map(h => ({
-          _id: h.id,
-          name: 'Demo Customer',
-          phone: '918100002156',
-          address: h.address || 'Kolkata / Dhaka Hub',
-          items: [{ name: h.itemsText || 'Biryani Combo', price: h.total }],
-          total: h.total,
-          status: h.status || 'Pending'
-        }));
-        updateStats();
-        renderOrders();
-      }
-    }
-
-    function updateStats() {
-      document.getElementById('statTotalOrders').innerText = allOrders.length;
-      const active = allOrders.filter(o => o.status !== 'Delivered');
-      const out = allOrders.filter(o => o.status === 'Out for Delivery');
-      const rev = allOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
-
-      document.getElementById('statActiveOrders').innerText = active.length;
-      document.getElementById('statOutOrders').innerText = out.length;
-      document.getElementById('statRevenue').innerText = `৳${rev}`;
-    }
-
-    function filterList(filter, btn) {
-      currentFilter = filter;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderOrders();
-    }
-
-    function renderOrders() {
-      const container = document.getElementById('ordersListContainer');
-      let filtered = allOrders;
-
-      if (currentFilter === 'Active') {
-        filtered = allOrders.filter(o => o.status !== 'Delivered');
-      } else if (currentFilter === 'Delivered') {
-        filtered = allOrders.filter(o => o.status === 'Delivered');
-      }
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">No orders found.</p>`;
+      if (orders.length === 0) {
+        container.innerHTML = `<p style="color:#94a3b8;">No orders available.</p>`;
         return;
       }
 
-      container.innerHTML = filtered.map(ord => {
-        const status = ord.status || 'Pending';
-        let badgeClass = 'status-pending';
-        if (status === 'Preparing') badgeClass = 'status-preparing';
-        if (status === 'Out for Delivery') badgeClass = 'status-out';
-        if (status === 'Delivered') badgeClass = 'status-delivered';
-
-        const itemsSummary = (ord.items || []).map(i => `${i.name} (৳${i.price})`).join(', ');
-
-        return `
-          <div class="order-admin-card">
-            <div>
-              <div class="order-top-row">
-                <div>
-                  <strong style="font-size: 15px;">#${(ord._id || '').slice(-6)}</strong>
-                  <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">${ord.name || 'Customer'} (${ord.phone})</p>
-                </div>
-                <span class="badge-status ${badgeClass}">${status}</span>
-              </div>
-
-              <p style="font-size: 11px; color: #cbd5e1;"><i class="fa-solid fa-location-dot" style="color:#ef4444;"></i> ${ord.address}</p>
-
-              <div class="order-items-box">
-                <strong style="color: var(--primary);">Items Ordered:</strong>
-                <div>${itemsSummary || 'Food items'}</div>
-              </div>
-
-              <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:800;">
-                <span>Total Amount:</span>
-                <span style="color: var(--green); font-size:15px;">৳${ord.total} (COD)</span>
-              </div>
-            </div>
-
-            <div class="action-btn-row">
-              <a href="tel:${ord.phone}" class="btn-call"><i class="fa-solid fa-phone"></i></a>
-              <button class="btn-act btn-prep" onclick="updateOrderStatus('${ord._id}', 'Preparing')">Prep</button>
-              <button class="btn-act btn-dispatch" onclick="updateOrderStatus('${ord._id}', 'Out for Delivery')">Dispatch</button>
-              <button class="btn-act btn-complete" onclick="updateOrderStatus('${ord._id}', 'Delivered')">Delivered</button>
-            </div>
+      container.innerHTML = orders.map(o => `
+        <div class="order-card">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+            <strong>#${o._id.slice(-6)}</strong>
+            <span style="color:var(--primary); font-weight:800;">${o.status}</span>
           </div>
-        `;
-      }).join('');
+          <p style="font-size:13px;">Customer: ${o.name} (${o.phone})</p>
+          <p style="font-size:12px; color:#94a3b8; margin:4px 0 10px;">Address: ${o.address}</p>
+          <p style="color:var(--green); font-weight:900; margin-bottom:10px;">Total: ৳${o.total} (COD)</p>
+          <div style="display:flex; gap:6px;">
+            <button class="btn-act" style="background:#f59e0b; color:white;" onclick="updateStatus('${o._id}', 'Preparing')">Preparing</button>
+            <button class="btn-act" style="background:#0284c7; color:white;" onclick="updateStatus('${o._id}', 'Out for Delivery')">Dispatch</button>
+            <button class="btn-act" style="background:var(--green); color:white;" onclick="updateStatus('${o._id}', 'Delivered')">Delivered</button>
+          </div>
+        </div>
+      `).join('');
     }
 
-    async function updateOrderStatus(orderId, newStatus) {
-      try {
-        await fetch(`/api/order/${orderId}/status`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: newStatus })
-        });
-      } catch (e) {}
-
-      // Local update
-      const ord = allOrders.find(o => o._id === orderId);
-      if (ord) ord.status = newStatus;
-      updateStats();
-      renderOrders();
+    async function updateStatus(id, status) {
+      await fetch(`/api/order/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      loadOrders();
     }
 
-    // প্রতি ৪ সেকেন্ডে স্বয়ংক্রিয়ভাবে নতুন অর্ডার চেক করবে
-    setInterval(fetchOrders, 4000);
-    window.addEventListener('DOMContentLoaded', fetchOrders);
+    socket.on('order:new', () => loadOrders());
+    window.addEventListener('DOMContentLoaded', loadOrders);
   </script>
 </body>
 </html>

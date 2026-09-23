@@ -3,167 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Kwiky Hero | Delivery Partner App</title>
+  <title>Kwiky Hero | Rider App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="/socket.io/socket.io.js"></script>
   <style>
-    :root {
-      --primary: #fc8019;
-      --dark: #0f172a;
-      --card: #1e293b;
-      --green: #22c55e;
-      --border: #334155;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0b1120; color: white; padding: 14px; padding-bottom: 80px; }
-
-    .rider-nav {
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 12px 16px;
-      border-radius: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .duty-badge {
-      background: rgba(34, 197, 94, 0.15);
-      color: var(--green);
-      border: 1px solid var(--green);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .trip-card {
-      background: var(--card);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      padding: 16px;
-      margin-bottom: 14px;
-    }
-    .trip-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 12px; }
-    
-    .addr-box {
-      background: #0b1120;
-      padding: 12px;
-      border-radius: 10px;
-      margin: 10px 0;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .btn-nav-map {
-      background: #0284c7;
-      color: white;
-      text-decoration: none;
-      padding: 10px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-weight: 800;
-      font-size: 12px;
-      margin-top: 10px;
-    }
-    .btn-rider-action {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 900;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-    .btn-pickup { background: var(--primary); color: white; }
-    .btn-deliver { background: var(--green); color: white; }
+    :root { --primary: #fc8019; --card: #1e293b; --green: #22c55e; --border: #334155; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+    body { background: #0b1120; color: white; padding: 14px; }
+    .nav { background: var(--card); padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; margin-top: 8px; }
   </style>
 </head>
 <body>
 
-  <div class="rider-nav">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <div style="background: var(--primary); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900;">
-        <i class="fa-solid fa-motorcycle"></i>
-      </div>
-      <div>
-        <h3 style="font-size: 14px; font-weight: 900;">Rider Hero #KW-171</h3>
-        <p style="font-size: 10px; color: #94a3b8;">Motovolt E-Bike Delivery</p>
-      </div>
-    </div>
-    <span class="duty-badge">● Online On-Duty</span>
+  <div class="nav">
+    <div><strong>Hero #KW-171</strong><p style="font-size:11px; color:#94a3b8;" id="gpsTxt">GPS: Live</p></div>
+    <span style="color:var(--green); font-size:12px; font-weight:800;">● Online</span>
   </div>
 
-  <h3 style="font-size: 15px; font-weight: 900; margin-bottom: 12px;">Active Deliveries</h3>
-  <div id="riderTripsContainer">Loading assigned trips...</div>
+  <div id="trips">Loading trips...</div>
 
   <script>
-    async function loadRiderOrders() {
-      const container = document.getElementById('riderTripsContainer');
-      try {
-        const res = await fetch('/api/orders');
-        const data = await res.json();
-        const activeTrips = (data && data.orders) ? data.orders.filter(o => o.status !== 'Delivered') : [];
+    const socket = io();
+    let currentOrderId = null;
 
-        if (activeTrips.length === 0) {
-          container.innerHTML = `
-            <div style="text-align:center; padding: 40px 20px; background: var(--card); border-radius: 14px; border: 1px solid var(--border);">
-              <i class="fa-solid fa-circle-check" style="font-size: 36px; color: var(--green); margin-bottom: 10px;"></i>
-              <h4>All Deliveries Completed!</h4>
-              <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Wait for new customer orders.</p>
-            </div>
-          `;
-          return;
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition((pos) => {
+        const { latitude, longitude } = pos.coords;
+        document.getElementById('gpsTxt').innerText = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+        if (currentOrderId) {
+          socket.emit('rider:locationUpdate', { riderId: 'KW-171', orderId: currentOrderId, lat: latitude, lng: longitude });
         }
+      }, null, { enableHighAccuracy: true });
+    }
 
-        container.innerHTML = activeTrips.map(trip => `
-          <div class="trip-card">
-            <div class="trip-header">
-              <div>
-                <strong style="font-size: 15px;">Order #${(trip._id || '').slice(-6)}</strong>
-                <p style="font-size: 11px; color: #94a3b8;">Customer: ${trip.name} (${trip.phone})</p>
-              </div>
-              <a href="tel:${trip.phone}" style="background: var(--green); color:white; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-size: 11px; font-weight: 800;">
-                <i class="fa-solid fa-phone"></i> Call
-              </a>
-            </div>
+    async function loadTrips() {
+      const res = await fetch('/api/orders');
+      const d = await res.json();
+      const trips = (d.orders || []).filter(o => o.status !== 'Delivered');
+      const box = document.getElementById('trips');
 
-            <div class="addr-box">
-              <p style="color: #94a3b8; font-size: 10px; font-weight: 800;">DELIVER TO ADDRESS:</p>
-              <p style="font-size: 12px; font-weight: 700; margin-top: 2px;">${trip.address}</p>
-              <p style="font-size: 11px; color: var(--primary); margin-top: 6px;"><strong>Collect Cash:</strong> ৳${trip.total} (COD)</p>
-            </div>
-
-            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trip.address)}" target="_blank" class="btn-nav-map">
-              <i class="fa-solid fa-diamond-turn-right"></i> Open Navigation in Google Maps
-            </a>
-
-            ${trip.status !== 'Out for Delivery' 
-              ? `<button class="btn-rider-action btn-pickup" onclick="setTripStatus('${trip._id}', 'Out for Delivery')"><i class="fa-solid fa-box"></i> Confirm Food Picked Up</button>` 
-              : `<button class="btn-rider-action btn-deliver" onclick="setTripStatus('${trip._id}', 'Delivered')"><i class="fa-solid fa-circle-check"></i> Collect Cash & Mark Delivered</button>`
-            }
-          </div>
-        `).join('');
-      } catch (e) {
-        container.innerHTML = `<p style="color: #94a3b8; text-align:center;">Could not fetch orders.</p>`;
+      if (trips.length === 0) {
+        currentOrderId = null;
+        box.innerHTML = `<p style="color:#94a3b8;">No active deliveries.</p>`;
+        return;
       }
+
+      currentOrderId = trips[0]._id;
+      box.innerHTML = trips.map(t => `
+        <div class="card">
+          <p><strong>Order #${t._id.slice(-6)}</strong> (${t.status})</p>
+          <p style="font-size:12px; color:#94a3b8; margin:6px 0;">Deliver To: ${t.address}</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t.address)}" target="_blank" style="color:#38bdf8; font-size:12px; font-weight:bold; display:block; margin:6px 0;">Open in Google Maps</a>
+          <button class="btn" style="background:var(--green); color:white;" onclick="markDelivered('${t._id}')">Mark Delivered (Collect ৳${t.total})</button>
+        </div>
+      `).join('');
     }
 
-    async function setTripStatus(id, st) {
-      try {
-        await fetch(`/api/order/${id}/status`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: st })
-        });
-      } catch (e) {}
-      loadRiderOrders();
+    async function markDelivered(id) {
+      await fetch(`/api/order/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'Delivered' })
+      });
+      loadTrips();
     }
 
-    setInterval(loadRiderOrders, 4000);
-    window.addEventListener('DOMContentLoaded', loadRiderOrders);
+    socket.on('order:new', () => loadTrips());
+    window.addEventListener('DOMContentLoaded', loadTrips);
   </script>
 </body>
 </html>

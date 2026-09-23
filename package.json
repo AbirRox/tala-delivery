@@ -1,22 +1,17 @@
 {
-  "name": "tala-delivery",
+  "name": "kwiky-delivery",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Multi-purpose on-demand delivery platform",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "seed": "node seed.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "@capacitor/android": "^8.5.2",
-    "@capacitor/cli": "^8.5.2",
-    "@capacitor/core": "^8.5.2",
-    "cors": "^2.8.6",
-    "dotenv": "^18.0.3",
-    "express": "^5.2.1",
-    "mongoose": "^9.10.2"
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.1",
+    "socket.io": "^4.7.5"
   }
 }
