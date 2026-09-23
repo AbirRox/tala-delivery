@@ -210,6 +210,7 @@
       align-items: center;
       gap: 4px;
     }
+    .res-badge i { color: #f1c40f; }
     .res-details { padding: 14px; }
     .res-details h4 { font-size: 16px; font-weight: 900; color: var(--dark); }
     .res-details p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
@@ -279,18 +280,160 @@
       font-size: 13px;
     }
     .stepper-btn { background: none; border: none; color: white; padding: 6px 12px; font-size: 14px; font-weight: 900; cursor: pointer; }
+    .stepper-btn:active { background: rgba(0,0,0,0.15); }
     .stepper-count { padding: 0 4px; }
 
-    /* ==================== SWIGGY LIVE ORDER TRACKING MODAL ==================== */
-    .tracking-card {
+    /* ==================== SWIGGY/ZOMATO BILL BREAKUP ==================== */
+    .bill-box {
       background: #ffffff;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
       border: 1px solid var(--border);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 14px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+    .bill-box-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .bill-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .bill-row span i {
+      font-size: 11px;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+    .bill-total-row {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px dashed var(--border);
+      margin-top: 8px;
+      padding-top: 10px;
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--dark);
     }
 
+    /* ==================== SWIGGY/ZOMATO ORDER PLACED SCREEN ==================== */
+    .success-modal-box {
+      background: white;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 20px;
+      padding: 24px 20px;
+      text-align: center;
+      animation: popIn 0.3s ease-out;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .success-checkmark {
+      width: 70px;
+      height: 70px;
+      background: #eafaf1;
+      color: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 14px;
+      box-shadow: 0 0 0 10px #f4fbf7;
+    }
+
+    .success-modal-box h2 {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .success-subtext {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Suggestions Strip */
+    .suggestions-container {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      margin: 16px 0;
+      text-align: left;
+    }
+    .suggestions-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .suggestions-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .suggestions-scroll::-webkit-scrollbar { display: none; }
+
+    .suggestion-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      min-width: 125px;
+      max-width: 125px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .suggestion-item img {
+      width: 100%;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    .suggestion-name {
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
+      height: 26px;
+      overflow: hidden;
+    }
+    .suggestion-price {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--primary);
+      margin: 4px 0;
+    }
+    .btn-suggestion-add {
+      background: #fff3e6;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: 4px;
+      padding: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    /* Live Tracking Styles */
     .eta-banner {
       background: linear-gradient(135deg, #171a29 0%, #282c3f 100%);
       color: white;
@@ -301,11 +444,9 @@
       align-items: center;
       margin-bottom: 18px;
     }
-
     .eta-banner h2 { font-size: 22px; font-weight: 900; color: #ffb142; }
     .eta-banner p { font-size: 11px; opacity: 0.85; margin-top: 2px; }
 
-    /* Swiggy Timeline Steps */
     .tracking-steps {
       position: relative;
       margin-left: 20px;
@@ -313,13 +454,8 @@
       padding-left: 18px;
       margin-bottom: 20px;
     }
-
-    .step-item {
-      position: relative;
-      margin-bottom: 22px;
-    }
+    .step-item { position: relative; margin-bottom: 22px; }
     .step-item:last-child { margin-bottom: 0; }
-
     .step-icon-dot {
       position: absolute;
       left: -28px;
@@ -334,19 +470,14 @@
       justify-content: center;
       transition: all 0.3s;
     }
-
     .step-item.active .step-icon-dot {
       background: var(--primary);
       box-shadow: 0 0 10px rgba(252, 128, 25, 0.6);
     }
-    .step-item.completed .step-icon-dot {
-      background: var(--green);
-    }
-
+    .step-item.completed .step-icon-dot { background: var(--green); }
     .step-title { font-size: 13px; font-weight: 800; color: var(--dark); }
     .step-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
-    /* Rider Information Card */
     .rider-profile-box {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -356,37 +487,31 @@
       align-items: center;
       justify-content: space-between;
     }
-
     .rider-avatar {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       background: var(--primary);
       border-radius: 50%;
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
     }
-
-    .rider-info h4 { font-size: 14px; font-weight: 900; }
-    .rider-info p { font-size: 11px; color: var(--text-muted); }
-
     .call-rider-btn {
       background: var(--green);
       color: white;
       text-decoration: none;
-      padding: 9px 16px;
-      border-radius: 25px;
+      padding: 8px 14px;
+      border-radius: 20px;
       font-size: 12px;
       font-weight: 800;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 3px 8px rgba(46, 204, 113, 0.3);
     }
 
-    /* Standard Modals */
+    /* Modal Backdrop */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -413,35 +538,10 @@
       padding-bottom: 12px;
       margin-bottom: 12px;
     }
-    .cart-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      font-size: 13px;
-      border-bottom: 1px dashed var(--border);
-    }
 
     .form-group { margin-top: 10px; }
     .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
     .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
-
-    .bill-box {
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 12px;
-      margin: 14px 0;
-      font-size: 12px;
-    }
-    .bill-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
-    .bill-total {
-      display: flex;
-      justify-content: space-between;
-      font-weight: 800;
-      font-size: 14px;
-      border-top: 1px solid var(--border);
-      padding-top: 6px;
-    }
 
     .btn-checkout {
       width: 100%;
@@ -455,7 +555,6 @@
       cursor: pointer;
     }
 
-    /* Trust Footer */
     .compliance-footer {
       background: var(--dark);
       color: #94a3b8;
@@ -463,14 +562,6 @@
       font-size: 12px;
       text-align: center;
     }
-    .footer-links-grid {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-    .footer-links-grid a { color: #cbd5e1; text-decoration: none; cursor: pointer; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -485,18 +576,15 @@
       </div>
     </a>
     <div class="nav-actions">
-      <!-- Live Track Button (Jodi order active thake) -->
       <button id="navTrackBtn" style="display: none; background: #eafaf1; color: var(--green); border: 1px solid var(--green); padding: 7px 12px; border-radius: 20px; font-weight: 800; font-size: 11px; cursor: pointer;" onclick="openTrackingModal()">
         <i class="fa-solid fa-location-arrow fa-spin"></i> Live Track
       </button>
 
-      <!-- Customer Profile Icon -->
       <button class="profile-btn-pill" onclick="openProfileModal()">
         <i class="fa-regular fa-user" style="font-size: 14px;"></i>
         <span>Account</span>
       </button>
 
-      <!-- Cart Button -->
       <button class="cart-btn-pill" onclick="openCartModal()">
         <i class="fa-solid fa-bag-shopping"></i>
         <span id="cartCount">0</span>
@@ -524,7 +612,7 @@
     </div>
   </nav>
 
-  <!-- Dynamic Subcategory Pills -->
+  <!-- Dynamic Subcategory Bar -->
   <div class="subcategory-bar" id="subcatBar"></div>
 
   <!-- Search -->
@@ -545,15 +633,95 @@
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
-  <!-- Compliance Footer -->
+  <!-- Footer -->
   <footer class="compliance-footer">
-    <div class="footer-links-grid">
-      <a href="/rider.html" style="color: var(--primary);">Delivery Partner Portal</a>
-    </div>
-    <p>© 2026 Kwiky Online Delivery Platform</p>
+    <a href="/rider.html" style="color: var(--primary); text-decoration: none; font-weight: 700;">Delivery Partner Portal</a>
+    <p style="margin-top: 8px;">© 2026 Kwiky Online Delivery Platform</p>
   </footer>
 
-  <!-- ==================== SWIGGY LIVE ORDER TRACKING MODAL ==================== -->
+  <!-- ==================== SWIGGY/ZOMATO CART & FARE BREAKUP MODAL ==================== -->
+  <div class="modal-backdrop" id="cartModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 style="font-size: 16px;">Order Summary (<span id="modalCartCount">0</span>)</h3>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeCartModal()"></i>
+      </div>
+
+      <div id="cartItemsList"></div>
+
+      <!-- Comprehensive Swiggy/Zomato Bill Breakdown -->
+      <div class="bill-box">
+        <div class="bill-box-title"><i class="fa-solid fa-receipt"></i> Detailed Fare Breakup</div>
+        
+        <div class="bill-row">
+          <span>Items Subtotal</span>
+          <span id="billSubtotal">0 BDT</span>
+        </div>
+        
+        <div class="bill-row">
+          <span>Delivery Partner Fee (Standard)</span>
+          <span id="billDeliveryFee">40 BDT</span>
+        </div>
+        
+        <div class="bill-row">
+          <span>Platform Fee <i class="fa-regular fa-circle-question" title="Contributes to app maintenance and fast support"></i></span>
+          <span>3 BDT</span>
+        </div>
+        
+        <div class="bill-row">
+          <span>Govt Taxes & Restaurant Packaging (5%)</span>
+          <span id="billTaxPackaging">0 BDT</span>
+        </div>
+        
+        <div class="bill-total-row">
+          <span>Total To Pay</span>
+          <span id="billGrandTotal" style="color: var(--primary);">43 BDT</span>
+        </div>
+      </div>
+
+      <!-- Customer Details Form -->
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="custName" class="form-control" placeholder="E.g., Tanvir Ahmed" />
+      </div>
+      <div class="form-group">
+        <label>Contact Mobile Number</label>
+        <input type="tel" id="custPhone" class="form-control" placeholder="E.g., 01711223344" />
+      </div>
+      <div class="form-group">
+        <label>Delivery Address & Landmark</label>
+        <textarea id="custAddress" class="form-control" rows="2" placeholder="House / Road / Floor / Landmark"></textarea>
+      </div>
+
+      <button class="btn-checkout" style="margin-top: 16px;" onclick="submitOrder()">Confirm & Place Order</button>
+    </div>
+  </div>
+
+  <!-- ==================== ORDER PLACED & SUGGESTIONS MODAL ==================== -->
+  <div class="modal-backdrop" id="orderSuccessModal" style="align-items: center;">
+    <div class="success-modal-box">
+      <div class="success-checkmark">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h2>Order Placed Successfully!</h2>
+      <p class="success-subtext">Order <span id="confirmedOrderId" style="font-weight: 800; color: var(--primary);">#KW-1002</span> has been sent to the store.</p>
+
+      <!-- Suggestions Strip: Items Customer Might Love -->
+      <div class="suggestions-container">
+        <div class="suggestions-title">
+          <i class="fa-solid fa-sparkles" style="color: #f1c40f;"></i> Frequently Added with This Order:
+        </div>
+        <div class="suggestions-scroll" id="suggestionsList"></div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 14px;">
+        <button class="btn-checkout" style="background: #282c3f; flex: 1; padding: 12px;" onclick="closeSuccessAndContinue()">Close</button>
+        <button class="btn-checkout" style="flex: 2; padding: 12px;" onclick="goToTrackingFromSuccess()"><i class="fa-solid fa-motorcycle"></i> Track Live Order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SWIGGY LIVE TRACKING MODAL ==================== -->
   <div class="modal-backdrop" id="trackingModal" style="align-items: center;">
     <div class="modal-box" style="border-radius: 20px; max-width: 480px;">
       <div class="modal-header">
@@ -561,7 +729,6 @@
         <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeTrackingModal()"></i>
       </div>
 
-      <!-- Live ETA Banner -->
       <div class="eta-banner">
         <div>
           <p>ESTIMATED ARRIVAL</p>
@@ -573,7 +740,6 @@
         </div>
       </div>
 
-      <!-- Swiggy Stepper Flow -->
       <div class="tracking-steps">
         <div class="step-item completed" id="stepPlaced">
           <div class="step-icon-dot"></div>
@@ -590,7 +756,7 @@
         <div class="step-item" id="stepPicked">
           <div class="step-icon-dot"></div>
           <div class="step-title">Order Picked Up</div>
-          <div class="step-desc">Items verified and packed securely in thermal bag.</div>
+          <div class="step-desc">Items verified and packed in thermal bag.</div>
         </div>
 
         <div class="step-item" id="stepOut">
@@ -606,54 +772,16 @@
         </div>
       </div>
 
-      <!-- Rider Profile & Direct Call -->
       <div class="rider-profile-box">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="rider-avatar">
-            <i class="fa-solid fa-user-ninja"></i>
-          </div>
-          <div class="rider-info">
+          <div class="rider-avatar"><i class="fa-solid fa-user-ninja"></i></div>
+          <div>
             <h4 id="trackRiderName">Hero: Searching...</h4>
-            <p><i class="fa-solid fa-shield-heart" style="color: var(--green);"></i> Vaccinated & Verified Partner</p>
+            <p style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-shield-heart" style="color: var(--green);"></i> Verified Delivery Partner</p>
           </div>
         </div>
-        <a href="tel:01700000000" id="trackRiderCall" class="call-rider-btn">
-          <i class="fa-solid fa-phone"></i> Call
-        </a>
+        <a href="tel:01700000000" id="trackRiderCall" class="call-rider-btn"><i class="fa-solid fa-phone"></i> Call</a>
       </div>
-    </div>
-  </div>
-
-  <!-- Cart Modal -->
-  <div class="modal-backdrop" id="cartModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 style="font-size: 16px;">Your Cart (<span id="modalCartCount">0</span>)</h3>
-        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeCartModal()"></i>
-      </div>
-
-      <div id="cartItemsList"></div>
-
-      <div class="bill-box">
-        <div class="bill-row"><span>Items Subtotal</span><span id="cartSubtotal">0 BDT</span></div>
-        <div class="bill-row"><span>Delivery Fee</span><span>40 BDT</span></div>
-        <div class="bill-total"><span>Total Payable</span><span id="cartGrandTotal" style="color: var(--primary);">40 BDT</span></div>
-      </div>
-
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="custName" class="form-control" placeholder="E.g., Tanvir Ahmed" />
-      </div>
-      <div class="form-group">
-        <label>Contact Mobile Number</label>
-        <input type="tel" id="custPhone" class="form-control" placeholder="E.g., 01711223344" />
-      </div>
-      <div class="form-group">
-        <label>Delivery Address</label>
-        <textarea id="custAddress" class="form-control" rows="2" placeholder="House, Road, Landmark"></textarea>
-      </div>
-
-      <button class="btn-checkout" style="margin-top: 15px;" onclick="submitOrder()">Confirm & Place Order</button>
     </div>
   </div>
 
@@ -663,7 +791,9 @@
     let currentSubcategory = 'All Restaurants';
     let selectedRestaurant = null;
     let cart = {};
+
     const DELIVERY_FEE = 40;
+    const PLATFORM_FEE = 3;
 
     let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
     let trackPollTimer = null;
@@ -678,11 +808,20 @@
     ];
 
     const subcategoryMap = {
-      Food: ["All Restaurants", "Biryani & Polao", "Burgers & Sandwiches", "Kebabs & Tandoor", "Bengali Curries"],
-      Fashion: ["All", "Men's Casual Shirts", "Men's T-Shirts", "Women's Sarees & Kurtis"],
+      Food: ["All Restaurants", "Biryani & Polao", "Burgers & Sandwiches", "Kebabs & Tandoor", "Bengali Curries", "Desserts & Sweets", "Juices & Shakes"],
+      Fashion: ["All", "Men's Casual Shirts", "Men's T-Shirts", "Women's Sarees & Kurtis", "Watches & Accessories"],
       Medicine: ["All", "Fever & Pain Relief", "Gastric & Digestion", "First Aid & Antiseptics"],
-      Grocery: ["All", "Rice Dal & Flour", "Cooking Oil & Ghee", "Dairy Milk & Eggs"]
+      Grocery: ["All", "Rice Dal & Flour", "Cooking Oil & Ghee", "Snacks & Biscuits", "Soft Drinks & Beverages"]
     };
+
+    // Suggestions pool for Order Placed recommendation
+    const suggestionsPool = [
+      { name: "Shahi Borhani (1L)", price: 220, image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300" },
+      { name: "Special Firni Cup", price: 90, image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=300" },
+      { name: "Cheesy Loaded Fries", price: 190, image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300" },
+      { name: "Choco Lava Cake", price: 140, image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=300" },
+      { name: "Cold Coca-Cola (1.5L)", price: 95, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300" }
+    ];
 
     async function initCatalog() {
       try {
@@ -867,10 +1006,15 @@
         `).join('');
       }
 
+      // Detailed Fare Calculations
       const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const grandTotal = subtotal > 0 ? subtotal + DELIVERY_FEE : 0;
-      document.getElementById('cartSubtotal').innerText = `${subtotal} BDT`;
-      document.getElementById('cartGrandTotal').innerText = `${grandTotal} BDT`;
+      const taxPackaging = subtotal > 0 ? Math.round(subtotal * 0.05) : 0; // 5% Govt Tax & Packaging
+      const grandTotal = subtotal > 0 ? (subtotal + DELIVERY_FEE + PLATFORM_FEE + taxPackaging) : 0;
+
+      document.getElementById('billSubtotal').innerText = `${subtotal} BDT`;
+      document.getElementById('billDeliveryFee').innerText = `${subtotal > 0 ? DELIVERY_FEE : 0} BDT`;
+      document.getElementById('billTaxPackaging').innerText = `${taxPackaging} BDT`;
+      document.getElementById('billGrandTotal').innerText = `${grandTotal} BDT`;
     }
 
     function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
@@ -878,6 +1022,30 @@
     function openTrackingModal() { document.getElementById('trackingModal').style.display = 'flex'; }
     function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
+    // Render Recommendations on Order Placed Screen
+    function renderSuggestions() {
+      const cont = document.getElementById('suggestionsList');
+      cont.innerHTML = suggestionsPool.map((s, idx) => `
+        <div class="suggestion-item">
+          <img src="${s.image}" alt="${s.name}" />
+          <div class="suggestion-name">${s.name}</div>
+          <div class="suggestion-price">${s.price} BDT</div>
+          <button class="btn-suggestion-add" onclick="addSuggestedItem('${escape(s.name)}', ${s.price}, this)">+ Add</button>
+        </div>
+      `).join('');
+    }
+
+    function addSuggestedItem(rawName, price, btn) {
+      const name = unescape(rawName);
+      const tempId = 'sug_' + Math.floor(Math.random() * 10000);
+      updateItemQty(tempId, escape(name), price, 1);
+      btn.innerText = "✓ Added";
+      btn.style.background = "#2ecc71";
+      btn.style.color = "white";
+      btn.disabled = true;
+    }
+
+    // Submit Order with Swiggy/Zomato Placed Screen
     async function submitOrder() {
       const cartItems = Object.values(cart);
       if (cartItems.length === 0) return alert("Your cart is empty!");
@@ -886,7 +1054,7 @@
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
 
-      if (!name || !phone || !address) return alert("Please fill Name, Phone, and Address.");
+      if (!name || !phone || !address) return alert("Please fill Name, Phone, and Delivery Address.");
 
       const orderItems = [];
       cartItems.forEach(item => {
@@ -896,7 +1064,8 @@
       });
 
       const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const total = subtotal + DELIVERY_FEE;
+      const taxPackaging = Math.round(subtotal * 0.05);
+      const total = subtotal + DELIVERY_FEE + PLATFORM_FEE + taxPackaging;
 
       try {
         const res = await fetch('/api/orders', {
@@ -910,22 +1079,39 @@
           localStorage.setItem('kwiky_active_order_id', activeOrderId);
           document.getElementById('navTrackBtn').style.display = 'inline-block';
           
+          // Clear cart
           cart = {};
           updateCartUI();
           closeCartModal();
-          openTrackingModal();
+
+          // Show Swiggy Style "Order Placed" modal with Suggestions
+          document.getElementById('confirmedOrderId').innerText = `#${activeOrderId.slice(-6)}`;
+          renderSuggestions();
+          document.getElementById('orderSuccessModal').style.display = 'flex';
           startTrackingPoll();
+        } else {
+          alert("Order failed: " + data.message);
         }
       } catch (err) {
         alert("Server error. Please try again.");
       }
     }
 
-    // ==================== Real-time Tracking Poller ==================== //
+    function closeSuccessAndContinue() {
+      document.getElementById('orderSuccessModal').style.display = 'none';
+      displayCurrentView();
+    }
+
+    function goToTrackingFromSuccess() {
+      document.getElementById('orderSuccessModal').style.display = 'none';
+      openTrackingModal();
+    }
+
+    // Live Tracking Poller
     function startTrackingPoll() {
       if (trackPollTimer) clearInterval(trackPollTimer);
       pollTrackingData();
-      trackPollTimer = setInterval(pollTrackingData, 4000); // 4 sec live polling
+      trackPollTimer = setInterval(pollTrackingData, 4000);
     }
 
     async function pollTrackingData() {
@@ -947,14 +1133,12 @@
           document.getElementById('trackRiderCall').style.display = 'none';
         }
 
-        // Stepper State Logic
         const stepPlaced = document.getElementById('stepPlaced');
         const stepAssigned = document.getElementById('stepAssigned');
         const stepPicked = document.getElementById('stepPicked');
         const stepOut = document.getElementById('stepOut');
         const stepDelivered = document.getElementById('stepDelivered');
 
-        // Reset
         [stepPlaced, stepAssigned, stepPicked, stepOut, stepDelivered].forEach(s => s.className = 'step-item');
 
         if (ord.status === 'Pending') {
@@ -981,9 +1165,7 @@
           document.getElementById('trackEta').innerText = "Arrived!";
           clearInterval(trackPollTimer);
         }
-      } catch (e) {
-        console.warn("Tracking fetch error", e);
-      }
+      } catch (e) {}
     }
 
     window.addEventListener('DOMContentLoaded', initCatalog);
