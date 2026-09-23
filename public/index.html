@@ -555,7 +555,7 @@
     }
     .btn-swiggy-pay:active { background: #519b38; }
 
-    /* Login & Common Modals */
+    /* Common Modals */
     .modal-box { background: white; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 20px; max-height: 90vh; overflow-y: auto; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px; }
     .form-group { margin-top: 10px; }
@@ -744,6 +744,147 @@
     .track-eta-banner { background: #171a29; color: white; padding: 14px 18px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .track-rider-bar { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border); }
 
+    /* ==================== AI LIVE CHAT ASSISTANT WIDGET ==================== */
+    .ai-chat-floating-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--primary), #e26e10);
+      color: white;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 8px 24px rgba(252, 128, 25, 0.45);
+      cursor: pointer;
+      z-index: 250;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .ai-chat-floating-btn:hover { transform: scale(1.08); }
+    .ai-badge-indicator {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: #22c55e;
+      color: white;
+      font-size: 9px;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 10px;
+      border: 2px solid white;
+    }
+
+    .ai-chat-window {
+      position: fixed;
+      bottom: 86px;
+      right: 20px;
+      width: 360px;
+      max-width: calc(100vw - 40px);
+      height: 520px;
+      max-height: calc(100vh - 120px);
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      z-index: 260;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .ai-chat-header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: white;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ai-chat-messages {
+      flex: 1;
+      padding: 14px;
+      overflow-y: auto;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ai-msg {
+      max-width: 82%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .ai-msg-bot {
+      background: #ffffff;
+      color: #1e293b;
+      align-self: flex-start;
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .ai-msg-user {
+      background: var(--primary);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .ai-quick-prompts {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 12px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      scrollbar-width: none;
+    }
+    .ai-quick-prompts::-webkit-scrollbar { display: none; }
+    .ai-prompt-chip {
+      padding: 5px 10px;
+      border-radius: 16px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: #334155;
+      cursor: pointer;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+    }
+    .ai-prompt-chip:hover { background: #fff3e6; color: var(--primary); border-color: var(--primary); }
+
+    .ai-chat-input-row {
+      display: flex;
+      padding: 10px 12px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      gap: 8px;
+    }
+    .ai-chat-input-row input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 9px 14px;
+      font-size: 12px;
+      outline: none;
+    }
+    .ai-chat-input-row input:focus { border-color: var(--primary); }
+    .ai-send-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .compliance-footer { background: var(--dark); color: #94a3b8; padding: 24px 16px; font-size: 12px; text-align: center; }
     .footer-support-links { margin-top: 10px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
     .footer-support-links a { color: #38bdf8; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
@@ -839,6 +980,45 @@
     </div>
   </div>
 
+  <!-- ==================== FLOATING AI CHAT BUTTON & WINDOW ==================== -->
+  <div class="ai-chat-floating-btn" id="aiChatBtn" onclick="toggleAiChat()">
+    <i class="fa-solid fa-robot"></i>
+    <span class="ai-badge-indicator">AI</span>
+  </div>
+
+  <div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-bolt" style="color: white; font-size: 14px;"></i>
+        </div>
+        <div>
+          <strong style="font-size: 13px;">Kwiky AI Assistant</strong>
+          <p style="font-size: 10px; color: #22c55e; font-weight: 700;">● Online 24/7 Support</p>
+        </div>
+      </div>
+      <i class="fa-solid fa-xmark" style="font-size: 18px; cursor: pointer; color: #94a3b8;" onclick="toggleAiChat()"></i>
+    </div>
+
+    <div class="ai-chat-messages" id="aiChatMessages">
+      <div class="ai-msg ai-msg-bot">
+        👋 স্বাগতম! আমি <strong>Kwiky AI</strong>। মেনুর খাবার পছন্দ করা, ডেলিভারি চার্জ জানা বা অর্ডার ট্র্যাক করতে কোনো সাহায্য লাগবে কি?
+      </div>
+    </div>
+
+    <div class="ai-quick-prompts">
+      <div class="ai-prompt-chip" onclick="handleQuickPrompt('ডেলিভারি চার্জ কত?')">🛵 ডেলিভারি চার্জ কত?</div>
+      <div class="ai-prompt-chip" onclick="handleQuickPrompt('সেরা বিরিয়ানি কোনটা?')">🍛 সেরা বিরিয়ানি?</div>
+      <div class="ai-prompt-chip" onclick="handleQuickPrompt('কুপন কোড কী?')">🏷️ কুপন কোড?</div>
+      <div class="ai-prompt-chip" onclick="handleQuickPrompt('লাইভ এজেন্ট সাপোর্ট দিন')">💬 Live Agent</div>
+    </div>
+
+    <div class="ai-chat-input-row">
+      <input type="text" id="aiChatInput" placeholder="Ask anything about Kwiky..." onkeypress="if(event.key==='Enter') sendAiMessage()" />
+      <button class="ai-send-btn" onclick="sendAiMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="compliance-footer">
     <a href="/rider.html" style="color: var(--primary); text-decoration: none; font-weight: 700;">Delivery Partner Portal</a>
@@ -849,7 +1029,7 @@
     <p style="margin-top: 10px;">© 2026 Kwiky Online Delivery Platform</p>
   </footer>
 
-  <!-- ==================== SWIGGY REPLICA CUSTOMER PROFILE DRAWER ==================== -->
+  <!-- Profile Drawer -->
   <div class="modal-backdrop" id="profileModal">
     <div class="profile-sheet">
       <div class="profile-header">
@@ -869,8 +1049,6 @@
       </div>
 
       <div class="profile-body-container">
-        
-        <!-- 1. MAIN PROFILE MENU -->
         <div id="subpageProfileMain" class="subpage-panel" style="display: block;">
           <div class="profile-menu-group">
             <div class="profile-menu-row" onclick="openSubpage('orders')">
@@ -921,7 +1099,6 @@
           </div>
         </div>
 
-        <!-- 2. SUBPAGE: ORDERS HISTORY -->
         <div id="subpageOrders" class="subpage-panel">
           <div class="subpage-top-bar">
             <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -930,7 +1107,6 @@
           <div id="pastOrdersContainer"></div>
         </div>
 
-        <!-- 3. SUBPAGE: SAVED ADDRESSES -->
         <div id="subpageAddress" class="subpage-panel">
           <div class="subpage-top-bar">
             <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -950,7 +1126,6 @@
           </div>
         </div>
 
-        <!-- 4. SUBPAGE: MEMBERSHIP -->
         <div id="subpageMembership" class="subpage-panel">
           <div class="subpage-top-bar">
             <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -966,7 +1141,6 @@
           </div>
         </div>
 
-        <!-- 5. SUBPAGE: HELP & SUPPORT WITH WHATSAPP + EMAIL -->
         <div id="subpageHelp" class="subpage-panel">
           <div class="subpage-top-bar">
             <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -986,12 +1160,11 @@
             </a>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 
-  <!-- SWIGGY REPLICA CART SHEET -->
+  <!-- Cart Sheet -->
   <div class="modal-backdrop" id="cartModal">
     <div class="swiggy-cart-sheet">
       <div class="cart-sheet-header">
@@ -1047,7 +1220,6 @@
           </div>
         </div>
 
-        <!-- DELIVER TO MAP -->
         <div class="cart-address-card">
           <div class="map-header-row">
             <p style="font-size: 12px; font-weight: 800;"><i class="fa-solid fa-location-dot" style="color: #e74c3c;"></i> Deliver To (Live Map)</p>
@@ -1238,7 +1410,6 @@
     let currentUser = JSON.parse(localStorage.getItem('kwiky_customer_user')) || null;
     let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
 
-    // OFFICIAL UPDATED WHATSAPP & SUPPORT CREDENTIALS
     const ADMIN_WHATSAPP_NUMBER = "918100002156";
     const OFFICIAL_SUPPORT_EMAIL = "mynameisabirroy@gmail.com";
 
@@ -2081,6 +2252,65 @@
     function goToTrackingFromSuccess() {
       document.getElementById('orderSuccessModal').style.display = 'none';
       openTrackingModal();
+    }
+
+    // ==================== KWIKY AI CHAT LOGIC ==================== //
+    function toggleAiChat() {
+      const chatWin = document.getElementById('aiChatWindow');
+      if (chatWin.style.display === 'flex') {
+        chatWin.style.display = 'none';
+      } else {
+        chatWin.style.display = 'flex';
+      }
+    }
+
+    function handleQuickPrompt(text) {
+      document.getElementById('aiChatInput').value = text;
+      sendAiMessage();
+    }
+
+    function sendAiMessage() {
+      const input = document.getElementById('aiChatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendChatMessage(text, 'user');
+      input.value = '';
+
+      // AI Response processing
+      setTimeout(() => {
+        const reply = generateAiReply(text.toLowerCase());
+        appendChatMessage(reply, 'bot');
+      }, 500);
+    }
+
+    function appendChatMessage(msgHtml, sender) {
+      const box = document.getElementById('aiChatMessages');
+      const div = document.createElement('div');
+      div.className = `ai-msg ${sender === 'user' ? 'ai-msg-user' : 'ai-msg-bot'}`;
+      div.innerHTML = msgHtml;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function generateAiReply(query) {
+      if (query.includes('charge') || query.includes('ভাড়া') || query.includes('খরচ') || query.includes('delivery')) {
+        return `🛵 <strong>ডেলিভারি চার্জের নিয়ম:</strong><br>• প্রথম ১.৫ কিমি পর্যন্ত মাত্র ৩৫ টাকা।<br>• এরপর প্রতি অতিরিক্ত কিমি ১২ টাকা করে যোগ হয়। কার্টে ম্যাপে আপনার পিন বসালে স্বয়ংক্রিয়ভাবে আসল ড্রাইভিং দূরত্ব ও ভাড়া দেখা যাবে।`;
+      }
+      if (query.includes('biryani') || query.includes('বিরিয়ানি') || query.includes('kacchi') || query.includes('কাচ্চি')) {
+        return `🍛 <strong>জনপ্রিয় বিরিয়ানি:</strong><br>• <em>Sultan's Dine</em>-এর বাসমতী কাচ্চি প্ল্যাটার ও মাটন রেজালা সবচেয়ে বেশি পছন্দ করা হচ্ছে! উপরের Food মেনুতে সুলতানস ডাইনে ক্লিক করলেই অর্ডার করতে পারবেন।`;
+      }
+      if (query.includes('coupon') || query.includes('কুপন') || query.includes('offer') || query.includes('ছাড়')) {
+        return `🏷️ ২০০ টাকার বেশি অর্ডারে <strong>KWIKY50</strong> কুপন ব্যবহার করে সাথে সাথে ৫০ টাকা ছাড় পাবেন! কার্ট শিটে কুপন সেকশনে APPLY বাটনে ক্লিক করুন।`;
+      }
+      if (query.includes('track') || query.includes('ট্র্যাক') || query.includes('rider') || query.includes('কোথায়')) {
+        return `📍 অর্ডার কনফার্ম হলেই স্ক্রিনের উপরে <strong>"Live Track"</strong> বাটন চলে আসে। সেখানে ক্লিক করলে সুইগির মতো গুগল ম্যাপে সবুজ লাইনের ওপর রাইডারের অবস্থান ও পৌঁছানোর সময় দেখতে পাবেন।`;
+      }
+      if (query.includes('agent') || query.includes('human') || query.includes('live') || query.includes('কথা') || query.includes('support') || query.includes('admin')) {
+        return `💬 আমাদের হিউম্যান সাপোর্ট টিমের সাথে সরাসরি কথা বলতে নিচের লিংকে ক্লিক করুন:<br><br><a href="https://wa.me/918100002156?text=Hello%20Kwiky%20Team,%20I%20need%20human%20assistance." target="_blank" style="color:var(--green); font-weight:800; text-decoration:none;"><i class="fa-brands fa-whatsapp"></i> WhatsApp Live Chat (+91 8100002156)</a>`;
+      }
+
+      return `ধন্যবাদ! আপনি Kwiky প্ল্যাটফর্মে খাবার, ফ্যাশন, ওষুধ বা মুদি পণ্য অর্ডার করতে পারেন। কোনো নির্দিষ্ট আইটেম খুঁজছেন? নাকি সরাসরি ডেলিভারি টিমের সাথে <a href="https://wa.me/918100002156" target="_blank" style="color:var(--primary); font-weight:bold;">WhatsApp চ্যাট (+91 8100002156)</a> করতে চান?`;
     }
 
     window.addEventListener('DOMContentLoaded', initCatalog);
