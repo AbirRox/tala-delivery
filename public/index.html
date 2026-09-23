@@ -22,7 +22,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 90px; }
 
-    /* Top Navigation */
+    /* Top Navigation Bar */
     .navbar {
       background: #ffffff;
       position: sticky;
@@ -51,6 +51,27 @@
     .brand-text p { font-size: 10px; color: var(--text-muted); font-weight: 600; }
 
     .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    /* Customer Profile Button */
+    .profile-btn-pill {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .profile-btn-pill:hover {
+      background: #e2e8f0;
+      color: var(--primary);
+    }
+
     .cart-btn-pill {
       background: var(--primary);
       color: white;
@@ -65,7 +86,7 @@
       cursor: pointer;
     }
 
-    /* 4 Primary Categories */
+    /* 4 Primary Category Tabs */
     .main-category-bar {
       background: #ffffff;
       display: flex;
@@ -184,11 +205,7 @@
       position: relative;
       background: #e2e8f0;
     }
-    .res-banner-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .res-banner-box img { width: 100%; height: 100%; object-fit: cover; }
     .res-badge {
       position: absolute;
       bottom: 8px;
@@ -219,7 +236,7 @@
       color: #475569;
     }
 
-    /* Product Cards Grid */
+    /* Product Grid */
     .items-grid {
       padding: 0 16px;
       display: grid;
@@ -260,11 +277,8 @@
     .prod-subcat { font-size: 10px; color: var(--text-muted); margin-bottom: 6px; }
     .prod-price { font-size: 14px; font-weight: 900; color: var(--primary); margin-bottom: 8px; }
 
-    /* Swiggy Style Interactive Add / Stepper Button */
-    .cart-btn-container {
-      width: 100%;
-    }
-
+    /* Interactive Stepper Button */
+    .cart-btn-container { width: 100%; }
     .btn-add {
       width: 100%;
       background: white;
@@ -291,7 +305,6 @@
       font-weight: 800;
       font-size: 13px;
     }
-
     .stepper-btn {
       background: none;
       border: none;
@@ -300,15 +313,9 @@
       font-size: 14px;
       font-weight: 900;
       cursor: pointer;
-      transition: background 0.2s;
     }
-    .stepper-btn:active {
-      background: rgba(0,0,0,0.15);
-    }
-
-    .stepper-count {
-      padding: 0 4px;
-    }
+    .stepper-btn:active { background: rgba(0,0,0,0.15); }
+    .stepper-count { padding: 0 4px; }
 
     /* Modals & Cart */
     .modal-backdrop {
@@ -390,7 +397,7 @@
       cursor: pointer;
     }
 
-    /* Trust Footer */
+    /* Trust Badges & Footer */
     .payment-trust-bar {
       margin-top: 30px;
       padding: 20px 16px;
@@ -447,7 +454,7 @@
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Top App Navigation -->
   <header class="navbar">
     <a href="/" class="brand-box">
       <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
@@ -457,9 +464,13 @@
       </div>
     </a>
     <div class="nav-actions">
-      <a href="/rider.html" style="font-size: 11px; color: var(--primary); font-weight: 800; text-decoration: none;">
-        <i class="fa-solid fa-motorcycle"></i> Rider
-      </a>
+      <!-- Customer Profile Icon -->
+      <button class="profile-btn-pill" onclick="openProfileModal()">
+        <i class="fa-regular fa-user" style="font-size: 14px;"></i>
+        <span id="navUserName">Account</span>
+      </button>
+
+      <!-- Cart Button -->
       <button class="cart-btn-pill" onclick="openCartModal()">
         <i class="fa-solid fa-bag-shopping"></i>
         <span id="cartCount">0</span>
@@ -467,7 +478,7 @@
     </div>
   </header>
 
-  <!-- 4 Core Categories -->
+  <!-- 4 Main Categories -->
   <nav class="main-category-bar">
     <div class="main-cat-item active" onclick="switchMainCategory('Food', this)">
       <i class="fa-solid fa-utensils"></i>
@@ -495,7 +506,7 @@
     <input type="text" id="searchInput" class="search-input" placeholder="Search dishes, restaurants, fashion..." onkeyup="handleSearch()" />
   </div>
 
-  <!-- Content Section -->
+  <!-- Main Section -->
   <section>
     <div class="section-title-wrap">
       <h3 id="sectionHeading">Top Partner Restaurants</h3>
@@ -507,7 +518,7 @@
     <!-- Restaurant Grid -->
     <div class="restaurants-grid" id="restaurantView"></div>
 
-    <!-- Product Grid -->
+    <!-- Products Grid -->
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
@@ -523,16 +534,41 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- Compliance Footer (Delivery Partner link placed here safely) -->
   <footer class="compliance-footer">
     <div class="footer-links-grid">
       <a onclick="showPolicy('terms')">Terms & Conditions</a>
       <a onclick="showPolicy('privacy')">Privacy Policy</a>
       <a onclick="showPolicy('refund')">Refund & Cancellation</a>
       <a onclick="showPolicy('contact')">Customer Support</a>
+      <a href="/rider.html" style="color: var(--primary);">Delivery Partner Portal</a>
     </div>
     <p>© 2026 Kwiky Online Delivery Platform</p>
   </footer>
+
+  <!-- Customer Account / Profile Modal -->
+  <div class="modal-backdrop" id="profileModal" style="align-items: center;">
+    <div class="policy-modal-box" style="text-align: center;">
+      <div class="modal-header">
+        <h3 style="font-size: 16px;">Customer Account</h3>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeProfileModal()"></i>
+      </div>
+      <div style="padding: 15px 0;">
+        <div style="width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 12px;">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <h4 id="userDisplayName" style="font-size: 16px; margin-bottom: 4px;">Welcome to Kwiky!</h4>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Instant 30-min delivery platform</p>
+        
+        <div style="text-align: left; background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 14px; font-size: 12px;">
+          <p><strong><i class="fa-solid fa-bag-shopping" style="color: var(--primary);"></i> Orders:</strong> Active tracking available at checkout</p>
+          <p style="margin-top: 6px;"><strong><i class="fa-solid fa-location-dot" style="color: var(--green);"></i> Delivery:</strong> Live GPS Fleet Integration</p>
+        </div>
+        
+        <button class="btn-checkout" style="padding: 10px; margin-top: 0;" onclick="closeProfileModal()">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Cart Modal -->
   <div class="modal-backdrop" id="cartModal">
@@ -595,8 +631,6 @@
     let currentCategory = 'Food';
     let currentSubcategory = 'All Restaurants';
     let selectedRestaurant = null;
-    
-    // Cart Data Structure: { id: { id, name, price, qty } }
     let cart = {};
     const DELIVERY_FEE = 40;
 
@@ -819,7 +853,6 @@
       displayCurrentView();
     }
 
-    // Helper: Generate Stepper HTML or + ADD button
     function getActionButtonHtml(id, rawName, price) {
       const qty = cart[id] ? cart[id].qty : 0;
       if (qty > 0) {
@@ -924,7 +957,6 @@
       `).join('');
     }
 
-    // Dynamic Add / Increase / Decrease Counter
     function updateItemQty(id, rawName, price, delta) {
       const name = unescape(rawName);
       if (!cart[id]) {
@@ -937,7 +969,6 @@
         delete cart[id];
       }
 
-      // Update specific product card button container without full re-render
       const container = document.getElementById(`btn-container-${id}`);
       if (container) {
         container.innerHTML = getActionButtonHtml(id, escape(name), price);
@@ -983,6 +1014,9 @@
     function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
     function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
+    function openProfileModal() { document.getElementById('profileModal').style.display = 'flex'; }
+    function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+
     async function submitOrder() {
       const cartItems = Object.values(cart);
       if (cartItems.length === 0) return alert("Your cart is empty!");
@@ -996,7 +1030,6 @@
       if (!name || !phone || !address) return alert("Please fill Name, Phone, and Address.");
       if (!compliance) return alert("Please agree to the Terms & Conditions.");
 
-      // Flatten items array for backend orders
       const orderItems = [];
       cartItems.forEach(item => {
         for (let k = 0; k < item.qty; k++) {
