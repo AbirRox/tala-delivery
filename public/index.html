@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Kwiky | Food, Fashion, Medicine & Grocery</title>
+  <title>Kwiky | Order Food, Grocery, Fashion & Medicine Online</title>
   
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#fc8019" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- FontAwesome & Leaflet Map -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="/socket.io/socket.io.js"></script>
@@ -14,181 +18,663 @@
   <style>
     :root {
       --primary: #fc8019;
+      --primary-dark: #e26e10;
       --dark: #171a29;
-      --light: #f4f5f7;
+      --dark-gray: #282c3f;
+      --light-bg: #f2f2f2;
+      --card-bg: #ffffff;
       --text-muted: #686b78;
       --border: #e2e8f0;
       --green: #60b244;
+      --red: #e74c3c;
       --blue: #0984e3;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--light); color: var(--dark); padding-bottom: 120px; }
 
-    /* Top Nav */
-    .navbar { background: #fff; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
-    .brand-box { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
-    .brand-logo { background: var(--primary); color: white; font-weight: 900; font-size: 20px; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-    .brand-text h1 { font-size: 18px; font-weight: 900; }
-    .nav-actions { display: flex; align-items: center; gap: 8px; }
-    .pill-btn { background: #f1f5f9; border: 1px solid var(--border); padding: 8px 12px; border-radius: 20px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: #f8fafc; color: var(--dark); padding-bottom: 120px; overflow-x: hidden; }
 
-    /* Categories Bar */
-    .main-category-bar { background: #fff; display: flex; justify-content: space-around; border-bottom: 1px solid var(--border); padding: 10px 0; position: sticky; top: 60px; z-index: 150; }
-    .main-cat-item { text-align: center; cursor: pointer; color: var(--text-muted); font-size: 11px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .main-cat-item.active { color: var(--primary); transform: scale(1.05); }
+    /* ==================== SKELETON SHIMMER LOADER ==================== */
+    @keyframes shimmer {
+      0% { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #eceff1 25%, #f8fafc 50%, #eceff1 75%);
+      background-size: 800px 100%;
+      animation: shimmer 1.5s infinite linear;
+      border-radius: 8px;
+    }
 
-    /* Search & Grid */
-    .search-wrap { padding: 12px 16px; }
-    .search-input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); font-size: 13px; outline: none; background: white; }
-    .restaurants-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; padding: 0 16px 20px; }
-    .restaurant-card { background: white; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
-    .res-banner-box { width: 100%; height: 140px; position: relative; background: #e2e8f0; }
-    .res-banner-box img { width: 100%; height: 100%; object-fit: cover; }
-    .res-details { padding: 14px; }
+    /* ==================== SWIGGY HEADER NAVBAR ==================== */
+    .swiggy-nav {
+      background: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-left { display: flex; align-items: center; gap: 14px; }
+    .brand-logo-badge {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 10px rgba(252, 128, 25, 0.35);
+    }
+    .location-selector {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .loc-top { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 900; color: var(--dark); }
+    .loc-bottom { font-size: 11px; color: var(--text-muted); max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .items-grid { padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 14px; }
-    .product-card { background: white; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
-    .prod-img-holder { width: 100%; height: 135px; position: relative; }
-    .prod-img-holder img { width: 100%; height: 100%; object-fit: cover; }
-    .prod-body { padding: 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
-    .btn-add { width: 100%; height: 32px; background: white; color: var(--green); border: 1px solid #d4d5d9; border-radius: 8px; font-weight: 800; cursor: pointer; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .btn-nav-action {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: #334155;
+      transition: all 0.2s;
+    }
+    .btn-nav-action:active { transform: scale(0.95); }
+    .btn-cart-nav {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(252, 128, 25, 0.3);
+    }
 
-    /* Floating Cart */
-    .floating-cart-bar { position: fixed; bottom: 14px; left: 14px; right: 14px; max-width: 500px; margin: 0 auto; background: var(--green); color: white; padding: 12px 18px; border-radius: 14px; display: none; justify-content: space-between; align-items: center; z-index: 180; cursor: pointer; }
+    /* ==================== 4 ENTERPRISE CATEGORIES ==================== */
+    .category-strip {
+      background: #ffffff;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0 10px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 68px;
+      z-index: 450;
+    }
+    .cat-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 12px;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .cat-tab i { font-size: 19px; }
+    .cat-tab.active {
+      color: var(--primary);
+      transform: scale(1.08);
+    }
 
-    /* Modals */
-    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 300; justify-content: center; align-items: flex-end; }
-    .sheet-box { background: white; width: 100%; max-width: 520px; border-radius: 20px 20px 0 0; max-height: 94vh; overflow-y: auto; display: flex; flex-direction: column; padding: 16px; }
-    .addr-map-box { width: 100%; height: 160px; border-radius: 10px; border: 1px solid var(--border); margin: 8px 0; }
-    .input-ctrl { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; margin: 4px 0 10px; }
-    .btn-pay { background: var(--green); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 900; width: 100%; cursor: pointer; margin-top: 10px; }
+    /* ==================== HEAVY HERO SEARCH BAR ==================== */
+    .search-container {
+      padding: 14px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .search-input-box {
+      position: relative;
+      width: 100%;
+    }
+    .search-input-box input {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      outline: none;
+      font-size: 14px;
+      font-weight: 600;
+      background: #ffffff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+      transition: all 0.2s;
+    }
+    .search-input-box input:focus { border-color: var(--primary); box-shadow: 0 4px 20px rgba(252, 128, 25, 0.15); }
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 16px;
+    }
 
-    /* Tracking Sheet */
-    .track-sheet { background: white; width: 100%; max-width: 520px; border-radius: 24px 24px 0 0; height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
-    #trackingLiveMap { width: 100%; flex: 1; min-height: 350px; }
-    .track-info-panel { padding: 18px; background: white; border-top: 1px solid var(--border); }
-    .track-eta-banner { background: var(--dark); color: white; padding: 14px; border-radius: 14px; display: flex; justify-content: space-between; margin-bottom: 12px; }
+    /* ==================== PROMO BANNER CAROUSEL ==================== */
+    .banner-carousel {
+      display: flex;
+      gap: 14px;
+      padding: 0 20px 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .banner-carousel::-webkit-scrollbar { display: none; }
+    .promo-card {
+      min-width: 280px;
+      height: 130px;
+      border-radius: 16px;
+      padding: 16px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    .promo-card-1 { background: linear-gradient(135deg, #1e293b, #0f172a); }
+    .promo-card-2 { background: linear-gradient(135deg, #e11d48, #be123c); }
+    .promo-card-3 { background: linear-gradient(135deg, #059669, #047857); }
 
-    /* AI Chat */
-    .ai-chat-btn { position: fixed; bottom: 24px; right: 20px; background: var(--primary); color: white; width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; z-index: 250; box-shadow: 0 8px 24px rgba(252,128,25,0.4); }
-    .ai-chat-window { position: fixed; bottom: 86px; right: 20px; width: 350px; max-width: calc(100vw - 40px); height: 480px; background: white; border-radius: 20px; border: 1px solid var(--border); z-index: 260; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    /* ==================== RESTAURANT GRID & CARDS ==================== */
+    .section-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 10px 20px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .res-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+    }
+    .swiggy-card {
+      background: #ffffff;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .swiggy-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.09);
+    }
+    .card-banner {
+      width: 100%;
+      height: 155px;
+      position: relative;
+      background: #e2e8f0;
+    }
+    .card-banner img { width: 100%; height: 100%; object-fit: cover; }
+    .banner-badge {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(23, 26, 41, 0.85);
+      backdrop-filter: blur(4px);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-info { padding: 14px 16px; }
+    .card-title { font-size: 17px; font-weight: 900; color: #1e293b; }
+    .card-sub { font-size: 13px; color: var(--text-muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* ==================== PRODUCT MENU CARDS & STEPPERS ==================== */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 16px;
+    }
+    .menu-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+    }
+    .menu-img-wrap { width: 100%; height: 145px; position: relative; background: #f1f5f9; }
+    .menu-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .menu-body { padding: 12px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+    .dish-name { font-size: 13px; font-weight: 800; margin-bottom: 3px; line-height: 1.3; }
+    .dish-price { font-size: 14px; font-weight: 900; color: #1e293b; margin: 4px 0 10px; }
+
+    .stepper-container { width: 100%; height: 34px; position: relative; }
+    .btn-add-stepper {
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      color: var(--green);
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      transition: all 0.15s;
+    }
+    .btn-add-stepper:active { transform: scale(0.92); border-color: var(--green); }
+    .stepper-active-box {
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border: 1.5px solid var(--green);
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(96, 178, 68, 0.2);
+    }
+    .stepper-action-btn {
+      background: none;
+      border: none;
+      color: var(--green);
+      font-size: 16px;
+      font-weight: 900;
+      width: 32px;
+      height: 100%;
+      cursor: pointer;
+    }
+    .stepper-digit { color: var(--green); font-size: 13px; font-weight: 900; }
+
+    /* ==================== BOTTOM FLOATING CART BAR ==================== */
+    .floating-cart-bar {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      max-width: 540px;
+      margin: 0 auto;
+      background: #60b244;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 16px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(96, 178, 68, 0.45);
+      animation: slideUpBottom 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideUpBottom { from { transform: translateY(80px); } to { transform: translateY(0); } }
+
+    /* ==================== HEAVY CART & MODAL DRAWER ==================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 700;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .swiggy-sheet {
+      background: #f4f5f7;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 24px 24px 0 0;
+      max-height: 92vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      animation: sheetUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .sheet-header {
+      background: #ffffff;
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .sheet-content { padding: 16px; display: flex; flex-direction: column; gap: 14px; padding-bottom: 110px; }
+    .heavy-card { background: #ffffff; border-radius: 16px; padding: 16px; border: 1px solid var(--border); }
+
+    /* Map Box */
+    #deliveryMap { width: 100%; height: 180px; border-radius: 12px; margin: 8px 0; border: 1px solid var(--border); }
+
+    .bill-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+    .bill-total-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: 900; color: #1e293b; border-top: 1px dashed #cbd5e1; padding-top: 10px; margin-top: 8px; }
+
+    .sheet-pay-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 520px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 30;
+      box-shadow: 0 -6px 20px rgba(0,0,0,0.06);
+    }
+    .btn-place-order {
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Live Tracking Map Screen */
+    #trackingLiveMap { width: 100%; flex: 1; min-height: 380px; }
+
+    /* Floating AI Bot */
+    .ai-bubble-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(252, 128, 25, 0.45);
+      z-index: 650;
+    }
+    .ai-chat-box {
+      position: fixed;
+      bottom: 88px;
+      right: 20px;
+      width: 350px;
+      max-width: calc(100vw - 40px);
+      height: 480px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      z-index: 660;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <header class="navbar">
-    <a href="/" class="brand-box">
-      <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
-      <div class="brand-text"><h1>Kwiky</h1></div>
-    </a>
+  <!-- ==================== HEADER ==================== -->
+  <header class="swiggy-nav">
+    <div class="nav-left">
+      <div class="brand-logo-badge"><i class="fa-solid fa-bolt"></i></div>
+      <div class="location-selector" onclick="openCartModal()">
+        <div class="loc-top">
+          <i class="fa-solid fa-location-dot" style="color: var(--primary);"></i>
+          <span>DELIVER TO</span>
+          <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: var(--primary);"></i>
+        </div>
+        <div class="loc-bottom" id="navAddressDisplay">Locating via GPS...</div>
+      </div>
+    </div>
+
     <div class="nav-actions">
-      <button id="navTrackBtn" style="display: none; background: #eafaf1; color: var(--green); border: 1px solid var(--green);" class="pill-btn" onclick="openTrackingModal()">
-        <i class="fa-solid fa-location-arrow fa-spin"></i> Track
+      <button id="navTrackBtn" style="display: none; background: #eafaf1; color: var(--green); border-color: var(--green);" class="btn-nav-action" onclick="openTrackingModal()">
+        <i class="fa-solid fa-location-arrow fa-spin"></i> Live Track
       </button>
-      <button class="pill-btn" onclick="handleAccountClick()"><i class="fa-regular fa-user"></i> <span id="navAccountText">Account</span></button>
-      <button class="pill-btn" style="background: var(--primary); color: white; border: none;" onclick="openCartModal()">
-        <i class="fa-solid fa-bag-shopping"></i> <span id="cartCount">0</span>
+
+      <button class="btn-nav-action" onclick="handleAccountClick()">
+        <i class="fa-regular fa-user"></i>
+        <span id="navAccountText">Account</span>
+      </button>
+
+      <button class="btn-cart-nav" onclick="openCartModal()">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span id="cartCountBadge">0</span>
       </button>
     </div>
   </header>
 
-  <!-- Categories -->
-  <nav class="main-category-bar">
-    <div class="main-cat-item active" onclick="switchCategory('Food', this)"><i class="fa-solid fa-utensils"></i><span>Food</span></div>
-    <div class="main-cat-item" onclick="switchCategory('Fashion', this)"><i class="fa-solid fa-shirt"></i><span>Fashion</span></div>
-    <div class="main-cat-item" onclick="switchCategory('Medicine', this)"><i class="fa-solid fa-pills"></i><span>Medicine</span></div>
-    <div class="main-cat-item" onclick="switchCategory('Grocery', this)"><i class="fa-solid fa-basket-shopping"></i><span>Grocery</span></div>
+  <!-- ==================== 4 CATEGORY STRIP ==================== -->
+  <nav class="category-strip">
+    <div class="cat-tab active" onclick="switchCategory('Food', this)">
+      <i class="fa-solid fa-utensils"></i>
+      <span>Food</span>
+    </div>
+    <div class="cat-tab" onclick="switchCategory('Fashion', this)">
+      <i class="fa-solid fa-shirt"></i>
+      <span>Fashion</span>
+    </div>
+    <div class="cat-tab" onclick="switchCategory('Medicine', this)">
+      <i class="fa-solid fa-pills"></i>
+      <span>Medicine</span>
+    </div>
+    <div class="cat-tab" onclick="switchCategory('Grocery', this)">
+      <i class="fa-solid fa-basket-shopping"></i>
+      <span>Grocery</span>
+    </div>
   </nav>
 
-  <!-- Search -->
-  <div class="search-wrap">
-    <input type="text" class="search-input" placeholder="Search dishes, fashion, grocery..." onkeyup="handleSearch(this.value)" />
-  </div>
-
-  <!-- Content Section -->
-  <section>
-    <div style="padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
-      <h3 id="sectionHeading" style="font-size: 16px; font-weight: 900;">Top Partner Restaurants</h3>
-      <button id="backBtn" style="display:none;" class="pill-btn" onclick="resetToAll()"><i class="fa-solid fa-arrow-left"></i> All</button>
+  <!-- ==================== SEARCH BAR ==================== -->
+  <div class="search-container">
+    <div class="search-input-box">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input type="text" id="searchInput" placeholder="Search dishes, restaurants, groceries, fashion..." onkeyup="handleSearch(this.value)" />
     </div>
-    <div class="restaurants-grid" id="restaurantView"></div>
-    <main class="items-grid" id="productsView" style="display: none;"></main>
-  </section>
-
-  <!-- Floating Cart Bar -->
-  <div class="floating-cart-bar" id="floatingCartBar" onclick="openCartModal()">
-    <strong id="floatingBarItemsText">1 ITEM | 240 BDT</strong>
-    <div>View Cart <i class="fa-solid fa-arrow-right"></i></div>
   </div>
 
-  <!-- AI Chat Floating Button -->
-  <div class="ai-chat-btn" onclick="toggleAiChat()"><i class="fa-solid fa-robot"></i></div>
-  <div class="ai-chat-window" id="aiChatWindow">
-    <div style="background: #1e293b; color: white; padding: 14px; display: flex; justify-content: space-between;">
+  <!-- ==================== PROMO CAROUSEL ==================== -->
+  <div class="banner-carousel">
+    <div class="promo-card promo-card-1">
+      <div>
+        <span style="font-size: 10px; font-weight: 900; background: var(--primary); padding: 3px 8px; border-radius: 6px;">FLAT 50 BDT OFF</span>
+        <h3 style="font-size: 16px; margin-top: 6px;">Use Code: KWIKY50</h3>
+      </div>
+      <p style="font-size: 11px; opacity: 0.85;">On orders above 200 BDT</p>
+    </div>
+
+    <div class="promo-card promo-card-2">
+      <div>
+        <span style="font-size: 10px; font-weight: 900; background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 6px;">FASTEST COURIER</span>
+        <h3 style="font-size: 16px; margin-top: 6px;">25-30 Mins Delivery</h3>
+      </div>
+      <p style="font-size: 11px; opacity: 0.85;">Fresh hot food at door</p>
+    </div>
+
+    <div class="promo-card promo-card-3">
+      <div>
+        <span style="font-size: 10px; font-weight: 900; background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 6px;">24/7 SUPPORT</span>
+        <h3 style="font-size: 16px; margin-top: 6px;">WhatsApp Support</h3>
+      </div>
+      <p style="font-size: 11px; opacity: 0.85;">Direct chat: +91 8100002156</p>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CATALOG ==================== -->
+  <main class="section-wrapper">
+    <div class="section-title">
+      <h3 id="sectionHeadingText">Top Partner Restaurants</h3>
+      <button id="btnBackToRes" style="display: none; background: #e2e8f0; border: none; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer;" onclick="resetToAll()">
+        <i class="fa-solid fa-arrow-left"></i> All Restaurants
+      </button>
+    </div>
+
+    <!-- Restaurants View -->
+    <div class="res-grid" id="resGridView"></div>
+
+    <!-- Products View -->
+    <div class="menu-grid" id="menuGridView" style="display: none;"></div>
+  </main>
+
+  <!-- ==================== FLOATING CART ==================== -->
+  <div class="floating-cart-bar" id="floatingCartBar" onclick="openCartModal()">
+    <div>
+      <strong id="floatingItemsCountText" style="font-size: 14px;">1 ITEM | 240 BDT</strong>
+      <p style="font-size: 11px; opacity: 0.9;">View order summary & checkout</p>
+    </div>
+    <div style="font-weight: 900; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+      VIEW CART <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </div>
+
+  <!-- ==================== AI SUPPORT BUBBLE ==================== -->
+  <div class="ai-bubble-btn" onclick="toggleAiChat()"><i class="fa-solid fa-robot"></i></div>
+  <div class="ai-chat-box" id="aiChatBox">
+    <div style="background: var(--dark); color: white; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;">
       <strong>Kwiky AI Assistant</strong>
       <i class="fa-solid fa-xmark" style="cursor: pointer;" onclick="toggleAiChat()"></i>
     </div>
-    <div id="aiChatMessages" style="flex:1; padding:12px; overflow-y:auto; background:#f8fafc; font-size:12px; display:flex; flex-direction:column; gap:8px;">
-      <div style="background:white; padding:8px 12px; border-radius:12px; border:1px solid #e2e8f0;">স্বাগতম! খাবার পছন্দ করা, ডেলিভারি চার্জ জানা বা অর্ডারে যেকোনো সহায়তায় আমাকে জিজ্ঞেস করুন।</div>
+    <div id="aiMsgContainer" style="flex:1; padding:14px; overflow-y:auto; background:#f8fafc; display:flex; flex-direction:column; gap:8px; font-size:12px;">
+      <div style="background:white; padding:10px 14px; border-radius:12px; border:1px solid var(--border);">
+        স্বাগতম! খাবার অর্ডার, ডেলিভারি চার্জ জানা বা লাইভ সাপোর্টের জন্য আমাকে জিজ্ঞেস করতে পারেন।
+      </div>
     </div>
-    <div style="display:flex; padding:8px; background:white; border-top:1px solid #e2e8f0; gap:6px;">
-      <input type="text" id="aiChatInput" placeholder="Ask AI..." style="flex:1; padding:8px 12px; border:1px solid #e2e8f0; border-radius:20px; outline:none; font-size:12px;" onkeypress="if(event.key==='Enter') sendAiMessage()" />
-      <button onclick="sendAiMessage()" style="background:var(--primary); color:white; border:none; border-radius:50%; width:34px; height:34px; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
+    <div style="display:flex; padding:10px; background:white; border-top:1px solid var(--border); gap:6px;">
+      <input type="text" id="aiInput" placeholder="Type here..." style="flex:1; padding:8px 14px; border:1px solid var(--border); border-radius:20px; outline:none; font-size:12px;" onkeypress="if(event.key==='Enter') sendAiMessage()" />
+      <button onclick="sendAiMessage()" style="background:var(--primary); color:white; border:none; width:34px; height:34px; border-radius:50%; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
   </div>
 
-  <!-- Cart Modal -->
-  <div class="modal-backdrop" id="cartModal">
-    <div class="sheet-box">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
-        <h3 style="font-size: 16px;">Delivery Cart</h3>
-        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeCartModal()"></i>
+  <!-- ==================== SWIGGY CART SHEET MODAL ==================== -->
+  <div class="modal-overlay" id="cartModal">
+    <div class="swiggy-sheet">
+      <div class="sheet-header">
+        <h3 style="font-size: 16px; font-weight: 900;">Order Summary</h3>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer; color:#64748b;" onclick="closeCartModal()"></i>
       </div>
-      <div id="cartItemsList" style="margin: 12px 0;"></div>
-      <p style="font-size: 12px; font-weight: 800;"><i class="fa-solid fa-location-dot" style="color: #e74c3c;"></i> Deliver To (Live Map)</p>
-      <div id="deliveryMap" class="addr-map-box"></div>
-      <input type="text" id="custAddress" class="input-ctrl" placeholder="House no, Flat, Landmark" />
-      <div style="background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 12px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>Item Total:</span><span id="billItemTotal">0 BDT</span></div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>Delivery Fee:</span><span id="billDeliveryFee">35 BDT</span></div>
-        <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 14px; border-top: 1px dashed #cbd5e1; padding-top: 6px;"><span>To Pay:</span><span id="billFinalToPay" style="color: var(--primary);">0 BDT</span></div>
+
+      <div class="sheet-content">
+        <div class="heavy-card">
+          <div id="cartItemList"></div>
+        </div>
+
+        <div class="heavy-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <p style="font-size: 13px; font-weight: 900;"><i class="fa-solid fa-location-dot" style="color:var(--red);"></i> Delivery Address (Live Map)</p>
+            <button onclick="detectGpsLocation()" style="background:#eff6ff; color:var(--blue); border:1px solid #bfdbfe; padding:4px 8px; border-radius:12px; font-size:11px; font-weight:800; cursor:pointer;">
+              <i class="fa-solid fa-crosshairs"></i> Use GPS
+            </button>
+          </div>
+          <div id="deliveryMap"></div>
+          <input type="text" id="custAddressInput" placeholder="House no, Flat, Landmark (Auto-updated from pin)" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:12px; outline:none;" />
+        </div>
+
+        <div class="heavy-card">
+          <h4 style="font-size: 13px; font-weight: 900; margin-bottom: 12px; text-transform: uppercase;">Bill Details</h4>
+          <div class="bill-row"><span>Item Total</span><span id="billItemTotal">0 BDT</span></div>
+          <div class="bill-row"><span id="billDistLabel">Delivery Partner Fee</span><span id="billDeliveryFee">35 BDT</span></div>
+          <div class="bill-row"><span>Platform Fee</span><span>3 BDT</span></div>
+          <div class="bill-row"><span>Govt Taxes (5%)</span><span id="billTaxes">0 BDT</span></div>
+          <div class="bill-total-row"><span>To Pay</span><span id="billFinalToPay" style="color: var(--primary);">0 BDT</span></div>
+        </div>
       </div>
-      <button class="btn-pay" onclick="handleCheckoutClick()">Place Order (Cash On Delivery)</button>
+
+      <div class="sheet-pay-bar">
+        <div>
+          <p style="font-size: 10px; color: var(--text-muted); font-weight: 800;">TOTAL PAYABLE</p>
+          <h3 id="payBarTotalText" style="font-size: 18px; font-weight: 900;">0 BDT</h3>
+        </div>
+        <button class="btn-place-order" onclick="handleCheckout()">
+          Proceed to Pay <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Live Tracking Modal -->
-  <div class="modal-backdrop" id="trackingModal" style="align-items: flex-end;">
-    <div class="track-sheet">
-      <div style="padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);">
-        <strong style="font-size: 15px;">Live Delivery Tracking</strong>
+  <!-- ==================== SWIGGY LIVE TRACKING MODAL ==================== -->
+  <div class="modal-overlay" id="trackingModal">
+    <div class="swiggy-sheet" style="height: 92vh;">
+      <div class="sheet-header">
+        <strong>Live Delivery Tracking</strong>
         <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeTrackingModal()"></i>
       </div>
       <div id="trackingLiveMap"></div>
-      <div class="track-info-panel">
-        <div class="track-eta-banner">
-          <div><p style="font-size: 11px;">ESTIMATED ARRIVAL</p><h2 id="trackEta" style="color: #2ecc71;">18 Mins</h2></div>
-          <div style="text-align: right;"><p style="font-size: 11px;">REMAINING DISTANCE</p><h3 id="trackDist">1.5 KM</h3></div>
+      <div style="background:white; padding:16px; border-top:1px solid var(--border);">
+        <div style="background:var(--dark); color:white; padding:14px; border-radius:14px; display:flex; justify-content:space-between; margin-bottom:12px;">
+          <div><p style="font-size:11px;">ESTIMATED ARRIVAL</p><h2 id="trackEta" style="color:#2ecc71;">18 Mins</h2></div>
+          <div style="text-align:right;"><p style="font-size:11px;">DISTANCE</p><h3 id="trackDist">1.5 KM</h3></div>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div><h4 id="trackRiderName">Hero #KW-171</h4><p style="font-size: 11px; color: var(--text-muted);">Verified Partner</p></div>
-          <a href="tel:+918100002156" style="background: var(--green); color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 12px;">Call Support</a>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div><h4>Hero #KW-171</h4><p style="font-size:11px; color:var(--text-muted);">Verified Delivery Partner</p></div>
+          <a href="tel:+918100002156" style="background:var(--green); color:white; padding:8px 16px; border-radius:20px; text-decoration:none; font-weight:800; font-size:12px;">Call Support</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Login Modal -->
-  <div class="modal-backdrop" id="loginModal" style="align-items: center;">
-    <div class="sheet-box" style="border-radius: 20px; max-width: 380px;">
-      <h3 style="margin-bottom: 10px;">Login with Mobile</h3>
-      <input type="text" id="loginName" class="input-ctrl" placeholder="Your Name" />
-      <input type="tel" id="loginPhone" class="input-ctrl" placeholder="Mobile Number" />
-      <button class="btn-pay" style="background: var(--primary);" onclick="submitLogin()">Send & Verify (OTP: 1234)</button>
+  <!-- ==================== LOGIN MODAL ==================== -->
+  <div class="modal-overlay" id="loginModal" style="align-items: center;">
+    <div style="background:white; width:90%; max-width:380px; border-radius:20px; padding:20px;">
+      <h3 style="font-size:16px; margin-bottom:12px;">Login with Mobile</h3>
+      <input type="text" id="loginName" placeholder="Your Name" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; font-size:13px;" />
+      <input type="tel" id="loginPhone" placeholder="Mobile Number" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; margin-bottom:14px; font-size:13px;" />
+      <button onclick="submitLogin()" style="width:100%; background:var(--primary); color:white; border:none; padding:12px; border-radius:10px; font-weight:900; cursor:pointer;">
+        Verify with OTP (1234)
+      </button>
     </div>
   </div>
 
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
@@ -202,8 +688,8 @@
     let STORE_LNG = 88.4600;
     let CUSTOMER_LAT = 22.5850;
     let CUSTOMER_LNG = 88.4600;
-    let dynamicDeliveryFee = 35;
     let calculatedDistanceKm = 1.5;
+    let dynamicDeliveryFee = 35;
 
     let currentUser = JSON.parse(localStorage.getItem('kwiky_customer_user')) || null;
     let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
@@ -211,11 +697,12 @@
     const ADMIN_WHATSAPP_NUMBER = "918100002156";
 
     const defaultRestaurants = [
-      { name: "Sultan's Dine", cuisine: "Kacchi Biryani, Mutton Rezala", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600" },
-      { name: "Takeout Burgers", cuisine: "Gourmet Beef Burgers, Fries", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600" }
+      { name: "Sultan's Dine", cuisine: "Kacchi Biryani, Mutton Rezala", rating: "4.8", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600" },
+      { name: "Takeout Burgers", cuisine: "Gourmet Beef Burgers, Fries", rating: "4.7", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600" },
+      { name: "Star Kabab & Restaurant", cuisine: "Beef Boti Kebab, Chicken Tikka", rating: "4.6", image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600" }
     ];
 
-    async function init() {
+    async function initCatalog() {
       try {
         const res = await fetch('/api/public-menu');
         const data = await res.json();
@@ -223,7 +710,8 @@
       } catch (e) {}
 
       updateUserUI();
-      displayCurrentView();
+      renderViews();
+      detectGpsLocation();
 
       if (activeOrderId) {
         document.getElementById('navTrackBtn').style.display = 'inline-flex';
@@ -237,13 +725,13 @@
 
     function handleAccountClick() {
       if (!currentUser) document.getElementById('loginModal').style.display = 'flex';
-      else alert(`Account: ${currentUser.name} (${currentUser.phone})\nSupport WhatsApp: +${ADMIN_WHATSAPP_NUMBER}`);
+      else alert(`Customer: ${currentUser.name}\nPhone: ${currentUser.phone}\nWhatsApp Support: +${ADMIN_WHATSAPP_NUMBER}`);
     }
 
     function submitLogin() {
       const name = document.getElementById('loginName').value.trim();
       const phone = document.getElementById('loginPhone').value.trim();
-      if (!name || !phone) return alert("Please fill all fields!");
+      if (!name || !phone) return alert("Fill all fields");
 
       currentUser = { name, phone };
       localStorage.setItem('kwiky_customer_user', JSON.stringify(currentUser));
@@ -255,116 +743,189 @@
     function switchCategory(cat, el) {
       currentCategory = cat;
       selectedRestaurant = null;
-      document.querySelectorAll('.main-cat-item').forEach(i => i.classList.remove('active'));
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
-      displayCurrentView();
+      renderViews();
     }
 
-    function displayCurrentView() {
-      const resView = document.getElementById('restaurantView');
-      const prodView = document.getElementById('productsView');
-      const heading = document.getElementById('sectionHeading');
-      const backBtn = document.getElementById('backBtn');
+    function renderViews() {
+      const resView = document.getElementById('resGridView');
+      const menuView = document.getElementById('menuGridView');
+      const heading = document.getElementById('sectionHeadingText');
+      const backBtn = document.getElementById('btnBackToRes');
 
       if (currentCategory === 'Food' && !selectedRestaurant) {
         heading.innerText = "Top Partner Restaurants";
         backBtn.style.display = 'none';
         resView.style.display = 'grid';
-        prodView.style.display = 'none';
+        menuView.style.display = 'none';
         resView.innerHTML = defaultRestaurants.map(r => `
-          <div class="restaurant-card" onclick="openRestaurant('${escape(r.name)}')">
-            <div class="res-banner-box"><img src="${r.image}" /></div>
-            <div class="res-details"><h4 style="font-size:15px; font-weight:800;">${r.name}</h4><p style="font-size:12px; color:var(--text-muted);">${r.cuisine}</p></div>
+          <div class="swiggy-card" onclick="openRestaurant('${escape(r.name)}')">
+            <div class="card-banner">
+              <img src="${r.image}" loading="lazy" />
+              <div class="banner-badge"><i class="fa-solid fa-star" style="color:#f1c40f;"></i> ${r.rating}</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title">${r.name}</div>
+              <div class="card-sub">${r.cuisine}</div>
+              <div class="card-meta">
+                <span>⚡ 25-30 mins</span>
+                <span style="color:var(--green);">Pure Authentic</span>
+              </div>
+            </div>
           </div>
         `).join('');
       } else {
         resView.style.display = 'none';
-        prodView.style.display = 'grid';
-        heading.innerText = selectedRestaurant || currentCategory;
-        backBtn.style.display = selectedRestaurant ? 'inline-flex' : 'none';
+        menuView.style.display = 'grid';
+        heading.innerText = selectedRestaurant ? `${selectedRestaurant} (Menu)` : currentCategory;
+        backBtn.style.display = selectedRestaurant ? 'inline-block' : 'none';
 
         let items = rawCatalog.filter(i => (i.category || '').toLowerCase() === currentCategory.toLowerCase());
         if (selectedRestaurant) items = items.filter(i => (i.storeName || '').toLowerCase() === selectedRestaurant.toLowerCase());
 
-        prodView.innerHTML = items.map(item => `
-          <div class="product-card">
-            <div class="prod-img-holder"><img src="${item.imageUrl}" /></div>
-            <div class="prod-body">
-              <div><strong style="font-size:12px;">${item.name}</strong><p style="color:#1e293b; font-weight:900; margin:4px 0;">${item.price} BDT</p></div>
-              <button class="btn-add" onclick="addToCart('${item._id}', '${escape(item.name)}', ${item.price})">+ ADD</button>
+        menuView.innerHTML = items.map(item => {
+          const qty = cart[item._id] ? cart[item._id].qty : 0;
+          return `
+            <div class="menu-card">
+              <div class="menu-img-wrap"><img src="${item.imageUrl}" loading="lazy" /></div>
+              <div class="menu-body">
+                <div>
+                  <div class="dish-name">${item.name}</div>
+                  <div class="dish-price">৳${item.price}</div>
+                </div>
+                <div class="stepper-container" id="stepper-${item._id}">
+                  ${renderStepperHtml(item._id, escape(item.name), item.price, qty)}
+                </div>
+              </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       }
     }
 
-    function openRestaurant(name) { selectedRestaurant = unescape(name); displayCurrentView(); }
-    function resetToAll() { selectedRestaurant = null; displayCurrentView(); }
-
-    function addToCart(id, rawName, price) {
-      const name = unescape(rawName);
-      if (!cart[id]) cart[id] = { id, name, price, qty: 1 };
-      else cart[id].qty++;
-      updateCartUI();
+    function renderStepperHtml(id, escName, price, qty) {
+      if (qty > 0) {
+        return `
+          <div class="stepper-active-box">
+            <button class="stepper-action-btn" onclick="updateQty('${id}', '${escName}', ${price}, -1)">−</button>
+            <span class="stepper-digit">${qty}</span>
+            <button class="stepper-action-btn" onclick="updateQty('${id}', '${escName}', ${price}, 1)">+</button>
+          </div>
+        `;
+      }
+      return `<button class="btn-add-stepper" onclick="updateQty('${id}', '${escName}', ${price}, 1)">+ ADD</button>`;
     }
 
-    function updateCartUI() {
-      const items = Object.values(cart);
-      const totalCount = items.reduce((s, i) => s + i.qty, 0);
-      const subtotal = items.reduce((s, i) => s + (i.price * i.qty), 0);
-      const toPay = subtotal > 0 ? (subtotal + dynamicDeliveryFee) : 0;
+    function updateQty(id, escName, price, delta) {
+      const name = unescape(escName);
+      if (!cart[id]) cart[id] = { id, name, price, qty: 0 };
+      cart[id].qty += delta;
+      if (cart[id].qty <= 0) delete cart[id];
 
-      document.getElementById('cartCount').innerText = totalCount;
-      document.getElementById('floatingBarItemsText').innerText = `${totalCount} ITEMS | ${subtotal} BDT`;
-      document.getElementById('floatingCartBar').style.display = totalCount > 0 ? 'flex' : 'none';
+      const stepperEl = document.getElementById(`stepper-${id}`);
+      if (stepperEl) stepperEl.innerHTML = renderStepperHtml(id, escape(name), price, cart[id] ? cart[id].qty : 0);
+
+      updateCartBar();
+    }
+
+    function updateCartBar() {
+      const items = Object.values(cart);
+      const totalQty = items.reduce((s, i) => s + i.qty, 0);
+      const subtotal = items.reduce((s, i) => s + (i.price * i.qty), 0);
+      const tax = Math.round(subtotal * 0.05);
+      const toPay = subtotal > 0 ? (subtotal + dynamicDeliveryFee + 3 + tax) : 0;
+
+      document.getElementById('cartCountBadge').innerText = totalQty;
+      document.getElementById('floatingItemsCountText').innerText = `${totalQty} ITEM${totalQty>1?'S':''} | ${subtotal} BDT`;
+      document.getElementById('floatingCartBar').style.display = totalQty > 0 ? 'flex' : 'none';
 
       document.getElementById('billItemTotal').innerText = `${subtotal} BDT`;
       document.getElementById('billDeliveryFee').innerText = `${dynamicDeliveryFee} BDT`;
+      document.getElementById('billDistLabel').innerText = `Delivery Fee (${calculatedDistanceKm} KM)`;
+      document.getElementById('billTaxes').innerText = `${tax} BDT`;
       document.getElementById('billFinalToPay').innerText = `${toPay} BDT`;
+      document.getElementById('payBarTotalText').innerText = `${toPay} BDT`;
 
-      document.getElementById('cartItemsList').innerHTML = items.map(i => `
-        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #e2e8f0; font-size:13px;">
-          <span>${i.name} (x${i.qty})</span><strong>${i.price * i.qty} BDT</strong>
+      document.getElementById('cartItemList').innerHTML = items.map(i => `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed var(--border); font-size:13px;">
+          <div><strong>${i.name}</strong><div style="font-size:11px; color:var(--text-muted);">৳${i.price} x ${i.qty}</div></div>
+          <strong>৳${i.price * i.qty}</strong>
         </div>
       `).join('');
     }
 
-    let cMap, cMarker;
+    function openRestaurant(name) { selectedRestaurant = unescape(name); renderViews(); }
+    function resetToAll() { selectedRestaurant = null; renderViews(); }
+
+    /* ==================== LEAFLET ROUTING & GPS ==================== */
+    let dMap, dMarker;
     function openCartModal() {
       document.getElementById('cartModal').style.display = 'flex';
       setTimeout(() => {
-        if (!cMap) {
-          cMap = L.map('deliveryMap', { zoomControl: false }).setView([STORE_LAT, STORE_LNG], 13);
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(cMap);
-          cMarker = L.marker([STORE_LAT, STORE_LNG], { draggable: true }).addTo(cMap);
+        if (!dMap) {
+          dMap = L.map('deliveryMap', { zoomControl: false }).setView([CUSTOMER_LAT, CUSTOMER_LNG], 14);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(dMap);
+          dMarker = L.marker([CUSTOMER_LAT, CUSTOMER_LNG], { draggable: true }).addTo(dMap);
 
-          cMarker.on('dragend', async (e) => {
-            const p = e.target.getLatLng();
-            CUSTOMER_LAT = p.lat; CUSTOMER_LNG = p.lng;
-            try {
-              const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${STORE_LNG},${STORE_LAT};${p.lng},${p.lat}?overview=false`);
-              const d = await res.json();
-              if (d.routes && d.routes.length > 0) {
-                calculatedDistanceKm = parseFloat((d.routes[0].distance / 1000).toFixed(1));
-                dynamicDeliveryFee = calculatedDistanceKm <= 1.5 ? 35 : Math.round(35 + ((calculatedDistanceKm - 1.5) * 12));
-                updateCartUI();
-              }
-            } catch (err) {}
+          dMarker.on('dragend', (e) => {
+            const pos = e.target.getLatLng();
+            handleNewLocation(pos.lat, pos.lng);
           });
         }
-      }, 150);
+      }, 200);
     }
     function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
-    function handleCheckoutClick() {
+    function detectGpsLocation() {
+      if (!navigator.geolocation) return;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          CUSTOMER_LAT = lat;
+          CUSTOMER_LNG = lng;
+          if (dMap && dMarker) {
+            dMap.setView([lat, lng], 15);
+            dMarker.setLatLng([lat, lng]);
+          }
+          handleNewLocation(lat, lng);
+        },
+        () => {},
+        { enableHighAccuracy: true }
+      );
+    }
+
+    async function handleNewLocation(lat, lng) {
+      try {
+        const routeRes = await fetch(`https://router.project-osrm.org/route/v1/driving/${STORE_LNG},${STORE_LAT};${lng},${lat}?overview=false`);
+        const rData = await routeRes.json();
+        if (rData.routes && rData.routes.length > 0) {
+          calculatedDistanceKm = parseFloat((rData.routes[0].distance / 1000).toFixed(1));
+          dynamicDeliveryFee = calculatedDistanceKm <= 1.5 ? 35 : Math.round(35 + ((calculatedDistanceKm - 1.5) * 12));
+          updateCartBar();
+        }
+
+        const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+        const gData = await geoRes.json();
+        if (gData && gData.display_name) {
+          const shortAddr = gData.display_name.split(',').slice(0, 3).join(', ');
+          document.getElementById('custAddressInput').value = shortAddr;
+          document.getElementById('navAddressDisplay').innerText = shortAddr;
+        }
+      } catch (e) {}
+    }
+
+    /* ==================== CHECKOUT & ORDER ==================== */
+    async function handleCheckout() {
       if (!currentUser) return document.getElementById('loginModal').style.display = 'flex';
-      const address = document.getElementById('custAddress').value.trim() || 'Home Address';
       const items = Object.values(cart);
       if (items.length === 0) return alert("Cart is empty!");
 
-      const total = parseInt(document.getElementById('billFinalToPay').innerText);
+      const address = document.getElementById('custAddressInput').value.trim() || 'Customer Address';
+      const total = parseInt(document.getElementById('payBarTotalText').innerText);
 
-      fetch('/api/orders', {
+      const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -373,77 +934,72 @@
           address,
           distanceKm: calculatedDistanceKm,
           total,
-          paymentMethod: 'COD'
+          items: items.map(i => ({ name: i.name, price: i.price, qty: i.qty }))
         })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.order) {
-          activeOrderId = data.order._id;
-          localStorage.setItem('kwiky_active_order_id', activeOrderId);
-          document.getElementById('navTrackBtn').style.display = 'inline-flex';
-          cart = {};
-          updateCartUI();
-          closeCartModal();
-
-          // WhatsApp Instant Alert
-          const itemsSummary = items.map(i => `• ${i.name} (x${i.qty})`).join('%0A');
-          const waMsg = `*🚨 NEW ORDER PLACED (KWIKY)*%0A%0A*Order ID:* %23${activeOrderId.slice(-6)}%0A*Customer:* ${currentUser.name} (${currentUser.phone})%0A*Address:* ${address}%0A*Items:*%0A${itemsSummary}%0A%0A*Total Bill:* ৳${total} (COD)`;
-          window.open(`https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${waMsg}`, '_blank');
-
-          listenLiveTracking(activeOrderId);
-          openTrackingModal();
-        }
       });
+      const data = await res.json();
+      if (data && data.order) {
+        activeOrderId = data.order._id;
+        localStorage.setItem('kwiky_active_order_id', activeOrderId);
+        document.getElementById('navTrackBtn').style.display = 'inline-flex';
+        cart = {};
+        updateCartBar();
+        closeCartModal();
+
+        // WhatsApp Instant Push
+        const itemsSummary = items.map(i => `• ${i.name} (x${i.qty})`).join('%0A');
+        const waMsg = `*🚨 NEW ORDER PLACED (KWIKY)*%0A%0A*Order ID:* %23${activeOrderId.slice(-6)}%0A*Customer:* ${currentUser.name} (${currentUser.phone})%0A*Address:* ${address}%0A*Distance:* ${calculatedDistanceKm} KM%0A*Items:*%0A${itemsSummary}%0A%0A*Total:* ৳${total} (COD)`;
+        window.open(`https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${waMsg}`, '_blank');
+
+        listenLiveTracking(activeOrderId);
+        openTrackingModal();
+      }
     }
 
-    // Realtime Tracking
-    let tMap, tRiderMarker;
+    /* ==================== LIVE TRACKING ==================== */
+    let tMap, tMarker;
     function openTrackingModal() {
       document.getElementById('trackingModal').style.display = 'flex';
       setTimeout(() => {
         if (!tMap) {
           tMap = L.map('trackingLiveMap', { zoomControl: false }).setView([STORE_LAT, STORE_LNG], 14);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(tMap);
-          tRiderMarker = L.marker([STORE_LAT, STORE_LNG]).addTo(tMap);
+          tMarker = L.marker([STORE_LAT, STORE_LNG]).addTo(tMap);
         }
-      }, 150);
+      }, 200);
     }
     function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
     function listenLiveTracking(orderId) {
       socket.on(`tracking:${orderId}`, (data) => {
-        if (tRiderMarker && tMap) {
-          tRiderMarker.setLatLng([data.lat, data.lng]);
+        if (tMarker && tMap) {
+          tMarker.setLatLng([data.lat, data.lng]);
           tMap.setView([data.lat, data.lng]);
         }
       });
     }
 
-    // AI Chat
+    /* ==================== AI CHAT ==================== */
     function toggleAiChat() {
-      const w = document.getElementById('aiChatWindow');
-      w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
+      const box = document.getElementById('aiChatBox');
+      box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
     }
     function sendAiMessage() {
-      const input = document.getElementById('aiChatInput');
-      const val = input.value.trim();
-      if (!val) return;
-      const box = document.getElementById('aiChatMessages');
-      box.innerHTML += `<div style="background:var(--primary); color:white; padding:8px 12px; border-radius:12px; align-self:flex-end;">${val}</div>`;
-      input.value = '';
+      const inp = document.getElementById('aiInput');
+      const txt = inp.value.trim();
+      if (!txt) return;
+
+      const container = document.getElementById('aiMsgContainer');
+      container.innerHTML += `<div style="background:var(--primary); color:white; padding:8px 12px; border-radius:12px; align-self:flex-end;">${txt}</div>`;
+      inp.value = '';
 
       setTimeout(() => {
-        box.innerHTML += `<div style="background:white; padding:8px 12px; border-radius:12px; border:1px solid #e2e8f0; align-self:flex-start;">যেকোনো অর্ডার বা ডেলিভারির বিষয়ে সরাসরি <a href="https://wa.me/${ADMIN_WHATSAPP_NUMBER}" target="_blank" style="color:var(--primary); font-weight:bold;">WhatsApp (+91 8100002156)</a> এ মেসেজ দিন।</div>`;
-        box.scrollTop = box.scrollHeight;
+        container.innerHTML += `<div style="background:white; padding:8px 12px; border-radius:12px; border:1px solid var(--border); align-self:flex-start;">যেকোনো জিজ্ঞাসা বা ডেলিভারি তথ্যের জন্য সরাসরি <a href="https://wa.me/${ADMIN_WHATSAPP_NUMBER}" target="_blank" style="color:var(--primary); font-weight:bold;">WhatsApp (+91 8100002156)</a> এ যোগাযোগ করতে পারেন।</div>`;
+        container.scrollTop = container.scrollHeight;
       }, 400);
     }
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    }
-
-    window.addEventListener('DOMContentLoaded', init);
+    window.addEventListener('DOMContentLoaded', initCatalog);
   </script>
 </body>
 </html>
