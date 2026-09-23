@@ -3,258 +3,167 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Kwiky Delivery Partner</title>
+  <title>Kwiky Hero | Delivery Partner App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --swiggy-orange: #fc8019;
-      --swiggy-black: #171a29;
-      --swiggy-green: #2ecc71;
-      --swiggy-blue: #0984e3;
-      --swiggy-red: #e74c3c;
-      --bg-gray: #f2f2f6;
-      --text-muted: #93959f;
+      --primary: #fc8019;
+      --dark: #0f172a;
+      --card: #1e293b;
+      --green: #22c55e;
+      --border: #334155;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--bg-gray); color: #282c3f; padding-bottom: 50px; }
+    body { background-color: #0b1120; color: white; padding: 14px; padding-bottom: 80px; }
 
-    .partner-topbar {
-      background-color: var(--swiggy-black);
-      color: #ffffff;
-      padding: 14px 16px;
+    .rider-nav {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      margin-bottom: 16px;
     }
-    .partner-id-box { display: flex; align-items: center; gap: 10px; }
-    .partner-avatar {
-      width: 42px;
-      height: 42px;
-      background: var(--swiggy-orange);
-      border-radius: 50%;
+    .duty-badge {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--green);
+      border: 1px solid var(--green);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .trip-card {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .trip-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 12px; }
+    
+    .addr-box {
+      background: #0b1120;
+      padding: 12px;
+      border-radius: 10px;
+      margin: 10px 0;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .btn-nav-map {
+      background: #0284c7;
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 19px;
-      color: #fff;
-    }
-
-    .duty-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #282c3f;
-      padding: 8px 14px;
-      border-radius: 24px;
-      cursor: pointer;
-      border: 1.5px solid #3d4152;
-      transition: all 0.2s ease;
-    }
-    .duty-indicator { width: 10px; height: 10px; border-radius: 50%; background: #7e818c; }
-    .duty-pill.active { background: #11361b; border-color: var(--swiggy-green); }
-    .duty-pill.active .duty-indicator { background: var(--swiggy-green); box-shadow: 0 0 10px var(--swiggy-green); }
-    .duty-pill span { font-size: 12px; font-weight: 800; color: #fff; }
-
-    .alert-banner {
-      display: none;
-      background: #d63031;
-      color: white;
-      padding: 12px 16px;
-      text-align: center;
-      font-weight: 900;
-      font-size: 13px;
-    }
-
-    .order-feed-container { padding: 14px 16px; }
-    .order-ticket {
-      background: #ffffff;
-      border-radius: 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-      overflow: hidden;
-      border: 1px solid #e9e9eb;
-    }
-    .ticket-header {
-      background: #fafafb;
-      padding: 12px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #f0f0f2;
-    }
-    .ticket-body { padding: 14px; }
-    .button-grid { display: flex; gap: 8px; margin-top: 12px; }
-
-    .action-flow-btn {
-      flex: 2;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 13px;
+      gap: 6px;
       font-weight: 800;
-      color: #ffffff;
-      cursor: pointer;
-      text-transform: uppercase;
+      font-size: 12px;
+      margin-top: 10px;
     }
-    .flow-accept { background: var(--swiggy-orange); }
-    .flow-picked { background: var(--swiggy-blue); }
-    .flow-out { background: #8e44ad; }
-    .flow-deliver { background: var(--swiggy-green); }
+    .btn-rider-action {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-pickup { background: var(--primary); color: white; }
+    .btn-deliver { background: var(--green); color: white; }
   </style>
 </head>
 <body>
 
-  <header class="partner-topbar">
-    <div class="partner-id-box">
-      <div class="partner-avatar"><i class="fa-solid fa-motorcycle"></i></div>
+  <div class="rider-nav">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="background: var(--primary); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900;">
+        <i class="fa-solid fa-motorcycle"></i>
+      </div>
       <div>
-        <h2 style="font-size: 15px;">Kwiky Partner</h2>
-        <p id="riderDisplayId" style="font-size: 11px; color: var(--text-muted);">ID: #KW-884</p>
+        <h3 style="font-size: 14px; font-weight: 900;">Rider Hero #KW-171</h3>
+        <p style="font-size: 10px; color: #94a3b8;">Motovolt E-Bike Delivery</p>
       </div>
     </div>
+    <span class="duty-badge">● Online On-Duty</span>
+  </div>
 
-    <div class="duty-pill" id="dutyBtn" onclick="toggleDuty()">
-      <div class="duty-indicator"></div>
-      <span id="dutyText">GO ONLINE</span>
-    </div>
-  </header>
-
-  <div class="alert-banner" id="alertBanner">🚨 NEW ORDER WAITING! ACCEPT NOW! 🚨</div>
-
-  <main class="order-feed-container">
-    <div id="ordersContainer">
-      <p style="text-align: center; color: var(--text-muted); padding: 40px;">Toggle ONLINE to start duty</p>
-    </div>
-  </main>
+  <h3 style="font-size: 15px; font-weight: 900; margin-bottom: 12px;">Active Deliveries</h3>
+  <div id="riderTripsContainer">Loading assigned trips...</div>
 
   <script>
-    let riderId = localStorage.getItem('kwiky_rider_id') || ('KW-' + Math.floor(100 + Math.random() * 900));
-    localStorage.setItem('kwiky_rider_id', riderId);
-    document.getElementById('riderDisplayId').innerText = `ID: #${riderId}`;
-
-    let pollInterval = null;
-    let lastLat = 22.5726, lastLng = 88.3639;
-
-    function init() {
-      if (localStorage.getItem('kwiky_rider_duty') === 'ONLINE') {
-        setDutyUI(true);
-        startDuty();
-      }
-    }
-
-    function toggleDuty() {
-      const isOnline = localStorage.getItem('kwiky_rider_duty') === 'ONLINE';
-      const nextState = !isOnline;
-      localStorage.setItem('kwiky_rider_duty', nextState ? 'ONLINE' : 'OFFLINE');
-      setDutyUI(nextState);
-      if (nextState) startDuty();
-      else stopDuty();
-    }
-
-    function setDutyUI(online) {
-      const btn = document.getElementById('dutyBtn');
-      const txt = document.getElementById('dutyText');
-      if (online) {
-        btn.classList.add('active');
-        txt.innerText = "ONLINE";
-      } else {
-        btn.classList.remove('active');
-        txt.innerText = "GO ONLINE";
-        document.getElementById('ordersContainer').innerHTML = '<p style="text-align:center; padding:40px; color:#888;">You are Offline</p>';
-      }
-    }
-
-    function startDuty() {
-      if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(pos => {
-          lastLat = pos.coords.latitude;
-          lastLng = pos.coords.longitude;
-          pingServer();
-        });
-      } else {
-        pingServer();
-      }
-
-      fetchOrders();
-      if (!pollInterval) pollInterval = setInterval(fetchOrders, 4000);
-    }
-
-    function stopDuty() {
-      if (pollInterval) clearInterval(pollInterval);
-      pollInterval = null;
-    }
-
-    async function pingServer() {
-      fetch('/api/rider/ping', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ riderId, name: "Rider " + riderId, phone: "01711223344", isOnline: true, lat: lastLat, lng: lastLng })
-      }).catch(() => {});
-    }
-
-    async function fetchOrders() {
-      if (localStorage.getItem('kwiky_rider_duty') !== 'ONLINE') return;
-      pingServer();
+    async function loadRiderOrders() {
+      const container = document.getElementById('riderTripsContainer');
       try {
-        const res = await fetch(`/api/rider/assigned-orders?riderId=${riderId}`);
+        const res = await fetch('/api/orders');
         const data = await res.json();
-        renderOrders(data.orders || []);
-      } catch (err) {}
-    }
+        const activeTrips = (data && data.orders) ? data.orders.filter(o => o.status !== 'Delivered') : [];
 
-    function renderOrders(orders) {
-      const cont = document.getElementById('ordersContainer');
-      if (orders.length === 0) {
-        cont.innerHTML = '<p style="text-align:center; padding:40px; color:#888;">Waiting for orders near your radar...</p>';
-        return;
-      }
-
-      cont.innerHTML = orders.map(ord => {
-        let actionBtn = '';
-        if (ord.status === 'Pending' || ord.status === 'Assigned') {
-          actionBtn = `<button class="action-flow-btn flow-accept" onclick="updateStatus('${ord._id}', 'Accepted')">Accept Order</button>`;
-        } else if (ord.status === 'Accepted') {
-          actionBtn = `<button class="action-flow-btn flow-picked" onclick="updateStatus('${ord._id}', 'Picked Up')">Confirm Picked Up</button>`;
-        } else if (ord.status === 'Picked Up') {
-          actionBtn = `<button class="action-flow-btn flow-out" onclick="updateStatus('${ord._id}', 'Out for Delivery')">Out for Delivery</button>`;
-        } else if (ord.status === 'Out for Delivery') {
-          actionBtn = `<button class="action-flow-btn flow-deliver" onclick="updateStatus('${ord._id}', 'Delivered')">Deliver & Collect Cash</button>`;
+        if (activeTrips.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center; padding: 40px 20px; background: var(--card); border-radius: 14px; border: 1px solid var(--border);">
+              <i class="fa-solid fa-circle-check" style="font-size: 36px; color: var(--green); margin-bottom: 10px;"></i>
+              <h4>All Deliveries Completed!</h4>
+              <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Wait for new customer orders.</p>
+            </div>
+          `;
+          return;
         }
 
-        return `
-          <div class="order-ticket">
-            <div class="ticket-header">
-              <strong>ORDER #${ord._id.slice(-6)}</strong>
-              <span style="font-size:11px; font-weight:800; color:var(--swiggy-orange);">${ord.status}</span>
-            </div>
-            <div class="ticket-body">
-              <p><strong>Customer:</strong> ${ord.name} (${ord.phone})</p>
-              <p style="font-size:12px; color:#666; margin:4px 0;"><strong>Address:</strong> ${ord.address}</p>
-              <p><strong>Collect Cash:</strong> ${ord.total} BDT</p>
-              <div class="button-grid">
-                ${actionBtn}
+        container.innerHTML = activeTrips.map(trip => `
+          <div class="trip-card">
+            <div class="trip-header">
+              <div>
+                <strong style="font-size: 15px;">Order #${(trip._id || '').slice(-6)}</strong>
+                <p style="font-size: 11px; color: #94a3b8;">Customer: ${trip.name} (${trip.phone})</p>
               </div>
+              <a href="tel:${trip.phone}" style="background: var(--green); color:white; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-size: 11px; font-weight: 800;">
+                <i class="fa-solid fa-phone"></i> Call
+              </a>
             </div>
+
+            <div class="addr-box">
+              <p style="color: #94a3b8; font-size: 10px; font-weight: 800;">DELIVER TO ADDRESS:</p>
+              <p style="font-size: 12px; font-weight: 700; margin-top: 2px;">${trip.address}</p>
+              <p style="font-size: 11px; color: var(--primary); margin-top: 6px;"><strong>Collect Cash:</strong> ৳${trip.total} (COD)</p>
+            </div>
+
+            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trip.address)}" target="_blank" class="btn-nav-map">
+              <i class="fa-solid fa-diamond-turn-right"></i> Open Navigation in Google Maps
+            </a>
+
+            ${trip.status !== 'Out for Delivery' 
+              ? `<button class="btn-rider-action btn-pickup" onclick="setTripStatus('${trip._id}', 'Out for Delivery')"><i class="fa-solid fa-box"></i> Confirm Food Picked Up</button>` 
+              : `<button class="btn-rider-action btn-deliver" onclick="setTripStatus('${trip._id}', 'Delivered')"><i class="fa-solid fa-circle-check"></i> Collect Cash & Mark Delivered</button>`
+            }
           </div>
-        `;
-      }).join('');
+        `).join('');
+      } catch (e) {
+        container.innerHTML = `<p style="color: #94a3b8; text-align:center;">Could not fetch orders.</p>`;
+      }
     }
 
-    async function updateStatus(id, st) {
-      await fetch(`/api/rider/order/${id}/status`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: st, riderId, riderName: "Rider #" + riderId, riderPhone: "01711223344" })
-      });
-      fetchOrders();
+    async function setTripStatus(id, st) {
+      try {
+        await fetch(`/api/order/${id}/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: st })
+        });
+      } catch (e) {}
+      loadRiderOrders();
     }
 
-    window.addEventListener('DOMContentLoaded', init);
+    setInterval(loadRiderOrders, 4000);
+    window.addEventListener('DOMContentLoaded', loadRiderOrders);
   </script>
 </body>
 </html>
