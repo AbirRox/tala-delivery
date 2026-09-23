@@ -12,16 +12,17 @@
   <style>
     :root {
       --primary: #fc8019;
+      --primary-dark: #e26e10;
       --dark: #171a29;
       --light-gray: #f4f5f7;
       --text-muted: #686b78;
       --border: #e2e8f0;
-      --green: #2ecc71;
+      --green: #60b244;
       --blue: #0984e3;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 90px; }
+    body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 110px; }
 
     /* Top Navigation */
     .navbar {
@@ -79,6 +80,15 @@
       align-items: center;
       gap: 6px;
       cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .cart-btn-pill.pulse {
+      animation: cartPulse 0.35s ease;
+    }
+    @keyframes cartPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.18); }
+      100% { transform: scale(1); }
     }
 
     /* 4 Primary Category Tabs */
@@ -135,6 +145,7 @@
       font-weight: 600;
       cursor: pointer;
       color: #334155;
+      transition: all 0.2s;
     }
     .subcat-pill.active {
       background: var(--dark);
@@ -152,7 +163,9 @@
       font-size: 13px;
       outline: none;
       background: white;
+      transition: border-color 0.2s;
     }
+    .search-input:focus { border-color: var(--primary); }
 
     .section-title-wrap {
       padding: 10px 16px 12px;
@@ -220,17 +233,21 @@
       padding: 0 16px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-      gap: 12px;
+      gap: 14px;
     }
     .product-card {
       background: white;
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .product-card:hover {
+      box-shadow: 0 6px 14px rgba(0,0,0,0.07);
     }
     .prod-img-holder { width: 100%; height: 135px; background: #f8fafc; position: relative; }
     .prod-img-holder img { width: 100%; height: 100%; object-fit: cover; }
@@ -246,46 +263,135 @@
       border-radius: 4px;
     }
 
-    .prod-body { padding: 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+    .prod-body { padding: 12px 10px 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
     .prod-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; line-height: 1.3; }
     .prod-subcat { font-size: 10px; color: var(--text-muted); margin-bottom: 6px; }
-    .prod-price { font-size: 14px; font-weight: 900; color: var(--primary); margin-bottom: 8px; }
+    .prod-price { font-size: 14px; font-weight: 900; color: #1e293b; margin-bottom: 10px; }
 
-    /* Interactive Stepper Button */
-    .cart-btn-container { width: 100%; }
+    /* ==================== SWIGGY NATURAL ANIMATED STEPPER ==================== */
+    .cart-btn-container {
+      width: 100%;
+      height: 34px;
+      position: relative;
+    }
+
+    /* Natural White + ADD Button */
     .btn-add {
       width: 100%;
-      background: white;
-      color: var(--primary);
-      border: 1.5px solid var(--primary);
-      padding: 6px;
-      border-radius: 6px;
+      height: 100%;
+      background: #ffffff;
+      color: #60b244;
+      border: 1px solid #d4d5d9;
+      border-radius: 8px;
       font-size: 12px;
       font-weight: 800;
       cursor: pointer;
       text-transform: uppercase;
-      transition: all 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .btn-add:active { background: var(--primary); color: white; }
+    .btn-add:active {
+      transform: scale(0.92);
+      background: #f0fdf4;
+      border-color: #60b244;
+    }
 
+    /* Swiggy Green Stepper Pill */
     .stepper-box {
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--primary);
-      color: white;
-      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid #60b244;
+      border-radius: 8px;
       overflow: hidden;
       font-weight: 800;
-      font-size: 13px;
+      box-shadow: 0 2px 6px rgba(96, 178, 68, 0.2);
+      animation: popStepper 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .stepper-btn { background: none; border: none; color: white; padding: 6px 12px; font-size: 14px; font-weight: 900; cursor: pointer; }
-    .stepper-btn:active { background: rgba(0,0,0,0.15); }
-    .stepper-count { padding: 0 4px; }
+    @keyframes popStepper {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
 
-    /* ========================================================
-       SWIGGY EXACT REPLICA CART & CHECKOUT STYLES
-       ======================================================== */
+    .stepper-btn {
+      background: none;
+      border: none;
+      color: #60b244;
+      width: 32px;
+      height: 100%;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, transform 0.12s;
+      user-select: none;
+    }
+    .stepper-btn:active {
+      background: #f0fdf4;
+      transform: scale(0.8);
+    }
+
+    .stepper-count {
+      color: #60b244;
+      font-size: 13px;
+      font-weight: 900;
+      min-width: 20px;
+      text-align: center;
+      display: inline-block;
+      transition: transform 0.18s ease;
+    }
+    .stepper-count.flip {
+      animation: numberFlip 0.18s ease-out;
+    }
+    @keyframes numberFlip {
+      0% { transform: translateY(-4px) scale(0.9); opacity: 0.5; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    /* ==================== SWIGGY FLOATING CART BAR (LIVELY) ==================== */
+    .floating-cart-bar {
+      position: fixed;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      max-width: 500px;
+      margin: 0 auto;
+      background: #60b244;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 14px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 24px rgba(96, 178, 68, 0.45);
+      z-index: 180;
+      cursor: pointer;
+      animation: bounceUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes bounceUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .floating-cart-bar .cart-info-strip strong { font-size: 14px; letter-spacing: 0.3px; }
+    .floating-cart-bar .cart-info-strip p { font-size: 11px; opacity: 0.9; }
+    .floating-cart-bar .view-cart-btn {
+      font-size: 13px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+    }
+
+    /* ==================== SWIGGY CART SHEET ==================== */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -295,7 +401,6 @@
       justify-content: center;
       align-items: flex-end;
     }
-
     .swiggy-cart-sheet {
       background: #f4f5f7;
       width: 100%;
@@ -307,7 +412,6 @@
       display: flex;
       flex-direction: column;
     }
-
     @keyframes sheetSlideUp {
       from { transform: translateY(100%); }
       to { transform: translateY(0); }
@@ -324,8 +428,6 @@
       align-items: center;
       border-bottom: 1px solid var(--border);
     }
-    .cart-sheet-header h3 { font-size: 16px; font-weight: 900; }
-
     .cart-sheet-content {
       padding: 14px 16px 100px;
       display: flex;
@@ -333,7 +435,6 @@
       gap: 14px;
     }
 
-    /* Swiggy Restaurant Mini Header in Cart */
     .cart-store-card {
       background: #ffffff;
       border-radius: 16px;
@@ -343,22 +444,9 @@
       gap: 12px;
       border: 1px solid var(--border);
     }
-    .cart-store-img {
-      width: 50px;
-      height: 50px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-    .cart-store-info h4 { font-size: 15px; font-weight: 800; }
-    .cart-store-info p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-    /* Items Container Card */
-    .cart-items-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px solid var(--border);
-    }
+    .cart-store-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
+    .cart-items-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); }
+    
     .cart-item-row-swiggy {
       display: flex;
       justify-content: space-between;
@@ -369,187 +457,42 @@
     .cart-item-row-swiggy:last-child { border-bottom: none; }
 
     .item-meta { display: flex; align-items: center; gap: 8px; }
-    .veg-icon {
-      width: 14px;
-      height: 14px;
-      border: 1.5px solid #2ecc71;
-      border-radius: 3px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .veg-icon { width: 14px; height: 14px; border: 1.5px solid #2ecc71; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
     .veg-dot { width: 6px; height: 6px; background: #2ecc71; border-radius: 50%; }
-
-    .nonveg-icon {
-      width: 14px;
-      height: 14px;
-      border: 1.5px solid #e74c3c;
-      border-radius: 3px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .nonveg-dot {
-      width: 0;
-      height: 0;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-bottom: 7px solid #e74c3c;
-    }
+    .nonveg-icon { width: 14px; height: 14px; border: 1.5px solid #e74c3c; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
+    .nonveg-dot { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid #e74c3c; }
 
     .swiggy-mini-stepper {
       display: flex;
       align-items: center;
-      border: 1px solid #d4d5d9;
+      border: 1px solid #60b244;
       border-radius: 6px;
       overflow: hidden;
       background: white;
       height: 30px;
     }
-    .swiggy-mini-stepper button {
-      background: none;
-      border: none;
-      width: 28px;
-      height: 100%;
-      font-size: 14px;
-      font-weight: 800;
-      color: #60b244;
-      cursor: pointer;
-    }
-    .swiggy-mini-stepper span {
-      font-size: 12px;
-      font-weight: 800;
-      padding: 0 4px;
-      color: #60b244;
-    }
+    .swiggy-mini-stepper button { background: none; border: none; width: 28px; height: 100%; font-size: 14px; font-weight: 800; color: #60b244; cursor: pointer; }
+    .swiggy-mini-stepper span { font-size: 12px; font-weight: 800; padding: 0 4px; color: #60b244; }
 
-    /* Cooking & Delivery Instructions */
-    .cart-instructions-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px solid var(--border);
-    }
-    .instructions-chips {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      margin-bottom: 10px;
-    }
-    .instructions-chips::-webkit-scrollbar { display: none; }
+    .cart-instructions-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); }
+    .instructions-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 10px; }
+    .inst-chip { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid var(--border); background: #f8fafc; color: #475569; cursor: pointer; white-space: nowrap; }
+    .inst-chip.active { background: #fff3e6; border-color: var(--primary); color: var(--primary); }
 
-    .inst-chip {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      border: 1px solid var(--border);
-      background: #f8fafc;
-      color: #475569;
-      cursor: pointer;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .inst-chip.active {
-      background: #fff3e6;
-      border-color: var(--primary);
-      color: var(--primary);
-    }
+    .cart-coupon-card { background: #ffffff; border-radius: 16px; padding: 12px 14px; border: 1px dashed var(--primary); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .cart-tip-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); }
+    .tip-pills-row { display: flex; gap: 8px; margin-top: 8px; }
+    .tip-pill { flex: 1; padding: 8px 0; border: 1px solid var(--border); border-radius: 10px; font-size: 12px; font-weight: 800; text-align: center; cursor: pointer; background: #f8fafc; }
+    .tip-pill.active { background: #fff3e6; border-color: var(--primary); color: var(--primary); }
 
-    .instruction-input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 12px;
-      outline: none;
-    }
+    .cart-address-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); }
+    .addr-input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; margin-top: 6px; outline: none; }
 
-    /* Coupons & Offers Strip */
-    .cart-coupon-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 12px 14px;
-      border: 1px dashed var(--primary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-    .coupon-left { display: flex; align-items: center; gap: 10px; }
-    .coupon-left i { font-size: 18px; color: var(--primary); }
-    .coupon-left strong { font-size: 13px; }
-    .coupon-left p { font-size: 10px; color: var(--text-muted); }
-
-    /* Tip Delivery Partner */
-    .cart-tip-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px solid var(--border);
-    }
-    .tip-title { font-size: 13px; font-weight: 800; margin-bottom: 4px; }
-    .tip-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
-    .tip-pills-row { display: flex; gap: 8px; }
-    .tip-pill {
-      flex: 1;
-      padding: 8px 0;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 800;
-      text-align: center;
-      cursor: pointer;
-      background: #f8fafc;
-    }
-    .tip-pill.active {
-      background: #fff3e6;
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    /* Swiggy Bill Details */
-    .cart-bill-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 16px;
-      border: 1px solid var(--border);
-    }
-    .bill-title { font-size: 13px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .cart-bill-card { background: #ffffff; border-radius: 16px; padding: 16px; border: 1px solid var(--border); }
+    .bill-title { font-size: 13px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
     .bill-line-item { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-    .bill-line-item.discount { color: #2ecc71; font-weight: 700; }
-    .bill-final-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px dashed #cbd5e1;
-      margin-top: 10px;
-      padding-top: 12px;
-      font-size: 15px;
-      font-weight: 900;
-    }
+    .bill-final-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; margin-top: 10px; padding-top: 12px; font-size: 15px; font-weight: 900; }
 
-    /* Delivery Address / Customer Box in Cart */
-    .cart-address-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px solid var(--border);
-    }
-    .addr-input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 12px;
-      margin-top: 6px;
-      outline: none;
-    }
-
-    /* Fixed Floating Proceed Bar (Swiggy Signature Bar) */
     .cart-floating-bottom-bar {
       position: fixed;
       bottom: 0;
@@ -566,9 +509,6 @@
       align-items: center;
       border-top: 1px solid var(--border);
     }
-    .pay-amount-box p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; }
-    .pay-amount-box h3 { font-size: 18px; font-weight: 900; color: var(--dark); }
-
     .btn-swiggy-pay {
       background: #60b244;
       color: #ffffff;
@@ -578,56 +518,22 @@
       font-size: 14px;
       font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
+      transition: background 0.2s;
     }
     .btn-swiggy-pay:active { background: #519b38; }
 
-    /* Modals */
-    .modal-box {
-      background: white;
-      width: 100%;
-      max-width: 500px;
-      border-radius: 20px 20px 0 0;
-      padding: 20px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
-      margin-bottom: 12px;
-    }
-
+    /* Modals & Tracking */
+    .modal-box { background: white; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 20px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px; }
     .form-group { margin-top: 10px; }
     .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
     .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
-
-    .btn-checkout {
-      width: 100%;
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .compliance-footer {
-      background: var(--dark);
-      color: #94a3b8;
-      padding: 24px 16px;
-      font-size: 12px;
-      text-align: center;
-    }
+    .btn-checkout { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; }
+    .compliance-footer { background: var(--dark); color: #94a3b8; padding: 24px 16px; font-size: 12px; text-align: center; }
   </style>
 </head>
 <body>
@@ -651,7 +557,7 @@
         <span id="navAccountText">Account</span>
       </button>
 
-      <button class="cart-btn-pill" onclick="openCartModal()">
+      <button class="cart-btn-pill" id="navCartBtn" onclick="openCartModal()">
         <i class="fa-solid fa-bag-shopping"></i>
         <span id="cartCount">0</span>
       </button>
@@ -699,18 +605,26 @@
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
+  <!-- Lively Floating Bottom Cart Pill (Swiggy Signature) -->
+  <div class="floating-cart-bar" id="floatingCartBar" onclick="openCartModal()">
+    <div class="cart-info-strip">
+      <strong id="floatingBarItemsText">1 ITEM | 220 BDT</strong>
+      <p id="floatingBarStoreText">From Sultan's Dine</p>
+    </div>
+    <div class="view-cart-btn">
+      View Cart <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="compliance-footer">
     <a href="/rider.html" style="color: var(--primary); text-decoration: none; font-weight: 700;">Delivery Partner Portal</a>
     <p style="margin-top: 8px;">© 2026 Kwiky Online Delivery Platform</p>
   </footer>
 
-  <!-- ========================================================
-       SWIGGY EXACT REPLICA CART & CHECKOUT SHEET
-       ======================================================== -->
+  <!-- ==================== SWIGGY REPLICA CART SHEET ==================== -->
   <div class="modal-backdrop" id="cartModal">
     <div class="swiggy-cart-sheet">
-      <!-- Header -->
       <div class="cart-sheet-header">
         <div>
           <h3>Your Food Cart</h3>
@@ -719,9 +633,7 @@
         <i class="fa-solid fa-xmark" style="font-size: 22px; cursor: pointer; color: #475569;" onclick="closeCartModal()"></i>
       </div>
 
-      <!-- Scrollable Content -->
       <div class="cart-sheet-content" id="cartSheetContent">
-        <!-- 1. Store Details Mini Card -->
         <div class="cart-store-card" id="cartStoreHeader">
           <img class="cart-store-img" id="cartStoreImg" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300" alt="Restaurant" />
           <div class="cart-store-info">
@@ -730,12 +642,10 @@
           </div>
         </div>
 
-        <!-- 2. Items List -->
         <div class="cart-items-card">
           <div id="swiggyItemsList"></div>
         </div>
 
-        <!-- 3. Instructions & Notes -->
         <div class="cart-instructions-card">
           <p style="font-size: 12px; font-weight: 800; margin-bottom: 8px;">Delivery & Cooking Instructions</p>
           <div class="instructions-chips">
@@ -746,7 +656,6 @@
           <input type="text" id="customCookingNote" class="instruction-input" placeholder="Write instructions for restaurant (e.g. less spicy)..." />
         </div>
 
-        <!-- 4. Coupon Strip -->
         <div class="cart-coupon-card" onclick="applySwiggyCoupon()">
           <div class="coupon-left">
             <i class="fa-solid fa-percent"></i>
@@ -758,10 +667,9 @@
           <span id="couponActionBtn" style="font-size: 12px; font-weight: 900; color: var(--primary);">APPLY</span>
         </div>
 
-        <!-- 5. Tip Delivery Hero -->
         <div class="cart-tip-card">
-          <div class="tip-title">Tip your delivery hero</div>
-          <div class="tip-sub">Thank your delivery partner for bringing your order quickly.</div>
+          <p style="font-size: 13px; font-weight: 800;">Tip your delivery hero</p>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Thank your partner for fast delivery.</p>
           <div class="tip-pills-row">
             <div class="tip-pill" onclick="selectTip(0, this)">No Tip</div>
             <div class="tip-pill" onclick="selectTip(20, this)">20 BDT</div>
@@ -770,58 +678,27 @@
           </div>
         </div>
 
-        <!-- 6. Delivery Address Selection -->
         <div class="cart-address-card">
           <p style="font-size: 12px; font-weight: 800;"><i class="fa-solid fa-location-dot" style="color: #e74c3c;"></i> Deliver To</p>
-          <input type="text" id="custAddress" class="addr-input" placeholder="Enter complete house address, landmark, area..." />
+          <input type="text" id="custAddress" class="addr-input" placeholder="Enter complete address, house, floor, area..." />
         </div>
 
-        <!-- 7. Swiggy Itemized Bill Details -->
         <div class="cart-bill-card">
           <div class="bill-title"><i class="fa-solid fa-receipt"></i> Bill Details</div>
-          
-          <div class="bill-line-item">
-            <span>Item Total</span>
-            <span id="billItemTotal">0 BDT</span>
-          </div>
-
-          <div class="bill-line-item">
-            <span>Delivery Partner Fee</span>
-            <span id="billDeliveryPartnerFee">40 BDT</span>
-          </div>
-
-          <div class="bill-line-item">
-            <span>Platform Fee</span>
-            <span>3 BDT</span>
-          </div>
-
-          <div class="bill-line-item">
-            <span>Govt Taxes & Restaurant Charges (5%)</span>
-            <span id="billTaxCharges">0 BDT</span>
-          </div>
-
-          <div class="bill-line-item discount" id="discountRow" style="display: none;">
-            <span>Coupon Savings (KWIKY50)</span>
-            <span id="billDiscount">-50 BDT</span>
-          </div>
-
-          <div class="bill-line-item" id="tipRow">
-            <span>Delivery Partner Tip</span>
-            <span id="billTipAmount">30 BDT</span>
-          </div>
-
-          <div class="bill-final-row">
-            <span>To Pay</span>
-            <span id="billFinalToPay" style="color: var(--primary);">73 BDT</span>
-          </div>
+          <div class="bill-line-item"><span>Item Total</span><span id="billItemTotal">0 BDT</span></div>
+          <div class="bill-line-item"><span>Delivery Partner Fee</span><span id="billDeliveryPartnerFee">40 BDT</span></div>
+          <div class="bill-line-item"><span>Platform Fee</span><span>3 BDT</span></div>
+          <div class="bill-line-item"><span>Govt Taxes & Charges (5%)</span><span id="billTaxCharges">0 BDT</span></div>
+          <div class="bill-line-item" id="discountRow" style="display:none; color:#2ecc71; font-weight:700;"><span>Coupon (KWIKY50)</span><span id="billDiscount">-50 BDT</span></div>
+          <div class="bill-line-item" id="tipRow"><span>Delivery Tip</span><span id="billTipAmount">30 BDT</span></div>
+          <div class="bill-final-row"><span>To Pay</span><span id="billFinalToPay" style="color: var(--primary);">73 BDT</span></div>
         </div>
       </div>
 
-      <!-- Fixed Bottom Floating Bar -->
       <div class="cart-floating-bottom-bar">
-        <div class="pay-amount-box">
-          <p>Total Payable</p>
-          <h3 id="bottomBarPayAmount">73 BDT</h3>
+        <div>
+          <p style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800;">To Pay</p>
+          <h3 id="bottomBarPayAmount" style="font-size: 18px; font-weight: 900;">73 BDT</h3>
         </div>
         <button class="btn-swiggy-pay" onclick="handleCheckoutClick()">
           Proceed To Pay <i class="fa-solid fa-arrow-right"></i>
@@ -838,23 +715,14 @@
         <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeLoginModal()"></i>
       </div>
       <div id="loginStepPhone">
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter mobile number to receive 4-digit verification code.</p>
-        <div class="form-group">
-          <label>Your Name</label>
-          <input type="text" id="loginInputName" class="form-control" placeholder="E.g., Tanvir Ahmed" />
-        </div>
-        <div class="form-group">
-          <label>Mobile Number</label>
-          <input type="tel" id="loginInputPhone" class="form-control" placeholder="017xxxxxxxx" />
-        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter mobile number to receive 4-digit OTP code.</p>
+        <div class="form-group"><label>Your Name</label><input type="text" id="loginInputName" class="form-control" placeholder="E.g., Tanvir Ahmed" /></div>
+        <div class="form-group"><label>Mobile Number</label><input type="tel" id="loginInputPhone" class="form-control" placeholder="017xxxxxxxx" /></div>
         <button class="btn-checkout" style="margin-top: 14px;" onclick="sendLoginOtp()">Send OTP</button>
       </div>
       <div id="loginStepOtp" style="display: none;">
         <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter 4-digit code sent to <strong id="sentPhoneDisplay"></strong></p>
-        <div class="form-group">
-          <label>4-Digit OTP</label>
-          <input type="number" id="loginInputOtp" class="form-control" placeholder="E.g. 1234" style="text-align: center; font-size: 18px; letter-spacing: 4px;" />
-        </div>
+        <div class="form-group"><label>4-Digit OTP</label><input type="number" id="loginInputOtp" class="form-control" placeholder="E.g. 1234" style="text-align: center; font-size: 18px; letter-spacing: 4px;" /></div>
         <button class="btn-checkout" style="margin-top: 14px;" onclick="verifyLoginOtp()">Verify & Continue</button>
       </div>
     </div>
@@ -1039,13 +907,13 @@
       if (qty > 0) {
         return `
           <div class="stepper-box">
-            <button class="stepper-btn" onclick="updateItemQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', -1)">-</button>
-            <span class="stepper-count">${qty}</span>
-            <button class="stepper-btn" onclick="updateItemQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', 1)">+</button>
+            <button class="stepper-btn" onclick="animateUpdateQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', -1, this)">−</button>
+            <span class="stepper-count" id="count-span-${id}">${qty}</span>
+            <button class="stepper-btn" onclick="animateUpdateQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', 1, this)">+</button>
           </div>
         `;
       } else {
-        return `<button class="btn-add" onclick="updateItemQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', 1)">+ ADD</button>`;
+        return `<button class="btn-add" onclick="animateUpdateQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', 1, this)">+ ADD</button>`;
       }
     }
 
@@ -1082,20 +950,50 @@
       `).join('');
     }
 
-    function updateItemQty(id, rawName, price, rawStore, delta) {
-      const name = unescape(rawName);
-      const storeName = rawStore ? unescape(rawStore) : 'Kwiky Store';
+    /* ==================== NATURAL TACTILE ANIMATION HANDLER ==================== */
+    function animateUpdateQty(id, rawName, price, rawStore, delta, btnElement) {
+      // 1. Subtle Haptic Scale Down on Click
+      if (btnElement) {
+        btnElement.style.transform = 'scale(0.82)';
+      }
 
-      if (!cart[id]) cart[id] = { id, name, price, storeName, qty: 0 };
-      cart[id].qty += delta;
-      if (cart[id].qty <= 0) delete cart[id];
+      // 2. 90ms Organic Delay to simulate natural physical touch
+      setTimeout(() => {
+        if (btnElement) {
+          btnElement.style.transform = 'scale(1)';
+        }
 
-      const container = document.getElementById(`btn-container-${id}`);
-      if (container) container.innerHTML = getActionButtonHtml(id, escape(name), price, storeName);
-      updateCartUI();
+        const name = unescape(rawName);
+        const storeName = rawStore ? unescape(rawStore) : 'Kwiky Store';
+
+        if (!cart[id]) cart[id] = { id, name, price, storeName, qty: 0 };
+        cart[id].qty += delta;
+
+        if (cart[id].qty <= 0) {
+          delete cart[id];
+        }
+
+        const container = document.getElementById(`btn-container-${id}`);
+        if (container) {
+          container.innerHTML = getActionButtonHtml(id, escape(name), price, storeName);
+          const countSpan = document.getElementById(`count-span-${id}`);
+          if (countSpan) {
+            countSpan.classList.add('flip');
+            setTimeout(() => countSpan.classList.remove('flip'), 180);
+          }
+        }
+
+        // Cart pulse animation
+        const navCart = document.getElementById('navCartBtn');
+        if (navCart) {
+          navCart.classList.add('pulse');
+          setTimeout(() => navCart.classList.remove('pulse'), 350);
+        }
+
+        updateCartUI();
+      }, 90);
     }
 
-    /* ==================== SWIGGY REPLICA CART UI ==================== */
     function updateCartUI() {
       const cartItems = Object.values(cart);
       const totalCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
@@ -1103,19 +1001,24 @@
       document.getElementById('cartCount').innerText = totalCount;
       document.getElementById('cartItemsCountText').innerText = `${totalCount} item${totalCount !== 1 ? 's' : ''} in your cart`;
 
+      // Swiggy Lively Floating Cart Bar Handler
+      const floatBar = document.getElementById('floatingCartBar');
+      if (totalCount > 0) {
+        floatBar.style.display = 'flex';
+        const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+        document.getElementById('floatingBarItemsText').innerText = `${totalCount} ITEM${totalCount > 1 ? 'S' : ''} | ${subtotal} BDT`;
+        document.getElementById('floatingBarStoreText').innerText = `From ${cartItems[0].storeName || 'Kwiky Store'}`;
+      } else {
+        floatBar.style.display = 'none';
+      }
+
       const list = document.getElementById('swiggyItemsList');
       if (cartItems.length === 0) {
-        list.innerHTML = `
-          <div style="text-align: center; padding: 30px 10px;">
-            <i class="fa-solid fa-basket-shopping" style="font-size: 36px; color: #cbd5e1; margin-bottom: 8px;"></i>
-            <h4 style="font-size: 15px;">Your cart is empty</h4>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Explore our top partner restaurants and add delicious items!</p>
-          </div>
-        `;
+        list.innerHTML = `<div style="text-align:center; padding:30px; color:#888;">Your cart is empty</div>`;
         document.getElementById('cartStoreHeader').style.display = 'none';
       } else {
         document.getElementById('cartStoreHeader').style.display = 'flex';
-        const primaryStore = cartItems[0].storeName || "Kwiky Express";
+        const primaryStore = cartItems[0].storeName || "Kwiky Store";
         document.getElementById('cartStoreTitle').innerText = primaryStore;
 
         list.innerHTML = cartItems.map(item => {
@@ -1136,9 +1039,9 @@
 
               <div style="display: flex; align-items: center; gap: 14px;">
                 <div class="swiggy-mini-stepper">
-                  <button onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, '${escape(item.storeName)}', -1)">-</button>
+                  <button onclick="animateUpdateQty('${item.id}', '${escape(item.name)}', ${item.price}, '${escape(item.storeName)}', -1, this)">−</button>
                   <span>${item.qty}</span>
-                  <button onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, '${escape(item.storeName)}', 1)">+</button>
+                  <button onclick="animateUpdateQty('${item.id}', '${escape(item.name)}', ${item.price}, '${escape(item.storeName)}', 1, this)">+</button>
                 </div>
                 <div style="font-size: 13px; font-weight: 900; width: 60px; text-align: right;">${item.price * item.qty} BDT</div>
               </div>
@@ -1147,12 +1050,10 @@
         }).join('');
       }
 
-      // Detailed Swiggy Bill Calculations
       const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
       const deliveryFee = subtotal > 0 ? DELIVERY_FEE : 0;
       const taxCharges = subtotal > 0 ? Math.round(subtotal * 0.05) : 0;
       const totalDiscount = (subtotal >= 200 && couponDiscount > 0) ? couponDiscount : 0;
-      
       const finalToPay = subtotal > 0 ? Math.max(0, subtotal + deliveryFee + PLATFORM_FEE + taxCharges + currentTip - totalDiscount) : 0;
 
       document.getElementById('billItemTotal').innerText = `${subtotal} BDT`;
@@ -1172,11 +1073,8 @@
 
     function toggleInstruction(el, text) {
       el.classList.toggle('active');
-      if (el.classList.contains('active')) {
-        selectedInstructions.push(text);
-      } else {
-        selectedInstructions = selectedInstructions.filter(t => t !== text);
-      }
+      if (el.classList.contains('active')) selectedInstructions.push(text);
+      else selectedInstructions = selectedInstructions.filter(t => t !== text);
     }
 
     function selectTip(amount, el) {
@@ -1189,17 +1087,13 @@
     function applySwiggyCoupon() {
       const cartItems = Object.values(cart);
       const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      if (subtotal < 200) {
-        alert("Add items worth 200 BDT or more to apply KWIKY50 coupon!");
-        return;
-      }
+      if (subtotal < 200) return alert("Add items worth 200 BDT or more to apply KWIKY50 coupon!");
 
       if (couponDiscount === 0) {
         couponDiscount = 50;
         document.getElementById('couponStatusText').innerText = "Coupon 'KWIKY50' Applied!";
         document.getElementById('couponActionBtn').innerText = "REMOVE";
         document.getElementById('couponActionBtn').style.color = "#e74c3c";
-        alert("Coupon applied! 50 BDT discount added to your bill.");
       } else {
         couponDiscount = 0;
         document.getElementById('couponStatusText').innerText = "Apply Coupon Code";
@@ -1213,9 +1107,8 @@
     function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
     function openTrackingModal() { document.getElementById('trackingModal').style.display = 'flex'; }
     function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
-    function openProfileModal() { alert("Customer profile active. Orders placed will update live."); }
+    function openProfileModal() { alert("Customer Profile verified and active."); }
 
-    // Checkout & Login Verification
     function handleCheckoutClick() {
       const cartItems = Object.values(cart);
       if (cartItems.length === 0) return alert("Your cart is empty!");
