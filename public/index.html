@@ -210,6 +210,7 @@
       align-items: center;
       gap: 4px;
     }
+    .res-badge i { color: #f1c40f; }
     .res-details { padding: 14px; }
     .res-details h4 { font-size: 16px; font-weight: 900; color: var(--dark); }
     .res-details p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
@@ -282,37 +283,310 @@
     .stepper-btn:active { background: rgba(0,0,0,0.15); }
     .stepper-count { padding: 0 4px; }
 
-    /* Fare Breakup Box */
-    .bill-box {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      margin: 14px 0;
-    }
-    .bill-box-title { font-size: 12px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
-    .bill-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
-    .bill-total-row {
-      display: flex;
-      justify-content: space-between;
-      border-top: 1px dashed var(--border);
-      margin-top: 8px;
-      padding-top: 10px;
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--dark);
-    }
-
-    /* Modal Backdrop & General Modals */
+    /* ========================================================
+       SWIGGY EXACT REPLICA CART & CHECKOUT STYLES
+       ======================================================== */
     .modal-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.65);
       z-index: 300;
       justify-content: center;
       align-items: flex-end;
     }
+
+    .swiggy-cart-sheet {
+      background: #f4f5f7;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 20px 20px 0 0;
+      max-height: 94vh;
+      overflow-y: auto;
+      animation: sheetSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes sheetSlideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .cart-sheet-header {
+      background: #ffffff;
+      padding: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-sheet-header h3 { font-size: 16px; font-weight: 900; }
+
+    .cart-sheet-content {
+      padding: 14px 16px 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Swiggy Restaurant Mini Header in Cart */
+    .cart-store-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--border);
+    }
+    .cart-store-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .cart-store-info h4 { font-size: 15px; font-weight: 800; }
+    .cart-store-info p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Items Container Card */
+    .cart-items-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid var(--border);
+    }
+    .cart-item-row-swiggy {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+    .cart-item-row-swiggy:last-child { border-bottom: none; }
+
+    .item-meta { display: flex; align-items: center; gap: 8px; }
+    .veg-icon {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid #2ecc71;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .veg-dot { width: 6px; height: 6px; background: #2ecc71; border-radius: 50%; }
+
+    .nonveg-icon {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid #e74c3c;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nonveg-dot {
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-bottom: 7px solid #e74c3c;
+    }
+
+    .swiggy-mini-stepper {
+      display: flex;
+      align-items: center;
+      border: 1px solid #d4d5d9;
+      border-radius: 6px;
+      overflow: hidden;
+      background: white;
+      height: 30px;
+    }
+    .swiggy-mini-stepper button {
+      background: none;
+      border: none;
+      width: 28px;
+      height: 100%;
+      font-size: 14px;
+      font-weight: 800;
+      color: #60b244;
+      cursor: pointer;
+    }
+    .swiggy-mini-stepper span {
+      font-size: 12px;
+      font-weight: 800;
+      padding: 0 4px;
+      color: #60b244;
+    }
+
+    /* Cooking & Delivery Instructions */
+    .cart-instructions-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid var(--border);
+    }
+    .instructions-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-bottom: 10px;
+    }
+    .instructions-chips::-webkit-scrollbar { display: none; }
+
+    .inst-chip {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: #475569;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .inst-chip.active {
+      background: #fff3e6;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .instruction-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px;
+      outline: none;
+    }
+
+    /* Coupons & Offers Strip */
+    .cart-coupon-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 12px 14px;
+      border: 1px dashed var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .coupon-left { display: flex; align-items: center; gap: 10px; }
+    .coupon-left i { font-size: 18px; color: var(--primary); }
+    .coupon-left strong { font-size: 13px; }
+    .coupon-left p { font-size: 10px; color: var(--text-muted); }
+
+    /* Tip Delivery Partner */
+    .cart-tip-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid var(--border);
+    }
+    .tip-title { font-size: 13px; font-weight: 800; margin-bottom: 4px; }
+    .tip-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+    .tip-pills-row { display: flex; gap: 8px; }
+    .tip-pill {
+      flex: 1;
+      padding: 8px 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+      cursor: pointer;
+      background: #f8fafc;
+    }
+    .tip-pill.active {
+      background: #fff3e6;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Swiggy Bill Details */
+    .cart-bill-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+    .bill-title { font-size: 13px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .bill-line-item { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .bill-line-item.discount { color: #2ecc71; font-weight: 700; }
+    .bill-final-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dashed #cbd5e1;
+      margin-top: 10px;
+      padding-top: 12px;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    /* Delivery Address / Customer Box in Cart */
+    .cart-address-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid var(--border);
+    }
+    .addr-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      margin-top: 6px;
+      outline: none;
+    }
+
+    /* Fixed Floating Proceed Bar (Swiggy Signature Bar) */
+    .cart-floating-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 520px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 12px 16px;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+    }
+    .pay-amount-box p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; }
+    .pay-amount-box h3 { font-size: 18px; font-weight: 900; color: var(--dark); }
+
+    .btn-swiggy-pay {
+      background: #60b244;
+      color: #ffffff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-swiggy-pay:active { background: #519b38; }
+
+    /* Modals */
     .modal-box {
       background: white;
       width: 100%;
@@ -347,171 +621,6 @@
       cursor: pointer;
     }
 
-    /* ==================== SWIGGY PROFILE SECTION STYLES ==================== */
-    .profile-header-card {
-      background: linear-gradient(135deg, #171a29 0%, #2b3044 100%);
-      color: white;
-      border-radius: 14px;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-    .profile-avatar-circle {
-      width: 50px;
-      height: 50px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      color: white;
-      font-weight: 900;
-    }
-
-    .profile-nav-tabs {
-      display: flex;
-      border-bottom: 2px solid #e2e8f0;
-      margin-bottom: 16px;
-    }
-    .profile-nav-tab {
-      flex: 1;
-      text-align: center;
-      padding: 10px;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--text-muted);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
-    }
-    .profile-nav-tab.active {
-      color: var(--primary);
-      border-color: var(--primary);
-    }
-
-    .order-history-ticket {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-    .order-ticket-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px dashed var(--border);
-      padding-bottom: 8px;
-      margin-bottom: 8px;
-      font-size: 12px;
-    }
-
-    .swiggy-menu-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .swiggy-menu-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #f8fafc;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      font-size: 13px;
-      font-weight: 700;
-      color: #334155;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .swiggy-menu-item:hover { background: #f1f5f9; }
-
-    /* Success Modal */
-    .success-modal-box {
-      background: white;
-      width: 100%;
-      max-width: 480px;
-      border-radius: 20px;
-      padding: 24px 20px;
-      text-align: center;
-    }
-    .success-checkmark {
-      width: 65px;
-      height: 65px;
-      background: #eafaf1;
-      color: var(--green);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      margin: 0 auto 12px;
-    }
-
-    /* Live Tracking Styles */
-    .eta-banner {
-      background: linear-gradient(135deg, #171a29 0%, #282c3f 100%);
-      color: white;
-      border-radius: 14px;
-      padding: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-    .tracking-steps {
-      position: relative;
-      margin-left: 20px;
-      border-left: 3px solid #e2e8f0;
-      padding-left: 18px;
-      margin-bottom: 20px;
-    }
-    .step-item { position: relative; margin-bottom: 22px; }
-    .step-item:last-child { margin-bottom: 0; }
-    .step-icon-dot {
-      position: absolute;
-      left: -28px;
-      top: 0;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #cbd5e1;
-      border: 3px solid #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .step-item.active .step-icon-dot { background: var(--primary); box-shadow: 0 0 10px rgba(252,128,25,0.6); }
-    .step-item.completed .step-icon-dot { background: var(--green); }
-    .step-title { font-size: 13px; font-weight: 800; }
-    .step-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-    .rider-profile-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .call-rider-btn {
-      background: var(--green);
-      color: white;
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
     .compliance-footer {
       background: var(--dark);
       color: #94a3b8;
@@ -537,7 +646,6 @@
         <i class="fa-solid fa-location-arrow fa-spin"></i> Live Track
       </button>
 
-      <!-- Customer Profile Button (Login korle nam dekhabe) -->
       <button class="profile-btn-pill" onclick="openProfileModal()">
         <i class="fa-regular fa-user"></i>
         <span id="navAccountText">Account</span>
@@ -570,7 +678,7 @@
     </div>
   </nav>
 
-  <!-- Dynamic Subcategory Bar -->
+  <!-- Subcategory Bar -->
   <div class="subcategory-bar" id="subcatBar"></div>
 
   <!-- Search -->
@@ -597,83 +705,140 @@
     <p style="margin-top: 8px;">© 2026 Kwiky Online Delivery Platform</p>
   </footer>
 
-  <!-- ==================== SWIGGY CUSTOMER PROFILE MODAL ==================== -->
-  <div class="modal-backdrop" id="profileModal" style="align-items: center;">
-    <div class="modal-box" style="border-radius: 20px; max-width: 480px;">
-      <div class="modal-header">
-        <h3 style="font-size: 16px;">My Account</h3>
-        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeProfileModal()"></i>
-      </div>
-
-      <!-- Logged Out State View -->
-      <div id="profileLoggedOutView" style="display: none; text-align: center; padding: 20px 0;">
-        <div style="width: 60px; height: 60px; background: #fff3e6; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 12px;">
-          <i class="fa-solid fa-user-lock"></i>
+  <!-- ========================================================
+       SWIGGY EXACT REPLICA CART & CHECKOUT SHEET
+       ======================================================== -->
+  <div class="modal-backdrop" id="cartModal">
+    <div class="swiggy-cart-sheet">
+      <!-- Header -->
+      <div class="cart-sheet-header">
+        <div>
+          <h3>Your Food Cart</h3>
+          <p id="cartItemsCountText" style="font-size: 11px; color: var(--text-muted);">0 items selected</p>
         </div>
-        <h3 style="font-size: 16px; margin-bottom: 4px;">Account Login</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Enter your phone number to access order history & saved details.</p>
-        
-        <button class="btn-checkout" onclick="openLoginModal()">Login with Phone Number</button>
+        <i class="fa-solid fa-xmark" style="font-size: 22px; cursor: pointer; color: #475569;" onclick="closeCartModal()"></i>
       </div>
 
-      <!-- Logged In State View (Swiggy Style) -->
-      <div id="profileLoggedInView">
-        <div class="profile-header-card">
-          <div class="profile-avatar-circle" id="profileInitials">T</div>
-          <div>
-            <h3 id="profileName" style="font-size: 16px; font-weight: 900;">Tanvir Ahmed</h3>
-            <p id="profilePhone" style="font-size: 12px; opacity: 0.85;">+880 1711223344</p>
-            <span style="background: rgba(46,204,113,0.25); color: #2ecc71; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 800;">● Verified Customer</span>
+      <!-- Scrollable Content -->
+      <div class="cart-sheet-content" id="cartSheetContent">
+        <!-- 1. Store Details Mini Card -->
+        <div class="cart-store-card" id="cartStoreHeader">
+          <img class="cart-store-img" id="cartStoreImg" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300" alt="Restaurant" />
+          <div class="cart-store-info">
+            <h4 id="cartStoreTitle">Sultan's Dine</h4>
+            <p><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> 30-35 mins instant delivery</p>
           </div>
         </div>
 
-        <div class="profile-nav-tabs">
-          <div class="profile-nav-tab active" id="tabOrdersBtn" onclick="switchProfileTab('orders')">Orders History</div>
-          <div class="profile-nav-tab" id="tabAccountBtn" onclick="switchProfileTab('settings')">Settings & Help</div>
+        <!-- 2. Items List -->
+        <div class="cart-items-card">
+          <div id="swiggyItemsList"></div>
         </div>
 
-        <!-- Tab 1: Orders History -->
-        <div id="profileOrdersTab">
-          <div id="profileOrdersList"></div>
+        <!-- 3. Instructions & Notes -->
+        <div class="cart-instructions-card">
+          <p style="font-size: 12px; font-weight: 800; margin-bottom: 8px;">Delivery & Cooking Instructions</p>
+          <div class="instructions-chips">
+            <div class="inst-chip" onclick="toggleInstruction(this, 'Avoid calling')"><i class="fa-solid fa-phone-slash"></i> Avoid calling</div>
+            <div class="inst-chip" onclick="toggleInstruction(this, 'Leave at door')"><i class="fa-solid fa-door-open"></i> Leave at door</div>
+            <div class="inst-chip" onclick="toggleInstruction(this, 'Send cutlery')"><i class="fa-solid fa-utensils"></i> Add cutlery</div>
+          </div>
+          <input type="text" id="customCookingNote" class="instruction-input" placeholder="Write instructions for restaurant (e.g. less spicy)..." />
         </div>
 
-        <!-- Tab 2: Swiggy Settings -->
-        <div id="profileSettingsTab" style="display: none;">
-          <div class="swiggy-menu-list">
-            <div class="swiggy-menu-item" onclick="alert('Primary Delivery Address: Saved in your active orders.')">
-              <span><i class="fa-solid fa-location-dot" style="color: var(--primary); margin-right: 8px;"></i> Manage Addresses</span>
-              <i class="fa-solid fa-chevron-right" style="color: #94a3b8; font-size: 12px;"></i>
-            </div>
-            <div class="swiggy-menu-item" onclick="alert('Payment Modes: Cash on Delivery & Online Gateway Available.')">
-              <span><i class="fa-solid fa-credit-card" style="color: var(--blue); margin-right: 8px;"></i> Payment Modes</span>
-              <i class="fa-solid fa-chevron-right" style="color: #94a3b8; font-size: 12px;"></i>
-            </div>
-            <div class="swiggy-menu-item" onclick="alert('Support 24/7 Helpline: +880 1700-000000')">
-              <span><i class="fa-solid fa-headset" style="color: var(--green); margin-right: 8px;"></i> Help & Support</span>
-              <i class="fa-solid fa-chevron-right" style="color: #94a3b8; font-size: 12px;"></i>
-            </div>
-            <div class="swiggy-menu-item" style="color: #ef4444;" onclick="logoutCustomer()">
-              <span><i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 8px;"></i> Log Out</span>
-              <i class="fa-solid fa-chevron-right" style="color: #94a3b8; font-size: 12px;"></i>
+        <!-- 4. Coupon Strip -->
+        <div class="cart-coupon-card" onclick="applySwiggyCoupon()">
+          <div class="coupon-left">
+            <i class="fa-solid fa-percent"></i>
+            <div>
+              <strong id="couponStatusText">Apply Coupon Code</strong>
+              <p>Save 50 BDT on orders above 200</p>
             </div>
           </div>
+          <span id="couponActionBtn" style="font-size: 12px; font-weight: 900; color: var(--primary);">APPLY</span>
         </div>
+
+        <!-- 5. Tip Delivery Hero -->
+        <div class="cart-tip-card">
+          <div class="tip-title">Tip your delivery hero</div>
+          <div class="tip-sub">Thank your delivery partner for bringing your order quickly.</div>
+          <div class="tip-pills-row">
+            <div class="tip-pill" onclick="selectTip(0, this)">No Tip</div>
+            <div class="tip-pill" onclick="selectTip(20, this)">20 BDT</div>
+            <div class="tip-pill active" onclick="selectTip(30, this)">30 BDT</div>
+            <div class="tip-pill" onclick="selectTip(50, this)">50 BDT</div>
+          </div>
+        </div>
+
+        <!-- 6. Delivery Address Selection -->
+        <div class="cart-address-card">
+          <p style="font-size: 12px; font-weight: 800;"><i class="fa-solid fa-location-dot" style="color: #e74c3c;"></i> Deliver To</p>
+          <input type="text" id="custAddress" class="addr-input" placeholder="Enter complete house address, landmark, area..." />
+        </div>
+
+        <!-- 7. Swiggy Itemized Bill Details -->
+        <div class="cart-bill-card">
+          <div class="bill-title"><i class="fa-solid fa-receipt"></i> Bill Details</div>
+          
+          <div class="bill-line-item">
+            <span>Item Total</span>
+            <span id="billItemTotal">0 BDT</span>
+          </div>
+
+          <div class="bill-line-item">
+            <span>Delivery Partner Fee</span>
+            <span id="billDeliveryPartnerFee">40 BDT</span>
+          </div>
+
+          <div class="bill-line-item">
+            <span>Platform Fee</span>
+            <span>3 BDT</span>
+          </div>
+
+          <div class="bill-line-item">
+            <span>Govt Taxes & Restaurant Charges (5%)</span>
+            <span id="billTaxCharges">0 BDT</span>
+          </div>
+
+          <div class="bill-line-item discount" id="discountRow" style="display: none;">
+            <span>Coupon Savings (KWIKY50)</span>
+            <span id="billDiscount">-50 BDT</span>
+          </div>
+
+          <div class="bill-line-item" id="tipRow">
+            <span>Delivery Partner Tip</span>
+            <span id="billTipAmount">30 BDT</span>
+          </div>
+
+          <div class="bill-final-row">
+            <span>To Pay</span>
+            <span id="billFinalToPay" style="color: var(--primary);">73 BDT</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fixed Bottom Floating Bar -->
+      <div class="cart-floating-bottom-bar">
+        <div class="pay-amount-box">
+          <p>Total Payable</p>
+          <h3 id="bottomBarPayAmount">73 BDT</h3>
+        </div>
+        <button class="btn-swiggy-pay" onclick="handleCheckoutClick()">
+          Proceed To Pay <i class="fa-solid fa-arrow-right"></i>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- ==================== OTP LOGIN VERIFICATION MODAL ==================== -->
+  <!-- OTP Login Modal -->
   <div class="modal-backdrop" id="loginModal" style="align-items: center;">
     <div class="modal-box" style="border-radius: 20px; max-width: 400px;">
       <div class="modal-header">
         <h3 style="font-size: 16px;"><i class="fa-solid fa-shield-halved" style="color: var(--primary);"></i> Phone Verification</h3>
         <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeLoginModal()"></i>
       </div>
-
-      <!-- Step 1: Input Phone -->
       <div id="loginStepPhone">
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter your mobile number to receive a 4-digit OTP verification code.</p>
-        
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter mobile number to receive 4-digit verification code.</p>
         <div class="form-group">
           <label>Your Name</label>
           <input type="text" id="loginInputName" class="form-control" placeholder="E.g., Tanvir Ahmed" />
@@ -682,73 +847,26 @@
           <label>Mobile Number</label>
           <input type="tel" id="loginInputPhone" class="form-control" placeholder="017xxxxxxxx" />
         </div>
-
-        <button class="btn-checkout" style="margin-top: 14px;" onclick="sendLoginOtp()">Send Verification OTP</button>
+        <button class="btn-checkout" style="margin-top: 14px;" onclick="sendLoginOtp()">Send OTP</button>
       </div>
-
-      <!-- Step 2: Input OTP -->
       <div id="loginStepOtp" style="display: none;">
         <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter 4-digit code sent to <strong id="sentPhoneDisplay"></strong></p>
-        
         <div class="form-group">
-          <label>4-Digit OTP Code</label>
+          <label>4-Digit OTP</label>
           <input type="number" id="loginInputOtp" class="form-control" placeholder="E.g. 1234" style="text-align: center; font-size: 18px; letter-spacing: 4px;" />
         </div>
-
         <button class="btn-checkout" style="margin-top: 14px;" onclick="verifyLoginOtp()">Verify & Continue</button>
-        <button style="background: none; border: none; width: 100%; margin-top: 10px; font-size: 12px; color: var(--text-muted); cursor: pointer;" onclick="backToPhoneStep()">Change Number</button>
       </div>
-    </div>
-  </div>
-
-  <!-- ==================== CART & BILL BREAKUP MODAL ==================== -->
-  <div class="modal-backdrop" id="cartModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 style="font-size: 16px;">Order Summary (<span id="modalCartCount">0</span>)</h3>
-        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeCartModal()"></i>
-      </div>
-
-      <div id="cartItemsList"></div>
-
-      <div class="bill-box">
-        <div class="bill-box-title"><i class="fa-solid fa-receipt"></i> Detailed Fare Breakup</div>
-        <div class="bill-row"><span>Items Subtotal</span><span id="billSubtotal">0 BDT</span></div>
-        <div class="bill-row"><span>Delivery Partner Fee (Standard)</span><span id="billDeliveryFee">40 BDT</span></div>
-        <div class="bill-row"><span>Platform Fee</span><span>3 BDT</span></div>
-        <div class="bill-row"><span>Govt Taxes & Packaging (5%)</span><span id="billTaxPackaging">0 BDT</span></div>
-        <div class="bill-total-row"><span>Total To Pay</span><span id="billGrandTotal" style="color: var(--primary);">43 BDT</span></div>
-      </div>
-
-      <!-- Delivery Address Form -->
-      <div class="form-group">
-        <label>Delivery Address & Landmark</label>
-        <textarea id="custAddress" class="form-control" rows="2" placeholder="House / Road / Floor / Landmark"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Payment Method</label>
-        <select id="custPaymentMethod" class="form-control">
-          <option value="COD">Cash on Delivery (COD)</option>
-          <option value="Online">Online Gateway (bKash / Nagad / Cards)</option>
-        </select>
-      </div>
-
-      <button class="btn-checkout" style="margin-top: 16px;" onclick="handleCheckoutClick()">Confirm & Place Order</button>
     </div>
   </div>
 
   <!-- Order Success Modal -->
   <div class="modal-backdrop" id="orderSuccessModal" style="align-items: center;">
-    <div class="success-modal-box">
-      <div class="success-checkmark"><i class="fa-solid fa-check"></i></div>
+    <div class="modal-box" style="border-radius: 20px; max-width: 480px; text-align: center;">
+      <div style="width: 65px; height: 65px; background: #eafaf1; color: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 12px;"><i class="fa-solid fa-check"></i></div>
       <h2 style="font-size: 20px; font-weight: 900;">Order Placed Successfully!</h2>
       <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 16px;">Order <span id="confirmedOrderId" style="font-weight: 800; color: var(--primary);"></span> has been sent to the store.</p>
-      
-      <div style="display: flex; gap: 10px;">
-        <button class="btn-checkout" style="background: #282c3f; flex: 1; padding: 12px;" onclick="closeSuccessAndContinue()">Close</button>
-        <button class="btn-checkout" style="flex: 2; padding: 12px;" onclick="goToTrackingFromSuccess()"><i class="fa-solid fa-motorcycle"></i> Track Live</button>
-      </div>
+      <button class="btn-checkout" onclick="goToTrackingFromSuccess()"><i class="fa-solid fa-motorcycle"></i> Track Live Order</button>
     </div>
   </div>
 
@@ -759,55 +877,22 @@
         <h3 style="font-size: 16px;"><i class="fa-solid fa-motorcycle" style="color: var(--primary);"></i> Live Order Tracking</h3>
         <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeTrackingModal()"></i>
       </div>
-
-      <div class="eta-banner">
+      <div style="background: #171a29; color: white; border-radius: 14px; padding: 16px; display: flex; justify-content: space-between; margin-bottom: 16px;">
         <div>
           <p style="font-size: 11px; opacity: 0.85;">ESTIMATED ARRIVAL</p>
           <h2 id="trackEta" style="color: #ffb142; font-size: 22px;">15 Mins</h2>
         </div>
         <div style="text-align: right;">
           <p style="font-size: 11px; opacity: 0.85;">DISTANCE</p>
-          <h3 id="trackDist" style="font-size: 16px; font-weight: 800;">1.8 KM</h3>
+          <h3 id="trackDist" style="font-size: 16px;">1.8 KM</h3>
         </div>
       </div>
-
-      <div class="tracking-steps">
-        <div class="step-item completed" id="stepPlaced">
-          <div class="step-icon-dot"></div>
-          <div class="step-title">Order Confirmed</div>
-          <div class="step-desc">Store has received and accepted your order.</div>
+      <div style="padding: 12px; background: #f8fafc; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h4 id="trackRiderName">Hero: Searching...</h4>
+          <p style="font-size: 11px; color: var(--text-muted);">Verified Delivery Partner</p>
         </div>
-        <div class="step-item" id="stepAssigned">
-          <div class="step-icon-dot"></div>
-          <div class="step-title">Delivery Hero Assigned</div>
-          <div class="step-desc" id="stepAssignedDesc">A nearby partner is heading to the store.</div>
-        </div>
-        <div class="step-item" id="stepPicked">
-          <div class="step-icon-dot"></div>
-          <div class="step-title">Order Picked Up</div>
-          <div class="step-desc">Items verified and packed securely in thermal bag.</div>
-        </div>
-        <div class="step-item" id="stepOut">
-          <div class="step-icon-dot"></div>
-          <div class="step-title">Out for Delivery</div>
-          <div class="step-desc">Rider is on the way to your delivery location.</div>
-        </div>
-        <div class="step-item" id="stepDelivered">
-          <div class="step-icon-dot"></div>
-          <div class="step-title">Delivered</div>
-          <div class="step-desc">Enjoy your fresh food and items!</div>
-        </div>
-      </div>
-
-      <div class="rider-profile-box">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 44px; height: 44px; background: var(--primary); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 18px;"><i class="fa-solid fa-user-ninja"></i></div>
-          <div>
-            <h4 id="trackRiderName">Hero: Searching...</h4>
-            <p style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-shield-heart" style="color: var(--green);"></i> Verified Delivery Partner</p>
-          </div>
-        </div>
-        <a href="tel:01700000000" id="trackRiderCall" class="call-rider-btn"><i class="fa-solid fa-phone"></i> Call</a>
+        <a href="tel:01700000000" id="trackRiderCall" style="background: var(--green); color: white; padding: 8px 14px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 12px;">Call</a>
       </div>
     </div>
   </div>
@@ -821,10 +906,11 @@
 
     const DELIVERY_FEE = 40;
     const PLATFORM_FEE = 3;
+    let currentTip = 30;
+    let couponDiscount = 0;
+    let selectedInstructions = [];
 
-    // Customer User Session & Past Orders State
     let currentUser = JSON.parse(localStorage.getItem('kwiky_customer_user')) || null;
-    let userOrders = JSON.parse(localStorage.getItem('kwiky_customer_orders')) || [];
     let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
     let trackPollTimer = null;
 
@@ -861,15 +947,9 @@
       }
     }
 
-    // Update Customer Topbar Profile Display
     function updateUserUI() {
       const accountText = document.getElementById('navAccountText');
-      if (currentUser && currentUser.name) {
-        const firstName = currentUser.name.trim().split(' ')[0];
-        accountText.innerText = firstName;
-      } else {
-        accountText.innerText = "Account";
-      }
+      accountText.innerText = (currentUser && currentUser.name) ? currentUser.name.split(' ')[0] : "Account";
     }
 
     function switchMainCategory(cat, el) {
@@ -954,18 +1034,18 @@
       displayCurrentView();
     }
 
-    function getActionButtonHtml(id, rawName, price) {
+    function getActionButtonHtml(id, rawName, price, storeName) {
       const qty = cart[id] ? cart[id].qty : 0;
       if (qty > 0) {
         return `
           <div class="stepper-box">
-            <button class="stepper-btn" onclick="updateItemQty('${id}', '${rawName}', ${price}, -1)">-</button>
+            <button class="stepper-btn" onclick="updateItemQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', -1)">-</button>
             <span class="stepper-count">${qty}</span>
-            <button class="stepper-btn" onclick="updateItemQty('${id}', '${rawName}', ${price}, 1)">+</button>
+            <button class="stepper-btn" onclick="updateItemQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', 1)">+</button>
           </div>
         `;
       } else {
-        return `<button class="btn-add" onclick="updateItemQty('${id}', '${rawName}', ${price}, 1)">+ ADD</button>`;
+        return `<button class="btn-add" onclick="updateItemQty('${id}', '${rawName}', ${price}, '${escape(storeName)}', 1)">+ ADD</button>`;
       }
     }
 
@@ -995,159 +1075,204 @@
               <div class="prod-price">${item.price} BDT</div>
             </div>
             <div class="cart-btn-container" id="btn-container-${item._id}">
-              ${getActionButtonHtml(item._id, escape(item.name), item.price)}
+              ${getActionButtonHtml(item._id, escape(item.name), item.price, item.storeName || 'Kwiky Store')}
             </div>
           </div>
         </div>
       `).join('');
     }
 
-    function updateItemQty(id, rawName, price, delta) {
+    function updateItemQty(id, rawName, price, rawStore, delta) {
       const name = unescape(rawName);
-      if (!cart[id]) cart[id] = { id, name, price, qty: 0 };
+      const storeName = rawStore ? unescape(rawStore) : 'Kwiky Store';
+
+      if (!cart[id]) cart[id] = { id, name, price, storeName, qty: 0 };
       cart[id].qty += delta;
       if (cart[id].qty <= 0) delete cart[id];
 
       const container = document.getElementById(`btn-container-${id}`);
-      if (container) container.innerHTML = getActionButtonHtml(id, escape(name), price);
+      if (container) container.innerHTML = getActionButtonHtml(id, escape(name), price, storeName);
       updateCartUI();
     }
 
+    /* ==================== SWIGGY REPLICA CART UI ==================== */
     function updateCartUI() {
       const cartItems = Object.values(cart);
       const totalCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
 
       document.getElementById('cartCount').innerText = totalCount;
-      document.getElementById('modalCartCount').innerText = totalCount;
+      document.getElementById('cartItemsCountText').innerText = `${totalCount} item${totalCount !== 1 ? 's' : ''} in your cart`;
 
-      const list = document.getElementById('cartItemsList');
+      const list = document.getElementById('swiggyItemsList');
       if (cartItems.length === 0) {
-        list.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 20px;">Cart is empty</p>`;
-      } else {
-        list.innerHTML = cartItems.map(item => `
-          <div class="cart-row">
-            <div>
-              <strong>${item.name}</strong>
-              <div style="font-size: 11px; color: var(--text-muted);">${item.price} BDT × ${item.qty}</div>
-            </div>
-            <div class="stepper-box" style="font-size: 11px;">
-              <button class="stepper-btn" style="padding: 3px 8px;" onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, -1)">-</button>
-              <span class="stepper-count">${item.qty}</span>
-              <button class="stepper-btn" style="padding: 3px 8px;" onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, 1)">+</button>
-            </div>
+        list.innerHTML = `
+          <div style="text-align: center; padding: 30px 10px;">
+            <i class="fa-solid fa-basket-shopping" style="font-size: 36px; color: #cbd5e1; margin-bottom: 8px;"></i>
+            <h4 style="font-size: 15px;">Your cart is empty</h4>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Explore our top partner restaurants and add delicious items!</p>
           </div>
-        `).join('');
+        `;
+        document.getElementById('cartStoreHeader').style.display = 'none';
+      } else {
+        document.getElementById('cartStoreHeader').style.display = 'flex';
+        const primaryStore = cartItems[0].storeName || "Kwiky Express";
+        document.getElementById('cartStoreTitle').innerText = primaryStore;
+
+        list.innerHTML = cartItems.map(item => {
+          const isVeg = item.name.toLowerCase().includes('veg') || item.name.toLowerCase().includes('paneer') || item.name.toLowerCase().includes('dal');
+          const badgeHtml = isVeg
+            ? `<div class="veg-icon"><div class="veg-dot"></div></div>`
+            : `<div class="nonveg-icon"><div class="nonveg-dot"></div></div>`;
+
+          return `
+            <div class="cart-item-row-swiggy">
+              <div class="item-meta">
+                ${badgeHtml}
+                <div>
+                  <strong style="font-size: 13px;">${item.name}</strong>
+                  <div style="font-size: 12px; font-weight: 800; color: #334155; margin-top: 2px;">${item.price} BDT</div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div class="swiggy-mini-stepper">
+                  <button onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, '${escape(item.storeName)}', -1)">-</button>
+                  <span>${item.qty}</span>
+                  <button onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, '${escape(item.storeName)}', 1)">+</button>
+                </div>
+                <div style="font-size: 13px; font-weight: 900; width: 60px; text-align: right;">${item.price * item.qty} BDT</div>
+              </div>
+            </div>
+          `;
+        }).join('');
       }
 
+      // Detailed Swiggy Bill Calculations
       const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const taxPackaging = subtotal > 0 ? Math.round(subtotal * 0.05) : 0;
-      const grandTotal = subtotal > 0 ? (subtotal + DELIVERY_FEE + PLATFORM_FEE + taxPackaging) : 0;
+      const deliveryFee = subtotal > 0 ? DELIVERY_FEE : 0;
+      const taxCharges = subtotal > 0 ? Math.round(subtotal * 0.05) : 0;
+      const totalDiscount = (subtotal >= 200 && couponDiscount > 0) ? couponDiscount : 0;
+      
+      const finalToPay = subtotal > 0 ? Math.max(0, subtotal + deliveryFee + PLATFORM_FEE + taxCharges + currentTip - totalDiscount) : 0;
 
-      document.getElementById('billSubtotal').innerText = `${subtotal} BDT`;
-      document.getElementById('billDeliveryFee').innerText = `${subtotal > 0 ? DELIVERY_FEE : 0} BDT`;
-      document.getElementById('billTaxPackaging').innerText = `${taxPackaging} BDT`;
-      document.getElementById('billGrandTotal').innerText = `${grandTotal} BDT`;
+      document.getElementById('billItemTotal').innerText = `${subtotal} BDT`;
+      document.getElementById('billDeliveryPartnerFee').innerText = `${deliveryFee} BDT`;
+      document.getElementById('billTaxCharges').innerText = `${taxCharges} BDT`;
+      document.getElementById('billTipAmount').innerText = `${currentTip} BDT`;
+      document.getElementById('billFinalToPay').innerText = `${finalToPay} BDT`;
+      document.getElementById('bottomBarPayAmount').innerText = `${finalToPay} BDT`;
+
+      if (totalDiscount > 0) {
+        document.getElementById('discountRow').style.display = 'flex';
+        document.getElementById('billDiscount').innerText = `-${totalDiscount} BDT`;
+      } else {
+        document.getElementById('discountRow').style.display = 'none';
+      }
+    }
+
+    function toggleInstruction(el, text) {
+      el.classList.toggle('active');
+      if (el.classList.contains('active')) {
+        selectedInstructions.push(text);
+      } else {
+        selectedInstructions = selectedInstructions.filter(t => t !== text);
+      }
+    }
+
+    function selectTip(amount, el) {
+      currentTip = amount;
+      document.querySelectorAll('.tip-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      updateCartUI();
+    }
+
+    function applySwiggyCoupon() {
+      const cartItems = Object.values(cart);
+      const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      if (subtotal < 200) {
+        alert("Add items worth 200 BDT or more to apply KWIKY50 coupon!");
+        return;
+      }
+
+      if (couponDiscount === 0) {
+        couponDiscount = 50;
+        document.getElementById('couponStatusText').innerText = "Coupon 'KWIKY50' Applied!";
+        document.getElementById('couponActionBtn').innerText = "REMOVE";
+        document.getElementById('couponActionBtn').style.color = "#e74c3c";
+        alert("Coupon applied! 50 BDT discount added to your bill.");
+      } else {
+        couponDiscount = 0;
+        document.getElementById('couponStatusText').innerText = "Apply Coupon Code";
+        document.getElementById('couponActionBtn').innerText = "APPLY";
+        document.getElementById('couponActionBtn').style.color = "var(--primary)";
+      }
+      updateCartUI();
     }
 
     function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
     function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
     function openTrackingModal() { document.getElementById('trackingModal').style.display = 'flex'; }
     function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
+    function openProfileModal() { alert("Customer profile active. Orders placed will update live."); }
 
-    // ==================== OTP LOGIN & VERIFICATION FLOW ==================== //
-    let loginTempName = '';
-    let loginTempPhone = '';
+    // Checkout & Login Verification
+    function handleCheckoutClick() {
+      const cartItems = Object.values(cart);
+      if (cartItems.length === 0) return alert("Your cart is empty!");
 
-    function openLoginModal() {
-      document.getElementById('profileModal').style.display = 'none';
-      document.getElementById('loginModal').style.display = 'flex';
-      backToPhoneStep();
+      if (!currentUser) {
+        document.getElementById('cartModal').style.display = 'none';
+        document.getElementById('loginModal').style.display = 'flex';
+        return;
+      }
+
+      submitOrder();
     }
-    function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
 
-    function backToPhoneStep() {
-      document.getElementById('loginStepPhone').style.display = 'block';
-      document.getElementById('loginStepOtp').style.display = 'none';
-    }
-
+    let tempLoginPhone = '', tempLoginName = '';
     async function sendLoginOtp() {
       const name = document.getElementById('loginInputName').value.trim();
       const phone = document.getElementById('loginInputPhone').value.trim();
+      if (!name || phone.length < 11) return alert("Enter valid name & 11-digit phone.");
 
-      if (!name || !phone || phone.length < 11) {
-        return alert("Please enter valid Full Name and 11-digit Mobile Number.");
-      }
+      tempLoginName = name;
+      tempLoginPhone = phone;
 
-      loginTempName = name;
-      loginTempPhone = phone;
-
-      try {
-        const res = await fetch('/api/auth/send-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone })
-        });
-        const data = await res.json();
-        
-        document.getElementById('sentPhoneDisplay').innerText = phone;
-        document.getElementById('loginStepPhone').style.display = 'none';
-        document.getElementById('loginStepOtp').style.display = 'block';
-
-        alert(`Verification OTP sent! For testing, your OTP code is: ${data.testOtp || '1234'}`);
-      } catch (err) {
-        alert("Failed to send OTP. Please check connection.");
-      }
+      const res = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone })
+      });
+      const data = await res.json();
+      document.getElementById('sentPhoneDisplay').innerText = phone;
+      document.getElementById('loginStepPhone').style.display = 'none';
+      document.getElementById('loginStepOtp').style.display = 'block';
+      alert(`OTP Sent! Your test OTP code is: ${data.testOtp || '1234'}`);
     }
 
     async function verifyLoginOtp() {
       const otp = document.getElementById('loginInputOtp').value.trim();
-      if (!otp) return alert("Please enter 4-digit OTP code.");
-
-      try {
-        const res = await fetch('/api/auth/verify-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: loginTempPhone, otp, name: loginTempName })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          currentUser = { name: loginTempName, phone: loginTempPhone };
-          localStorage.setItem('kwiky_customer_user', JSON.stringify(currentUser));
-          updateUserUI();
-          closeLoginModal();
-          alert(`Welcome back, ${currentUser.name}! You are now verified.`);
-
-          // Cart open thakle auto proceed
-          if (Object.keys(cart).length > 0) {
-            openCartModal();
-          }
-        } else {
-          alert("Invalid OTP code. Please try again.");
-        }
-      } catch (err) {
-        alert("Verification error.");
+      const res = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: tempLoginPhone, otp, name: tempLoginName })
+      });
+      const data = await res.json();
+      if (data.success) {
+        currentUser = { name: tempLoginName, phone: tempLoginPhone };
+        localStorage.setItem('kwiky_customer_user', JSON.stringify(currentUser));
+        updateUserUI();
+        document.getElementById('loginModal').style.display = 'none';
+        openCartModal();
+      } else {
+        alert("Invalid OTP.");
       }
-    }
-
-    // ==================== CHECKOUT WITH MANDATORY LOGIN ==================== //
-    function handleCheckoutClick() {
-      if (!currentUser) {
-        alert("Please login with mobile number and OTP verification before placing order.");
-        openLoginModal();
-        return;
-      }
-      submitOrder();
     }
 
     async function submitOrder() {
       const cartItems = Object.values(cart);
-      if (cartItems.length === 0) return alert("Your cart is empty!");
-
       const address = document.getElementById('custAddress').value.trim();
-      const paymentMethod = document.getElementById('custPaymentMethod').value;
-
-      if (!address) return alert("Please enter your complete delivery address.");
+      if (!address) return alert("Please enter your delivery address!");
 
       const orderItems = [];
       cartItems.forEach(item => {
@@ -1157,8 +1282,11 @@
       });
 
       const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const taxPackaging = Math.round(subtotal * 0.05);
-      const total = subtotal + DELIVERY_FEE + PLATFORM_FEE + taxPackaging;
+      const taxCharges = Math.round(subtotal * 0.05);
+      const total = subtotal + DELIVERY_FEE + PLATFORM_FEE + taxCharges + currentTip - couponDiscount;
+
+      const cookingNote = document.getElementById('customCookingNote').value.trim();
+      const fullNote = [...selectedInstructions, cookingNote].filter(Boolean).join(' | ');
 
       try {
         const res = await fetch('/api/orders', {
@@ -1167,29 +1295,18 @@
           body: JSON.stringify({
             name: currentUser.name,
             phone: currentUser.phone,
-            address,
+            address: `${address} (Note: ${fullNote || 'None'})`,
             items: orderItems,
             total,
-            paymentMethod
+            paymentMethod: 'COD'
           })
         });
         const data = await res.json();
-
         if (data.success) {
           activeOrderId = data.order._id;
           localStorage.setItem('kwiky_active_order_id', activeOrderId);
-
-          // Save to User Order History
-          userOrders.unshift({
-            id: activeOrderId,
-            date: new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
-            items: orderItems,
-            total: total,
-            status: 'Confirmed'
-          });
-          localStorage.setItem('kwiky_customer_orders', JSON.stringify(userOrders));
-
           document.getElementById('navTrackBtn').style.display = 'inline-block';
+          
           cart = {};
           updateCartUI();
           closeCartModal();
@@ -1199,110 +1316,15 @@
           startTrackingPoll();
         }
       } catch (err) {
-        alert("Order submission error.");
+        alert("Order failed to connect.");
       }
     }
 
-    function closeSuccessAndContinue() {
-      document.getElementById('orderSuccessModal').style.display = 'none';
-      displayCurrentView();
-    }
     function goToTrackingFromSuccess() {
       document.getElementById('orderSuccessModal').style.display = 'none';
       openTrackingModal();
     }
 
-    // ==================== SWIGGY CUSTOMER ACCOUNT MODAL ==================== //
-    function openProfileModal() {
-      const modal = document.getElementById('profileModal');
-      const loggedOutView = document.getElementById('profileLoggedOutView');
-      const loggedInView = document.getElementById('profileLoggedInView');
-
-      if (!currentUser) {
-        loggedOutView.style.display = 'block';
-        loggedInView.style.display = 'none';
-      } else {
-        loggedOutView.style.display = 'none';
-        loggedInView.style.display = 'block';
-
-        document.getElementById('profileName').innerText = currentUser.name;
-        document.getElementById('profilePhone').innerText = currentUser.phone;
-        document.getElementById('profileInitials').innerText = currentUser.name.charAt(0).toUpperCase();
-
-        renderProfileOrders();
-      }
-      modal.style.display = 'flex';
-    }
-    function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
-
-    function switchProfileTab(tab) {
-      const ordersBtn = document.getElementById('tabOrdersBtn');
-      const settingsBtn = document.getElementById('tabAccountBtn');
-      const ordersTab = document.getElementById('profileOrdersTab');
-      const settingsTab = document.getElementById('profileSettingsTab');
-
-      if (tab === 'orders') {
-        ordersBtn.classList.add('active');
-        settingsBtn.classList.remove('active');
-        ordersTab.style.display = 'block';
-        settingsTab.style.display = 'none';
-      } else {
-        settingsBtn.classList.add('active');
-        ordersBtn.classList.remove('active');
-        ordersTab.style.display = 'none';
-        settingsTab.style.display = 'block';
-      }
-    }
-
-    function renderProfileOrders() {
-      const cont = document.getElementById('profileOrdersList');
-      if (userOrders.length === 0) {
-        cont.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 30px;">No recent orders found.</p>`;
-        return;
-      }
-
-      cont.innerHTML = userOrders.map(ord => {
-        const itemsSummary = (ord.items || []).map(i => i.name).slice(0, 3).join(', ');
-        return `
-          <div class="order-history-ticket">
-            <div class="order-ticket-head">
-              <strong>ORDER #${ord.id.slice(-6)}</strong>
-              <span style="color: var(--green); font-weight: 800;">${ord.status || 'Delivered'}</span>
-            </div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;"><i class="fa-regular fa-clock"></i> ${ord.date}</p>
-            <p style="font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 8px;">${itemsSummary}...</p>
-            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 8px;">
-              <span style="font-size: 13px; font-weight: 900; color: var(--primary);">Total: ${ord.total} BDT</span>
-              <button style="background: #fff3e6; color: var(--primary); border: 1px solid var(--primary); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer;" onclick="reorderItems('${ord.id}')">Reorder</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function reorderItems(orderId) {
-      const matched = userOrders.find(o => o.id === orderId);
-      if (matched && matched.items) {
-        matched.items.forEach(i => {
-          const tempId = 're_' + Math.floor(Math.random() * 10000);
-          updateItemQty(tempId, escape(i.name), i.price, 1);
-        });
-        closeProfileModal();
-        openCartModal();
-      }
-    }
-
-    function logoutCustomer() {
-      if (confirm("Are you sure you want to log out?")) {
-        localStorage.removeItem('kwiky_customer_user');
-        currentUser = null;
-        updateUserUI();
-        closeProfileModal();
-        alert("Logged out successfully.");
-      }
-    }
-
-    // ==================== LIVE TRACKING POLLER ==================== //
     function startTrackingPoll() {
       if (trackPollTimer) clearInterval(trackPollTimer);
       pollTrackingData();
@@ -1314,48 +1336,12 @@
       try {
         const res = await fetch(`/api/order/${activeOrderId}/track`);
         const data = await res.json();
-        if (!data.success) return;
-
-        const ord = data.order;
-        document.getElementById('trackDist').innerText = `${ord.distanceKm} KM`;
-        document.getElementById('trackEta').innerText = `${ord.etaMinutes} Mins`;
-        document.getElementById('trackRiderName').innerText = ord.riderName || "Searching hero...";
-        
-        if (ord.riderPhone) {
-          document.getElementById('trackRiderCall').href = `tel:${ord.riderPhone}`;
-        }
-
-        const stepPlaced = document.getElementById('stepPlaced');
-        const stepAssigned = document.getElementById('stepAssigned');
-        const stepPicked = document.getElementById('stepPicked');
-        const stepOut = document.getElementById('stepOut');
-        const stepDelivered = document.getElementById('stepDelivered');
-
-        [stepPlaced, stepAssigned, stepPicked, stepOut, stepDelivered].forEach(s => s.className = 'step-item');
-
-        if (ord.status === 'Pending') {
-          stepPlaced.className = 'step-item active';
-        } else if (ord.status === 'Assigned' || ord.status === 'Accepted') {
-          stepPlaced.className = 'step-item completed';
-          stepAssigned.className = 'step-item active';
-          document.getElementById('stepAssignedDesc').innerText = `${ord.riderName} accepted and heading to store.`;
-        } else if (ord.status === 'Picked Up') {
-          stepPlaced.className = 'step-item completed';
-          stepAssigned.className = 'step-item completed';
-          stepPicked.className = 'step-item active';
-        } else if (ord.status === 'Out for Delivery') {
-          stepPlaced.className = 'step-item completed';
-          stepAssigned.className = 'step-item completed';
-          stepPicked.className = 'step-item completed';
-          stepOut.className = 'step-item active';
-        } else if (ord.status === 'Delivered') {
-          stepPlaced.className = 'step-item completed';
-          stepAssigned.className = 'step-item completed';
-          stepPicked.className = 'step-item completed';
-          stepOut.className = 'step-item completed';
-          stepDelivered.className = 'step-item completed';
-          document.getElementById('trackEta').innerText = "Arrived!";
-          clearInterval(trackPollTimer);
+        if (data.success) {
+          const ord = data.order;
+          document.getElementById('trackDist').innerText = `${ord.distanceKm} KM`;
+          document.getElementById('trackEta').innerText = `${ord.etaMinutes} Mins`;
+          document.getElementById('trackRiderName').innerText = ord.riderName || "Searching hero...";
+          if (ord.riderPhone) document.getElementById('trackRiderCall').href = `tel:${ord.riderPhone}`;
         }
       } catch (e) {}
     }
