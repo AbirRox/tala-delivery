@@ -68,7 +68,9 @@
       align-items: center;
       gap: 6px;
       cursor: pointer;
+      transition: all 0.2s;
     }
+    .profile-btn-pill:hover { background: #e2e8f0; }
 
     .cart-btn-pill {
       background: var(--primary);
@@ -317,11 +319,6 @@
       text-align: center;
       display: inline-block;
     }
-    .stepper-count.flip { animation: numberFlip 0.18s ease-out; }
-    @keyframes numberFlip {
-      0% { transform: translateY(-4px) scale(0.9); opacity: 0.5; }
-      100% { transform: translateY(0) scale(1); opacity: 1; }
-    }
 
     /* Floating Cart Bar */
     .floating-cart-bar {
@@ -377,7 +374,7 @@
       cursor: pointer;
     }
 
-    /* Cart Sheet */
+    /* Modal Backdrop */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -387,6 +384,8 @@
       justify-content: center;
       align-items: flex-end;
     }
+
+    /* Cart Sheet */
     .swiggy-cart-sheet {
       background: #f4f5f7;
       width: 100%;
@@ -556,6 +555,7 @@
     }
     .btn-swiggy-pay:active { background: #519b38; }
 
+    /* Login & Common Modals */
     .modal-box { background: white; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 20px; max-height: 90vh; overflow-y: auto; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px; }
     .form-group { margin-top: 10px; }
@@ -581,7 +581,138 @@
       margin-top: 10px;
     }
 
-    /* ================= SWIGGY LIVE TRACKING SHEET ================= */
+    /* ==================== SWIGGY REPLICA PROFILE & SUB-PAGES ==================== */
+    .profile-sheet {
+      background: #f8fafc;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 24px 24px 0 0;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: sheetSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .profile-header {
+      background: #ffffff;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-user-card {
+      background: #ffffff;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .user-avatar-circle {
+      width: 56px;
+      height: 56px;
+      background: #fff3e6;
+      color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 900;
+      border: 2px solid var(--primary);
+    }
+
+    /* Subpage Views Container */
+    .profile-body-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 16px 40px;
+    }
+    .profile-menu-group {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .profile-menu-row {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.15s;
+    }
+    .profile-menu-row:last-child { border-bottom: none; }
+    .profile-menu-row:active { background: #f8fafc; }
+    .profile-row-left { display: flex; align-items: center; gap: 14px; }
+    .profile-row-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .profile-row-title { font-size: 13px; font-weight: 800; color: #1e293b; }
+    .profile-row-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+    /* Sub-page Card View */
+    .subpage-panel {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .subpage-top-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .subpage-back-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    /* Past Order Card */
+    .past-order-card {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .past-order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed #e2e8f0;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+    .order-status-tag {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      background: #eafaf1;
+      color: var(--green);
+    }
+
+    /* Tracking Sheet */
     .tracking-sheet {
       background: #ffffff;
       width: 100%;
@@ -593,39 +724,10 @@
       overflow: hidden;
       box-shadow: 0 -10px 30px rgba(0,0,0,0.25);
     }
-    #trackingLiveMap {
-      width: 100%;
-      flex: 1;
-      min-height: 350px;
-      z-index: 10;
-      background: #f1f5f9;
-    }
-    .track-status-panel {
-      background: #ffffff;
-      padding: 18px 20px;
-      border-top: 1px solid var(--border);
-      box-shadow: 0 -6px 20px rgba(0,0,0,0.06);
-      z-index: 25;
-    }
-    .track-eta-banner {
-      background: #171a29;
-      color: white;
-      padding: 14px 18px;
-      border-radius: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-    .track-rider-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #f8fafc;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-    }
+    #trackingLiveMap { width: 100%; flex: 1; min-height: 350px; z-index: 10; background: #f1f5f9; }
+    .track-status-panel { background: #ffffff; padding: 18px 20px; border-top: 1px solid var(--border); box-shadow: 0 -6px 20px rgba(0,0,0,0.06); z-index: 25; }
+    .track-eta-banner { background: #171a29; color: white; padding: 14px 18px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .track-rider-bar { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border); }
 
     .compliance-footer { background: var(--dark); color: #94a3b8; padding: 24px 16px; font-size: 12px; text-align: center; }
   </style>
@@ -658,7 +760,8 @@
         <i class="fa-solid fa-location-arrow fa-spin"></i> Live Track
       </button>
 
-      <button class="profile-btn-pill" onclick="openProfileModal()">
+      <!-- Account Button -->
+      <button class="profile-btn-pill" onclick="handleAccountClick()">
         <i class="fa-regular fa-user"></i>
         <span id="navAccountText">Account</span>
       </button>
@@ -708,6 +811,7 @@
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
+  <!-- Floating Cart Bar -->
   <div class="floating-cart-bar" id="floatingCartBar" onclick="openCartModal()">
     <div>
       <strong id="floatingBarItemsText" style="font-size: 14px;">1 ITEM | 220 BDT</strong>
@@ -718,10 +822,151 @@
     </div>
   </div>
 
+  <!-- Footer -->
   <footer class="compliance-footer">
     <a href="/rider.html" style="color: var(--primary); text-decoration: none; font-weight: 700;">Delivery Partner Portal</a>
     <p style="margin-top: 8px;">© 2026 Kwiky Online Delivery Platform</p>
   </footer>
+
+  <!-- ==================== SWIGGY REPLICA CUSTOMER PROFILE DRAWER ==================== -->
+  <div class="modal-backdrop" id="profileModal">
+    <div class="profile-sheet">
+      <!-- Profile Drawer Header -->
+      <div class="profile-header">
+        <strong style="font-size: 16px; font-weight: 900;">My Account</strong>
+        <i class="fa-solid fa-xmark" style="font-size: 22px; cursor: pointer; color: #64748b;" onclick="closeProfileModal()"></i>
+      </div>
+
+      <!-- User Info Top Banner -->
+      <div class="profile-user-card">
+        <div class="user-avatar-circle" id="profileAvatarLetter">U</div>
+        <div style="flex: 1;">
+          <h3 id="profileNameDisplay" style="font-size: 16px; font-weight: 900;">Guest User</h3>
+          <p id="profilePhoneDisplay" style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Not Logged In</p>
+        </div>
+        <button onclick="logoutCustomer()" id="btnLogout" style="display: none; background: #fee2e2; color: #ef4444; border: none; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;">
+          Logout
+        </button>
+      </div>
+
+      <!-- Main Profile Screen & Sub-pages Container -->
+      <div class="profile-body-container">
+        
+        <!-- 1. MAIN PROFILE MENU -->
+        <div id="subpageProfileMain" class="subpage-panel" style="display: block;">
+          <div class="profile-menu-group">
+            <div class="profile-menu-row" onclick="openSubpage('orders')">
+              <div class="profile-row-left">
+                <div class="profile-row-icon" style="background: #eafaf1; color: var(--green);"><i class="fa-solid fa-bag-shopping"></i></div>
+                <div>
+                  <div class="profile-row-title">Orders & Re-order</div>
+                  <div class="profile-row-sub">Past orders, receipts & summaries</div>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
+            </div>
+
+            <div class="profile-menu-row" onclick="openSubpage('address')">
+              <div class="profile-row-left">
+                <div class="profile-row-icon" style="background: #eff6ff; color: var(--blue);"><i class="fa-solid fa-location-dot"></i></div>
+                <div>
+                  <div class="profile-row-title">Saved Delivery Addresses</div>
+                  <div class="profile-row-sub">Home, Work, Landmark pins</div>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
+            </div>
+          </div>
+
+          <div class="profile-menu-group">
+            <div class="profile-menu-row" onclick="openSubpage('membership')">
+              <div class="profile-row-left">
+                <div class="profile-row-icon" style="background: #fff3e6; color: var(--primary);"><i class="fa-solid fa-crown"></i></div>
+                <div>
+                  <div class="profile-row-title">Kwiky One Membership</div>
+                  <div class="profile-row-sub">Free delivery on orders above ৳199</div>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
+            </div>
+
+            <div class="profile-menu-row" onclick="openSubpage('help')">
+              <div class="profile-row-left">
+                <div class="profile-row-icon" style="background: #f1f5f9; color: #475569;"><i class="fa-solid fa-headset"></i></div>
+                <div>
+                  <div class="profile-row-title">Help & WhatsApp Support</div>
+                  <div class="profile-row-sub">FAQs, live chat & issue resolution</div>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. SUBPAGE: ORDERS HISTORY -->
+        <div id="subpageOrders" class="subpage-panel">
+          <div class="subpage-top-bar">
+            <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
+            <h3 style="font-size: 15px; font-weight: 900;">Your Orders</h3>
+          </div>
+          <div id="pastOrdersContainer"></div>
+        </div>
+
+        <!-- 3. SUBPAGE: SAVED ADDRESSES -->
+        <div id="subpageAddress" class="subpage-panel">
+          <div class="subpage-top-bar">
+            <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
+            <h3 style="font-size: 15px; font-weight: 900;">Delivery Addresses</h3>
+          </div>
+          <div style="background: white; padding: 16px; border-radius: 14px; border: 1px solid var(--border);">
+            <div style="display: flex; gap: 10px; align-items: flex-start;">
+              <i class="fa-solid fa-house" style="color: var(--primary); font-size: 16px; margin-top: 2px;"></i>
+              <div>
+                <strong style="font-size: 13px;">Default Home Location</strong>
+                <p id="savedAddressTextDisplay" style="font-size: 12px; color: var(--text-muted); margin: 4px 0 10px;">Select location from checkout map</p>
+                <button onclick="closeProfileModal(); openCartModal();" style="background: #f1f5f9; border: 1px solid var(--border); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;">
+                  Change on Map
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. SUBPAGE: MEMBERSHIP -->
+        <div id="subpageMembership" class="subpage-panel">
+          <div class="subpage-top-bar">
+            <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
+            <h3 style="font-size: 15px; font-weight: 900;">Kwiky One VIP</h3>
+          </div>
+          <div style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 20px; border-radius: 16px; text-align: center;">
+            <i class="fa-solid fa-crown" style="color: #f1c40f; font-size: 36px; margin-bottom: 10px;"></i>
+            <h3 style="font-size: 18px; font-weight: 900;">Unlimited Free Deliveries</h3>
+            <p style="font-size: 12px; opacity: 0.8; margin: 8px 0 16px;">Enjoy 0 ৳ Delivery Fee on all food and grocery orders above 199 ৳.</p>
+            <button style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 900; font-size: 13px; cursor: pointer;" onclick="alert('Congratulations! VIP Trial Activated on this device.')">
+              Activate 30-Days Free Pass
+            </button>
+          </div>
+        </div>
+
+        <!-- 5. SUBPAGE: HELP & SUPPORT -->
+        <div id="subpageHelp" class="subpage-panel">
+          <div class="subpage-top-bar">
+            <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
+            <h3 style="font-size: 15px; font-weight: 900;">Customer Support</h3>
+          </div>
+          <div style="background: white; padding: 16px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
+            <i class="fa-solid fa-headset" style="font-size: 32px; color: var(--primary); margin-bottom: 8px;"></i>
+            <h4 style="font-size: 14px; font-weight: 900;">Need help with an ongoing order?</h4>
+            <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 14px;">Connect with our 24/7 dedicated support desk via WhatsApp.</p>
+            <a href="https://wa.me/919876543210?text=Hello%20Kwiky%20Support,%20I%20need%20help%20with%20my%20order." target="_blank" class="btn-whatsapp-order">
+              <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- SWIGGY REPLICA CART SHEET -->
   <div class="modal-backdrop" id="cartModal">
@@ -868,22 +1113,19 @@
     </div>
   </div>
 
-  <!-- ==================== SWIGGY REPLICA LIVE ORDER TRACKING MODAL ==================== -->
+  <!-- Live Tracking Modal -->
   <div class="modal-backdrop" id="trackingModal" style="align-items: flex-end;">
     <div class="tracking-sheet">
-      <!-- Top Sticky Bar -->
       <div style="padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid var(--border); z-index: 30;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <div style="width: 10px; height: 10px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 10px #2ecc71; animation: pulseDot 1.5s infinite;"></div>
+          <div style="width: 10px; height: 10px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 10px #2ecc71;"></div>
           <strong style="font-size: 15px;">Live Delivery Tracking</strong>
         </div>
         <i class="fa-solid fa-xmark" style="font-size: 22px; cursor: pointer; color: #64748b;" onclick="closeTrackingModal()"></i>
       </div>
 
-      <!-- Live Fullscreen Leaflet Map with Animated Rider & Green Route Line -->
       <div id="trackingLiveMap"></div>
 
-      <!-- Bottom Swiggy-Style Status Box -->
       <div class="track-status-panel">
         <div class="track-eta-banner">
           <div>
@@ -915,14 +1157,6 @@
       </div>
     </div>
   </div>
-
-  <style>
-    @keyframes pulseDot {
-      0% { transform: scale(0.9); opacity: 0.7; }
-      50% { transform: scale(1.3); opacity: 1; }
-      100% { transform: scale(0.9); opacity: 0.7; }
-    }
-  </style>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -966,7 +1200,6 @@
     let selectedRestaurant = null;
     let cart = {};
 
-    // স্টোর বা কিচেন হাবের কেন্দ্র (যেখান থেকে খাবার ডেলিভারি শুরু হবে)
     let STORE_LAT = 22.5850;
     let STORE_LNG = 88.4600;
     let CUSTOMER_LAT = 22.5850;
@@ -1000,7 +1233,6 @@
       Grocery: ["All", "Rice Dal & Flour", "Cooking Oil & Ghee", "Snacks & Biscuits"]
     };
 
-    // OSRM Driving Distance & Route Coordinates
     async function getRealRoadRoute(lat1, lon1, lat2, lon2) {
       try {
         const url = `https://router.project-osrm.org/route/v1/driving/${lon1},${lat1};${lon2},${lat2}?overview=full&geometries=geojson`;
@@ -1009,13 +1241,11 @@
         if (data && data.routes && data.routes.length > 0) {
           const route = data.routes[0];
           const distKm = parseFloat((route.distance / 1000).toFixed(1));
-          // Leaflet expects [lat, lng] instead of [lng, lat]
           const coords = route.geometry.coordinates.map(pt => [pt[1], pt[0]]);
           return { distanceKm: distKm, coords };
         }
       } catch (e) {}
 
-      // Fallback: 직선 좌표
       return {
         distanceKm: 2.0,
         coords: [
@@ -1054,7 +1284,110 @@
 
     function updateUserUI() {
       const accountText = document.getElementById('navAccountText');
-      accountText.innerText = (currentUser && currentUser.name) ? currentUser.name.split(' ')[0] : "Account";
+      const nameDisp = document.getElementById('profileNameDisplay');
+      const phoneDisp = document.getElementById('profilePhoneDisplay');
+      const avatarDisp = document.getElementById('profileAvatarLetter');
+      const btnLogout = document.getElementById('btnLogout');
+
+      if (currentUser && currentUser.name) {
+        const firstName = currentUser.name.split(' ')[0];
+        accountText.innerText = firstName;
+        nameDisp.innerText = currentUser.name;
+        phoneDisp.innerText = currentUser.phone || 'Verified Customer';
+        avatarDisp.innerText = firstName.charAt(0).toUpperCase();
+        if (btnLogout) btnLogout.style.display = 'block';
+      } else {
+        accountText.innerText = "Account";
+        nameDisp.innerText = "Guest User";
+        phoneDisp.innerText = "Click to login with OTP";
+        avatarDisp.innerText = "G";
+        if (btnLogout) btnLogout.style.display = 'none';
+      }
+
+      // Update saved address
+      const savedAddr = localStorage.getItem('kwiky_saved_address');
+      if (savedAddr) {
+        document.getElementById('savedAddressTextDisplay').innerText = savedAddr;
+      }
+    }
+
+    // ==================== PROFILE DRAWER & SUBPAGE CONTROLLER ==================== //
+    function handleAccountClick() {
+      if (!currentUser) {
+        document.getElementById('loginModal').style.display = 'flex';
+      } else {
+        openProfileModal();
+      }
+    }
+
+    function openProfileModal() {
+      updateUserUI();
+      openSubpage('main');
+      document.getElementById('profileModal').style.display = 'flex';
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profileModal').style.display = 'none';
+    }
+
+    function openSubpage(pageName) {
+      document.querySelectorAll('.subpage-panel').forEach(p => p.style.display = 'none');
+      if (pageName === 'main') {
+        document.getElementById('subpageProfileMain').style.display = 'block';
+      } else if (pageName === 'orders') {
+        renderPastOrdersList();
+        document.getElementById('subpageOrders').style.display = 'block';
+      } else if (pageName === 'address') {
+        document.getElementById('subpageAddress').style.display = 'block';
+      } else if (pageName === 'membership') {
+        document.getElementById('subpageMembership').style.display = 'block';
+      } else if (pageName === 'help') {
+        document.getElementById('subpageHelp').style.display = 'block';
+      }
+    }
+
+    function renderPastOrdersList() {
+      const container = document.getElementById('pastOrdersContainer');
+      const orderHistory = JSON.parse(localStorage.getItem('kwiky_order_history')) || [];
+
+      if (orderHistory.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px; background: white; border-radius: 14px; border: 1px solid var(--border);">
+            <i class="fa-solid fa-receipt" style="font-size: 36px; color: #cbd5e1; margin-bottom: 8px;"></i>
+            <h4 style="font-size: 14px; font-weight: 800;">No Orders Yet</h4>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Orders placed with Kwiky will show up here.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orderHistory.map(ord => `
+        <div class="past-order-card">
+          <div class="past-order-header">
+            <div>
+              <strong style="font-size: 13px;">Order #${(ord.id || '').slice(-6)}</strong>
+              <p style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">${ord.date || 'Recent Order'}</p>
+            </div>
+            <span class="order-status-tag"><i class="fa-solid fa-check"></i> ${ord.status || 'Confirmed'}</span>
+          </div>
+          <p style="font-size: 12px; color: #334155; margin-bottom: 6px;"><strong>Items:</strong> ${ord.itemsText}</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+            <strong style="font-size: 14px; color: var(--primary);">৳${ord.total} (COD)</strong>
+            <button onclick="closeProfileModal(); openTrackingModal();" style="background: var(--green); color: white; border: none; padding: 6px 14px; border-radius: 12px; font-size: 11px; font-weight: 800; cursor: pointer;">
+              <i class="fa-solid fa-location-arrow"></i> Track
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function logoutCustomer() {
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem('kwiky_customer_user');
+        currentUser = null;
+        updateUserUI();
+        closeProfileModal();
+      }
     }
 
     function switchMainCategory(cat, el) {
@@ -1196,11 +1529,6 @@
         const container = document.getElementById(`btn-container-${id}`);
         if (container) {
           container.innerHTML = getActionButtonHtml(id, escape(name), price, storeName);
-          const countSpan = document.getElementById(`count-span-${id}`);
-          if (countSpan) {
-            countSpan.classList.add('flip');
-            setTimeout(() => countSpan.classList.remove('flip'), 180);
-          }
         }
 
         const navCart = document.getElementById('navCartBtn');
@@ -1397,6 +1725,7 @@
           const shortAddr = data.display_name.split(',').slice(0, 4).join(', ');
           document.getElementById('custAddress').value = shortAddr;
           document.getElementById('mapSearchInput').value = shortAddr;
+          localStorage.setItem('kwiky_saved_address', shortAddr);
         }
       } catch (err) {}
     }
@@ -1493,20 +1822,16 @@
         trackingMap.invalidateSize();
       }
 
-      // Fetch Real Road Route from Store to Customer
       const routeData = await getRealRoadRoute(STORE_LAT, STORE_LNG, cLat, cLng);
       const roadCoords = routeData.coords;
       const totalKm = routeData.distanceKm;
 
-      // Update Top Status Cards
       document.getElementById('trackDist').innerText = `${totalKm} KM`;
       document.getElementById('trackEta').innerText = `${Math.max(12, Math.round(totalKm * 3.5))} Mins`;
 
-      // Clear previous layers
       if (greenRouteLine) trackingMap.removeLayer(greenRouteLine);
       if (riderMarker) trackingMap.removeLayer(riderMarker);
 
-      // Custom Restaurant Icon
       const restIcon = L.divIcon({
         className: 'rest-pin',
         html: `<div style="background:#171a29; color:white; width:34px; height:34px; border-radius:50%; border:3px solid #fc8019; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,0.3);"><i class="fa-solid fa-utensils" style="font-size:14px;"></i></div>`,
@@ -1514,7 +1839,6 @@
         iconAnchor: [17, 17]
       });
 
-      // Custom Customer Home Icon
       const homeIcon = L.divIcon({
         className: 'home-pin',
         html: `<div style="background:#e74c3c; color:white; width:34px; height:34px; border-radius:50%; border:3px solid white; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,0.3);"><i class="fa-solid fa-house" style="font-size:14px;"></i></div>`,
@@ -1522,7 +1846,6 @@
         iconAnchor: [17, 17]
       });
 
-      // Custom Animated Motorcycle / Rider Icon
       const bikeIcon = L.divIcon({
         className: 'bike-pin',
         html: `<div style="background:#60b244; color:white; width:38px; height:38px; border-radius:50%; border:3px solid white; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(96,178,68,0.5); transform:scale(1.08);"><i class="fa-solid fa-motorcycle" style="font-size:17px;"></i></div>`,
@@ -1533,7 +1856,6 @@
       L.marker([STORE_LAT, STORE_LNG], { icon: restIcon }).addTo(trackingMap).bindPopup("<b>Restaurant</b><br>Order Prepared");
       L.marker([cLat, cLng], { icon: homeIcon }).addTo(trackingMap).bindPopup("<b>Your Location</b><br>Delivery Address");
 
-      // Draw the crisp Swiggy Green Route Line
       greenRouteLine = L.polyline(roadCoords, {
         color: '#60b244',
         weight: 6,
@@ -1542,20 +1864,16 @@
         lineJoin: 'round'
       }).addTo(trackingMap);
 
-      // Fit map to show both restaurant and customer
       trackingMap.fitBounds(greenRouteLine.getBounds(), { padding: [40, 40] });
 
-      // Rider Marker starts from store
       riderMarker = L.marker(roadCoords[0], { icon: bikeIcon }).addTo(trackingMap);
 
-      // Smooth Animation: Rider moves along the green route
       if (riderAnimationTimer) clearInterval(riderAnimationTimer);
       let coordIndex = 0;
       riderAnimationTimer = setInterval(() => {
         if (coordIndex < roadCoords.length) {
           riderMarker.setLatLng(roadCoords[coordIndex]);
 
-          // Update remaining distance and ETA smoothly
           const remainingPct = 1 - (coordIndex / roadCoords.length);
           const remKm = (totalKm * remainingPct).toFixed(1);
           const remMin = Math.max(2, Math.round(remKm * 3.5));
@@ -1582,7 +1900,6 @@
       if (riderAnimationTimer) clearInterval(riderAnimationTimer);
     }
 
-    function openProfileModal() { alert("Customer Profile verified and active."); }
     function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
 
     function handleCheckoutClick() {
@@ -1644,7 +1961,7 @@
           localStorage.setItem('kwiky_customer_user', JSON.stringify(currentUser));
           updateUserUI();
           document.getElementById('loginModal').style.display = 'none';
-          openCartModal();
+          openProfileModal();
         } else {
           alert("Invalid OTP code. Please enter 1234.");
         }
@@ -1653,7 +1970,7 @@
         localStorage.setItem('kwiky_customer_user', JSON.stringify(currentUser));
         updateUserUI();
         document.getElementById('loginModal').style.display = 'none';
-        openCartModal();
+        openProfileModal();
       }
     }
 
@@ -1679,6 +1996,20 @@
       localStorage.setItem('kwiky_last_order_dist', calculatedDistanceKm);
       localStorage.setItem('kwiky_cust_lat', CUSTOMER_LAT);
       localStorage.setItem('kwiky_cust_lng', CUSTOMER_LNG);
+      localStorage.setItem('kwiky_saved_address', address);
+
+      // Save into Local Order History
+      const orderHistory = JSON.parse(localStorage.getItem('kwiky_order_history')) || [];
+      const newOrderEntry = {
+        id: 'ORD' + Date.now().toString().slice(-6),
+        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+        itemsText: orderItems.map(i => i.name).join(', '),
+        total: total,
+        status: 'Delivering',
+        address: address
+      };
+      orderHistory.unshift(newOrderEntry);
+      localStorage.setItem('kwiky_order_history', JSON.stringify(orderHistory));
 
       try {
         const res = await fetch('/api/orders', {
@@ -1697,7 +2028,7 @@
         });
         const data = await res.json();
         if (data && (data.success || data.order)) {
-          activeOrderId = (data.order && data.order._id) ? data.order._id : 'ORD' + Date.now().toString().slice(-6);
+          activeOrderId = (data.order && data.order._id) ? data.order._id : newOrderEntry.id;
           localStorage.setItem('kwiky_active_order_id', activeOrderId);
           document.getElementById('navTrackBtn').style.display = 'inline-block';
           
@@ -1714,7 +2045,14 @@
           document.getElementById('orderSuccessModal').style.display = 'flex';
         }
       } catch (err) {
-        alert("Order submitted locally. Please notify delivery partner via WhatsApp.");
+        activeOrderId = newOrderEntry.id;
+        localStorage.setItem('kwiky_active_order_id', activeOrderId);
+        document.getElementById('navTrackBtn').style.display = 'inline-block';
+        cart = {};
+        updateCartUI();
+        closeCartModal();
+        document.getElementById('confirmedOrderId').innerText = `#${activeOrderId.slice(-6)}`;
+        document.getElementById('orderSuccessModal').style.display = 'flex';
       }
     }
 
