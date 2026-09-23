@@ -51,13 +51,13 @@
     .brand-text h1 { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; }
     .brand-text p { font-size: 10px; color: var(--text-muted); font-weight: 600; }
 
-    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
 
     .profile-btn-pill {
       background: #f1f5f9;
       color: #334155;
       border: 1px solid var(--border);
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 20px;
       font-weight: 800;
       font-size: 12px;
@@ -113,7 +113,7 @@
     }
     .main-cat-item.active i { color: var(--primary); }
 
-    /* Subcategory Pills Bar */
+    /* Subcategory Bar */
     .subcategory-bar {
       display: flex;
       gap: 8px;
@@ -174,7 +174,7 @@
       gap: 4px;
     }
 
-    /* Restaurant Listing */
+    /* Restaurant Grid */
     .restaurants-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -210,12 +210,11 @@
       align-items: center;
       gap: 4px;
     }
-    .res-badge i { color: #f1c40f; }
     .res-details { padding: 14px; }
     .res-details h4 { font-size: 16px; font-weight: 900; color: var(--dark); }
     .res-details p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
-    /* Product Grid */
+    /* Products Grid */
     .items-grid {
       padding: 0 16px;
       display: grid;
@@ -283,35 +282,16 @@
     .stepper-btn:active { background: rgba(0,0,0,0.15); }
     .stepper-count { padding: 0 4px; }
 
-    /* ==================== SWIGGY/ZOMATO BILL BREAKUP ==================== */
+    /* Fare Breakup Box */
     .bill-box {
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px;
       margin: 14px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
-    .bill-box-title {
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--dark);
-      margin-bottom: 10px;
-      letter-spacing: 0.5px;
-    }
-    .bill-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-    .bill-row span i {
-      font-size: 11px;
-      cursor: pointer;
-      margin-left: 4px;
-    }
+    .bill-box-title { font-size: 12px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+    .bill-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
     .bill-total-row {
       display: flex;
       justify-content: space-between;
@@ -323,195 +303,7 @@
       color: var(--dark);
     }
 
-    /* ==================== SWIGGY/ZOMATO ORDER PLACED SCREEN ==================== */
-    .success-modal-box {
-      background: white;
-      width: 100%;
-      max-width: 480px;
-      border-radius: 20px;
-      padding: 24px 20px;
-      text-align: center;
-      animation: popIn 0.3s ease-out;
-    }
-    @keyframes popIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .success-checkmark {
-      width: 70px;
-      height: 70px;
-      background: #eafaf1;
-      color: var(--green);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      margin: 0 auto 14px;
-      box-shadow: 0 0 0 10px #f4fbf7;
-    }
-
-    .success-modal-box h2 {
-      font-size: 20px;
-      font-weight: 900;
-      color: var(--dark);
-      margin-bottom: 4px;
-    }
-    .success-subtext {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
-
-    /* Suggestions Strip */
-    .suggestions-container {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      margin: 16px 0;
-      text-align: left;
-    }
-    .suggestions-title {
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--dark);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .suggestions-scroll {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .suggestions-scroll::-webkit-scrollbar { display: none; }
-
-    .suggestion-item {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px;
-      min-width: 125px;
-      max-width: 125px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .suggestion-item img {
-      width: 100%;
-      height: 70px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 6px;
-    }
-    .suggestion-name {
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 1.2;
-      height: 26px;
-      overflow: hidden;
-    }
-    .suggestion-price {
-      font-size: 11px;
-      font-weight: 900;
-      color: var(--primary);
-      margin: 4px 0;
-    }
-    .btn-suggestion-add {
-      background: #fff3e6;
-      color: var(--primary);
-      border: 1px solid var(--primary);
-      border-radius: 4px;
-      padding: 4px;
-      font-size: 10px;
-      font-weight: 800;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    /* Live Tracking Styles */
-    .eta-banner {
-      background: linear-gradient(135deg, #171a29 0%, #282c3f 100%);
-      color: white;
-      border-radius: 14px;
-      padding: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-    .eta-banner h2 { font-size: 22px; font-weight: 900; color: #ffb142; }
-    .eta-banner p { font-size: 11px; opacity: 0.85; margin-top: 2px; }
-
-    .tracking-steps {
-      position: relative;
-      margin-left: 20px;
-      border-left: 3px solid #e2e8f0;
-      padding-left: 18px;
-      margin-bottom: 20px;
-    }
-    .step-item { position: relative; margin-bottom: 22px; }
-    .step-item:last-child { margin-bottom: 0; }
-    .step-icon-dot {
-      position: absolute;
-      left: -28px;
-      top: 0;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #cbd5e1;
-      border: 3px solid #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
-    .step-item.active .step-icon-dot {
-      background: var(--primary);
-      box-shadow: 0 0 10px rgba(252, 128, 25, 0.6);
-    }
-    .step-item.completed .step-icon-dot { background: var(--green); }
-    .step-title { font-size: 13px; font-weight: 800; color: var(--dark); }
-    .step-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-    .rider-profile-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .rider-avatar {
-      width: 44px;
-      height: 44px;
-      background: var(--primary);
-      border-radius: 50%;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-    .call-rider-btn {
-      background: var(--green);
-      color: white;
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Modal Backdrop */
+    /* Modal Backdrop & General Modals */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -555,6 +347,171 @@
       cursor: pointer;
     }
 
+    /* ==================== SWIGGY PROFILE SECTION STYLES ==================== */
+    .profile-header-card {
+      background: linear-gradient(135deg, #171a29 0%, #2b3044 100%);
+      color: white;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .profile-avatar-circle {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: white;
+      font-weight: 900;
+    }
+
+    .profile-nav-tabs {
+      display: flex;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 16px;
+    }
+    .profile-nav-tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    .profile-nav-tab.active {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .order-history-ticket {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .order-ticket-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .swiggy-menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .swiggy-menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .swiggy-menu-item:hover { background: #f1f5f9; }
+
+    /* Success Modal */
+    .success-modal-box {
+      background: white;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 20px;
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .success-checkmark {
+      width: 65px;
+      height: 65px;
+      background: #eafaf1;
+      color: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 12px;
+    }
+
+    /* Live Tracking Styles */
+    .eta-banner {
+      background: linear-gradient(135deg, #171a29 0%, #282c3f 100%);
+      color: white;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .tracking-steps {
+      position: relative;
+      margin-left: 20px;
+      border-left: 3px solid #e2e8f0;
+      padding-left: 18px;
+      margin-bottom: 20px;
+    }
+    .step-item { position: relative; margin-bottom: 22px; }
+    .step-item:last-child { margin-bottom: 0; }
+    .step-icon-dot {
+      position: absolute;
+      left: -28px;
+      top: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      border: 3px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-item.active .step-icon-dot { background: var(--primary); box-shadow: 0 0 10px rgba(252,128,25,0.6); }
+    .step-item.completed .step-icon-dot { background: var(--green); }
+    .step-title { font-size: 13px; font-weight: 800; }
+    .step-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .rider-profile-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .call-rider-btn {
+      background: var(--green);
+      color: white;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .compliance-footer {
       background: var(--dark);
       color: #94a3b8;
@@ -566,7 +523,7 @@
 </head>
 <body>
 
-  <!-- Top App Navigation -->
+  <!-- Top Navigation -->
   <header class="navbar">
     <a href="/" class="brand-box">
       <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
@@ -580,9 +537,10 @@
         <i class="fa-solid fa-location-arrow fa-spin"></i> Live Track
       </button>
 
+      <!-- Customer Profile Button (Login korle nam dekhabe) -->
       <button class="profile-btn-pill" onclick="openProfileModal()">
-        <i class="fa-regular fa-user" style="font-size: 14px;"></i>
-        <span>Account</span>
+        <i class="fa-regular fa-user"></i>
+        <span id="navAccountText">Account</span>
       </button>
 
       <button class="cart-btn-pill" onclick="openCartModal()">
@@ -639,7 +597,111 @@
     <p style="margin-top: 8px;">© 2026 Kwiky Online Delivery Platform</p>
   </footer>
 
-  <!-- ==================== SWIGGY/ZOMATO CART & FARE BREAKUP MODAL ==================== -->
+  <!-- ==================== SWIGGY CUSTOMER PROFILE MODAL ==================== -->
+  <div class="modal-backdrop" id="profileModal" style="align-items: center;">
+    <div class="modal-box" style="border-radius: 20px; max-width: 480px;">
+      <div class="modal-header">
+        <h3 style="font-size: 16px;">My Account</h3>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeProfileModal()"></i>
+      </div>
+
+      <!-- Logged Out State View -->
+      <div id="profileLoggedOutView" style="display: none; text-align: center; padding: 20px 0;">
+        <div style="width: 60px; height: 60px; background: #fff3e6; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 12px;">
+          <i class="fa-solid fa-user-lock"></i>
+        </div>
+        <h3 style="font-size: 16px; margin-bottom: 4px;">Account Login</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Enter your phone number to access order history & saved details.</p>
+        
+        <button class="btn-checkout" onclick="openLoginModal()">Login with Phone Number</button>
+      </div>
+
+      <!-- Logged In State View (Swiggy Style) -->
+      <div id="profileLoggedInView">
+        <div class="profile-header-card">
+          <div class="profile-avatar-circle" id="profileInitials">T</div>
+          <div>
+            <h3 id="profileName" style="font-size: 16px; font-weight: 900;">Tanvir Ahmed</h3>
+            <p id="profilePhone" style="font-size: 12px; opacity: 0.85;">+880 1711223344</p>
+            <span style="background: rgba(46,204,113,0.25); color: #2ecc71; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 800;">● Verified Customer</span>
+          </div>
+        </div>
+
+        <div class="profile-nav-tabs">
+          <div class="profile-nav-tab active" id="tabOrdersBtn" onclick="switchProfileTab('orders')">Orders History</div>
+          <div class="profile-nav-tab" id="tabAccountBtn" onclick="switchProfileTab('settings')">Settings & Help</div>
+        </div>
+
+        <!-- Tab 1: Orders History -->
+        <div id="profileOrdersTab">
+          <div id="profileOrdersList"></div>
+        </div>
+
+        <!-- Tab 2: Swiggy Settings -->
+        <div id="profileSettingsTab" style="display: none;">
+          <div class="swiggy-menu-list">
+            <div class="swiggy-menu-item" onclick="alert('Primary Delivery Address: Saved in your active orders.')">
+              <span><i class="fa-solid fa-location-dot" style="color: var(--primary); margin-right: 8px;"></i> Manage Addresses</span>
+              <i class="fa-solid fa-chevron-right" style="color: #94a3b8; font-size: 12px;"></i>
+            </div>
+            <div class="swiggy-menu-item" onclick="alert('Payment Modes: Cash on Delivery & Online Gateway Available.')">
+              <span><i class="fa-solid fa-credit-card" style="color: var(--blue); margin-right: 8px;"></i> Payment Modes</span>
+              <i class="fa-solid fa-chevron-right" style="color: #94a3b8; font-size: 12px;"></i>
+            </div>
+            <div class="swiggy-menu-item" onclick="alert('Support 24/7 Helpline: +880 1700-000000')">
+              <span><i class="fa-solid fa-headset" style="color: var(--green); margin-right: 8px;"></i> Help & Support</span>
+              <i class="fa-solid fa-chevron-right" style="color: #94a3b8; font-size: 12px;"></i>
+            </div>
+            <div class="swiggy-menu-item" style="color: #ef4444;" onclick="logoutCustomer()">
+              <span><i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 8px;"></i> Log Out</span>
+              <i class="fa-solid fa-chevron-right" style="color: #94a3b8; font-size: 12px;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== OTP LOGIN VERIFICATION MODAL ==================== -->
+  <div class="modal-backdrop" id="loginModal" style="align-items: center;">
+    <div class="modal-box" style="border-radius: 20px; max-width: 400px;">
+      <div class="modal-header">
+        <h3 style="font-size: 16px;"><i class="fa-solid fa-shield-halved" style="color: var(--primary);"></i> Phone Verification</h3>
+        <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeLoginModal()"></i>
+      </div>
+
+      <!-- Step 1: Input Phone -->
+      <div id="loginStepPhone">
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter your mobile number to receive a 4-digit OTP verification code.</p>
+        
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="loginInputName" class="form-control" placeholder="E.g., Tanvir Ahmed" />
+        </div>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="tel" id="loginInputPhone" class="form-control" placeholder="017xxxxxxxx" />
+        </div>
+
+        <button class="btn-checkout" style="margin-top: 14px;" onclick="sendLoginOtp()">Send Verification OTP</button>
+      </div>
+
+      <!-- Step 2: Input OTP -->
+      <div id="loginStepOtp" style="display: none;">
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter 4-digit code sent to <strong id="sentPhoneDisplay"></strong></p>
+        
+        <div class="form-group">
+          <label>4-Digit OTP Code</label>
+          <input type="number" id="loginInputOtp" class="form-control" placeholder="E.g. 1234" style="text-align: center; font-size: 18px; letter-spacing: 4px;" />
+        </div>
+
+        <button class="btn-checkout" style="margin-top: 14px;" onclick="verifyLoginOtp()">Verify & Continue</button>
+        <button style="background: none; border: none; width: 100%; margin-top: 10px; font-size: 12px; color: var(--text-muted); cursor: pointer;" onclick="backToPhoneStep()">Change Number</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CART & BILL BREAKUP MODAL ==================== -->
   <div class="modal-backdrop" id="cartModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -649,79 +711,48 @@
 
       <div id="cartItemsList"></div>
 
-      <!-- Comprehensive Swiggy/Zomato Bill Breakdown -->
       <div class="bill-box">
         <div class="bill-box-title"><i class="fa-solid fa-receipt"></i> Detailed Fare Breakup</div>
-        
-        <div class="bill-row">
-          <span>Items Subtotal</span>
-          <span id="billSubtotal">0 BDT</span>
-        </div>
-        
-        <div class="bill-row">
-          <span>Delivery Partner Fee (Standard)</span>
-          <span id="billDeliveryFee">40 BDT</span>
-        </div>
-        
-        <div class="bill-row">
-          <span>Platform Fee <i class="fa-regular fa-circle-question" title="Contributes to app maintenance and fast support"></i></span>
-          <span>3 BDT</span>
-        </div>
-        
-        <div class="bill-row">
-          <span>Govt Taxes & Restaurant Packaging (5%)</span>
-          <span id="billTaxPackaging">0 BDT</span>
-        </div>
-        
-        <div class="bill-total-row">
-          <span>Total To Pay</span>
-          <span id="billGrandTotal" style="color: var(--primary);">43 BDT</span>
-        </div>
+        <div class="bill-row"><span>Items Subtotal</span><span id="billSubtotal">0 BDT</span></div>
+        <div class="bill-row"><span>Delivery Partner Fee (Standard)</span><span id="billDeliveryFee">40 BDT</span></div>
+        <div class="bill-row"><span>Platform Fee</span><span>3 BDT</span></div>
+        <div class="bill-row"><span>Govt Taxes & Packaging (5%)</span><span id="billTaxPackaging">0 BDT</span></div>
+        <div class="bill-total-row"><span>Total To Pay</span><span id="billGrandTotal" style="color: var(--primary);">43 BDT</span></div>
       </div>
 
-      <!-- Customer Details Form -->
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="custName" class="form-control" placeholder="E.g., Tanvir Ahmed" />
-      </div>
-      <div class="form-group">
-        <label>Contact Mobile Number</label>
-        <input type="tel" id="custPhone" class="form-control" placeholder="E.g., 01711223344" />
-      </div>
+      <!-- Delivery Address Form -->
       <div class="form-group">
         <label>Delivery Address & Landmark</label>
         <textarea id="custAddress" class="form-control" rows="2" placeholder="House / Road / Floor / Landmark"></textarea>
       </div>
 
-      <button class="btn-checkout" style="margin-top: 16px;" onclick="submitOrder()">Confirm & Place Order</button>
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select id="custPaymentMethod" class="form-control">
+          <option value="COD">Cash on Delivery (COD)</option>
+          <option value="Online">Online Gateway (bKash / Nagad / Cards)</option>
+        </select>
+      </div>
+
+      <button class="btn-checkout" style="margin-top: 16px;" onclick="handleCheckoutClick()">Confirm & Place Order</button>
     </div>
   </div>
 
-  <!-- ==================== ORDER PLACED & SUGGESTIONS MODAL ==================== -->
+  <!-- Order Success Modal -->
   <div class="modal-backdrop" id="orderSuccessModal" style="align-items: center;">
     <div class="success-modal-box">
-      <div class="success-checkmark">
-        <i class="fa-solid fa-check"></i>
-      </div>
-      <h2>Order Placed Successfully!</h2>
-      <p class="success-subtext">Order <span id="confirmedOrderId" style="font-weight: 800; color: var(--primary);">#KW-1002</span> has been sent to the store.</p>
-
-      <!-- Suggestions Strip: Items Customer Might Love -->
-      <div class="suggestions-container">
-        <div class="suggestions-title">
-          <i class="fa-solid fa-sparkles" style="color: #f1c40f;"></i> Frequently Added with This Order:
-        </div>
-        <div class="suggestions-scroll" id="suggestionsList"></div>
-      </div>
-
-      <div style="display: flex; gap: 10px; margin-top: 14px;">
+      <div class="success-checkmark"><i class="fa-solid fa-check"></i></div>
+      <h2 style="font-size: 20px; font-weight: 900;">Order Placed Successfully!</h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 16px;">Order <span id="confirmedOrderId" style="font-weight: 800; color: var(--primary);"></span> has been sent to the store.</p>
+      
+      <div style="display: flex; gap: 10px;">
         <button class="btn-checkout" style="background: #282c3f; flex: 1; padding: 12px;" onclick="closeSuccessAndContinue()">Close</button>
-        <button class="btn-checkout" style="flex: 2; padding: 12px;" onclick="goToTrackingFromSuccess()"><i class="fa-solid fa-motorcycle"></i> Track Live Order</button>
+        <button class="btn-checkout" style="flex: 2; padding: 12px;" onclick="goToTrackingFromSuccess()"><i class="fa-solid fa-motorcycle"></i> Track Live</button>
       </div>
     </div>
   </div>
 
-  <!-- ==================== SWIGGY LIVE TRACKING MODAL ==================== -->
+  <!-- Live Tracking Modal -->
   <div class="modal-backdrop" id="trackingModal" style="align-items: center;">
     <div class="modal-box" style="border-radius: 20px; max-width: 480px;">
       <div class="modal-header">
@@ -731,11 +762,11 @@
 
       <div class="eta-banner">
         <div>
-          <p>ESTIMATED ARRIVAL</p>
-          <h2 id="trackEta">15 Mins</h2>
+          <p style="font-size: 11px; opacity: 0.85;">ESTIMATED ARRIVAL</p>
+          <h2 id="trackEta" style="color: #ffb142; font-size: 22px;">15 Mins</h2>
         </div>
         <div style="text-align: right;">
-          <p>DISTANCE</p>
+          <p style="font-size: 11px; opacity: 0.85;">DISTANCE</p>
           <h3 id="trackDist" style="font-size: 16px; font-weight: 800;">1.8 KM</h3>
         </div>
       </div>
@@ -746,25 +777,21 @@
           <div class="step-title">Order Confirmed</div>
           <div class="step-desc">Store has received and accepted your order.</div>
         </div>
-
         <div class="step-item" id="stepAssigned">
           <div class="step-icon-dot"></div>
           <div class="step-title">Delivery Hero Assigned</div>
           <div class="step-desc" id="stepAssignedDesc">A nearby partner is heading to the store.</div>
         </div>
-
         <div class="step-item" id="stepPicked">
           <div class="step-icon-dot"></div>
           <div class="step-title">Order Picked Up</div>
-          <div class="step-desc">Items verified and packed in thermal bag.</div>
+          <div class="step-desc">Items verified and packed securely in thermal bag.</div>
         </div>
-
         <div class="step-item" id="stepOut">
           <div class="step-icon-dot"></div>
           <div class="step-title">Out for Delivery</div>
           <div class="step-desc">Rider is on the way to your delivery location.</div>
         </div>
-
         <div class="step-item" id="stepDelivered">
           <div class="step-icon-dot"></div>
           <div class="step-title">Delivered</div>
@@ -774,7 +801,7 @@
 
       <div class="rider-profile-box">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="rider-avatar"><i class="fa-solid fa-user-ninja"></i></div>
+          <div style="width: 44px; height: 44px; background: var(--primary); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 18px;"><i class="fa-solid fa-user-ninja"></i></div>
           <div>
             <h4 id="trackRiderName">Hero: Searching...</h4>
             <p style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-shield-heart" style="color: var(--green);"></i> Verified Delivery Partner</p>
@@ -795,6 +822,9 @@
     const DELIVERY_FEE = 40;
     const PLATFORM_FEE = 3;
 
+    // Customer User Session & Past Orders State
+    let currentUser = JSON.parse(localStorage.getItem('kwiky_customer_user')) || null;
+    let userOrders = JSON.parse(localStorage.getItem('kwiky_customer_orders')) || [];
     let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
     let trackPollTimer = null;
 
@@ -808,20 +838,11 @@
     ];
 
     const subcategoryMap = {
-      Food: ["All Restaurants", "Biryani & Polao", "Burgers & Sandwiches", "Kebabs & Tandoor", "Bengali Curries", "Desserts & Sweets", "Juices & Shakes"],
-      Fashion: ["All", "Men's Casual Shirts", "Men's T-Shirts", "Women's Sarees & Kurtis", "Watches & Accessories"],
+      Food: ["All Restaurants", "Biryani & Polao", "Burgers & Sandwiches", "Kebabs & Tandoor", "Bengali Curries"],
+      Fashion: ["All", "Men's Casual Shirts", "Men's T-Shirts", "Women's Sarees & Kurtis"],
       Medicine: ["All", "Fever & Pain Relief", "Gastric & Digestion", "First Aid & Antiseptics"],
-      Grocery: ["All", "Rice Dal & Flour", "Cooking Oil & Ghee", "Snacks & Biscuits", "Soft Drinks & Beverages"]
+      Grocery: ["All", "Rice Dal & Flour", "Cooking Oil & Ghee", "Snacks & Biscuits"]
     };
-
-    // Suggestions pool for Order Placed recommendation
-    const suggestionsPool = [
-      { name: "Shahi Borhani (1L)", price: 220, image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300" },
-      { name: "Special Firni Cup", price: 90, image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=300" },
-      { name: "Cheesy Loaded Fries", price: 190, image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300" },
-      { name: "Choco Lava Cake", price: 140, image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=300" },
-      { name: "Cold Coca-Cola (1.5L)", price: 95, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300" }
-    ];
 
     async function initCatalog() {
       try {
@@ -830,12 +851,24 @@
         rawCatalog = (data && data.catalog) ? data.catalog : [];
       } catch (err) {}
 
+      updateUserUI();
       renderSubcategoryTabs();
       displayCurrentView();
 
       if (activeOrderId) {
         document.getElementById('navTrackBtn').style.display = 'inline-block';
         startTrackingPoll();
+      }
+    }
+
+    // Update Customer Topbar Profile Display
+    function updateUserUI() {
+      const accountText = document.getElementById('navAccountText');
+      if (currentUser && currentUser.name) {
+        const firstName = currentUser.name.trim().split(' ')[0];
+        accountText.innerText = firstName;
+      } else {
+        accountText.innerText = "Account";
       }
     }
 
@@ -1006,9 +1039,8 @@
         `).join('');
       }
 
-      // Detailed Fare Calculations
       const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const taxPackaging = subtotal > 0 ? Math.round(subtotal * 0.05) : 0; // 5% Govt Tax & Packaging
+      const taxPackaging = subtotal > 0 ? Math.round(subtotal * 0.05) : 0;
       const grandTotal = subtotal > 0 ? (subtotal + DELIVERY_FEE + PLATFORM_FEE + taxPackaging) : 0;
 
       document.getElementById('billSubtotal').innerText = `${subtotal} BDT`;
@@ -1022,39 +1054,100 @@
     function openTrackingModal() { document.getElementById('trackingModal').style.display = 'flex'; }
     function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
-    // Render Recommendations on Order Placed Screen
-    function renderSuggestions() {
-      const cont = document.getElementById('suggestionsList');
-      cont.innerHTML = suggestionsPool.map((s, idx) => `
-        <div class="suggestion-item">
-          <img src="${s.image}" alt="${s.name}" />
-          <div class="suggestion-name">${s.name}</div>
-          <div class="suggestion-price">${s.price} BDT</div>
-          <button class="btn-suggestion-add" onclick="addSuggestedItem('${escape(s.name)}', ${s.price}, this)">+ Add</button>
-        </div>
-      `).join('');
+    // ==================== OTP LOGIN & VERIFICATION FLOW ==================== //
+    let loginTempName = '';
+    let loginTempPhone = '';
+
+    function openLoginModal() {
+      document.getElementById('profileModal').style.display = 'none';
+      document.getElementById('loginModal').style.display = 'flex';
+      backToPhoneStep();
+    }
+    function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+
+    function backToPhoneStep() {
+      document.getElementById('loginStepPhone').style.display = 'block';
+      document.getElementById('loginStepOtp').style.display = 'none';
     }
 
-    function addSuggestedItem(rawName, price, btn) {
-      const name = unescape(rawName);
-      const tempId = 'sug_' + Math.floor(Math.random() * 10000);
-      updateItemQty(tempId, escape(name), price, 1);
-      btn.innerText = "✓ Added";
-      btn.style.background = "#2ecc71";
-      btn.style.color = "white";
-      btn.disabled = true;
+    async function sendLoginOtp() {
+      const name = document.getElementById('loginInputName').value.trim();
+      const phone = document.getElementById('loginInputPhone').value.trim();
+
+      if (!name || !phone || phone.length < 11) {
+        return alert("Please enter valid Full Name and 11-digit Mobile Number.");
+      }
+
+      loginTempName = name;
+      loginTempPhone = phone;
+
+      try {
+        const res = await fetch('/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone })
+        });
+        const data = await res.json();
+        
+        document.getElementById('sentPhoneDisplay').innerText = phone;
+        document.getElementById('loginStepPhone').style.display = 'none';
+        document.getElementById('loginStepOtp').style.display = 'block';
+
+        alert(`Verification OTP sent! For testing, your OTP code is: ${data.testOtp || '1234'}`);
+      } catch (err) {
+        alert("Failed to send OTP. Please check connection.");
+      }
     }
 
-    // Submit Order with Swiggy/Zomato Placed Screen
+    async function verifyLoginOtp() {
+      const otp = document.getElementById('loginInputOtp').value.trim();
+      if (!otp) return alert("Please enter 4-digit OTP code.");
+
+      try {
+        const res = await fetch('/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: loginTempPhone, otp, name: loginTempName })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          currentUser = { name: loginTempName, phone: loginTempPhone };
+          localStorage.setItem('kwiky_customer_user', JSON.stringify(currentUser));
+          updateUserUI();
+          closeLoginModal();
+          alert(`Welcome back, ${currentUser.name}! You are now verified.`);
+
+          // Cart open thakle auto proceed
+          if (Object.keys(cart).length > 0) {
+            openCartModal();
+          }
+        } else {
+          alert("Invalid OTP code. Please try again.");
+        }
+      } catch (err) {
+        alert("Verification error.");
+      }
+    }
+
+    // ==================== CHECKOUT WITH MANDATORY LOGIN ==================== //
+    function handleCheckoutClick() {
+      if (!currentUser) {
+        alert("Please login with mobile number and OTP verification before placing order.");
+        openLoginModal();
+        return;
+      }
+      submitOrder();
+    }
+
     async function submitOrder() {
       const cartItems = Object.values(cart);
       if (cartItems.length === 0) return alert("Your cart is empty!");
 
-      const name = document.getElementById('custName').value.trim();
-      const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
+      const paymentMethod = document.getElementById('custPaymentMethod').value;
 
-      if (!name || !phone || !address) return alert("Please fill Name, Phone, and Delivery Address.");
+      if (!address) return alert("Please enter your complete delivery address.");
 
       const orderItems = [];
       cartItems.forEach(item => {
@@ -1071,29 +1164,42 @@
         const res = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone, address, items: orderItems, total })
+          body: JSON.stringify({
+            name: currentUser.name,
+            phone: currentUser.phone,
+            address,
+            items: orderItems,
+            total,
+            paymentMethod
+          })
         });
         const data = await res.json();
+
         if (data.success) {
           activeOrderId = data.order._id;
           localStorage.setItem('kwiky_active_order_id', activeOrderId);
+
+          // Save to User Order History
+          userOrders.unshift({
+            id: activeOrderId,
+            date: new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+            items: orderItems,
+            total: total,
+            status: 'Confirmed'
+          });
+          localStorage.setItem('kwiky_customer_orders', JSON.stringify(userOrders));
+
           document.getElementById('navTrackBtn').style.display = 'inline-block';
-          
-          // Clear cart
           cart = {};
           updateCartUI();
           closeCartModal();
 
-          // Show Swiggy Style "Order Placed" modal with Suggestions
           document.getElementById('confirmedOrderId').innerText = `#${activeOrderId.slice(-6)}`;
-          renderSuggestions();
           document.getElementById('orderSuccessModal').style.display = 'flex';
           startTrackingPoll();
-        } else {
-          alert("Order failed: " + data.message);
         }
       } catch (err) {
-        alert("Server error. Please try again.");
+        alert("Order submission error.");
       }
     }
 
@@ -1101,13 +1207,102 @@
       document.getElementById('orderSuccessModal').style.display = 'none';
       displayCurrentView();
     }
-
     function goToTrackingFromSuccess() {
       document.getElementById('orderSuccessModal').style.display = 'none';
       openTrackingModal();
     }
 
-    // Live Tracking Poller
+    // ==================== SWIGGY CUSTOMER ACCOUNT MODAL ==================== //
+    function openProfileModal() {
+      const modal = document.getElementById('profileModal');
+      const loggedOutView = document.getElementById('profileLoggedOutView');
+      const loggedInView = document.getElementById('profileLoggedInView');
+
+      if (!currentUser) {
+        loggedOutView.style.display = 'block';
+        loggedInView.style.display = 'none';
+      } else {
+        loggedOutView.style.display = 'none';
+        loggedInView.style.display = 'block';
+
+        document.getElementById('profileName').innerText = currentUser.name;
+        document.getElementById('profilePhone').innerText = currentUser.phone;
+        document.getElementById('profileInitials').innerText = currentUser.name.charAt(0).toUpperCase();
+
+        renderProfileOrders();
+      }
+      modal.style.display = 'flex';
+    }
+    function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+
+    function switchProfileTab(tab) {
+      const ordersBtn = document.getElementById('tabOrdersBtn');
+      const settingsBtn = document.getElementById('tabAccountBtn');
+      const ordersTab = document.getElementById('profileOrdersTab');
+      const settingsTab = document.getElementById('profileSettingsTab');
+
+      if (tab === 'orders') {
+        ordersBtn.classList.add('active');
+        settingsBtn.classList.remove('active');
+        ordersTab.style.display = 'block';
+        settingsTab.style.display = 'none';
+      } else {
+        settingsBtn.classList.add('active');
+        ordersBtn.classList.remove('active');
+        ordersTab.style.display = 'none';
+        settingsTab.style.display = 'block';
+      }
+    }
+
+    function renderProfileOrders() {
+      const cont = document.getElementById('profileOrdersList');
+      if (userOrders.length === 0) {
+        cont.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 30px;">No recent orders found.</p>`;
+        return;
+      }
+
+      cont.innerHTML = userOrders.map(ord => {
+        const itemsSummary = (ord.items || []).map(i => i.name).slice(0, 3).join(', ');
+        return `
+          <div class="order-history-ticket">
+            <div class="order-ticket-head">
+              <strong>ORDER #${ord.id.slice(-6)}</strong>
+              <span style="color: var(--green); font-weight: 800;">${ord.status || 'Delivered'}</span>
+            </div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;"><i class="fa-regular fa-clock"></i> ${ord.date}</p>
+            <p style="font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 8px;">${itemsSummary}...</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 8px;">
+              <span style="font-size: 13px; font-weight: 900; color: var(--primary);">Total: ${ord.total} BDT</span>
+              <button style="background: #fff3e6; color: var(--primary); border: 1px solid var(--primary); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer;" onclick="reorderItems('${ord.id}')">Reorder</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function reorderItems(orderId) {
+      const matched = userOrders.find(o => o.id === orderId);
+      if (matched && matched.items) {
+        matched.items.forEach(i => {
+          const tempId = 're_' + Math.floor(Math.random() * 10000);
+          updateItemQty(tempId, escape(i.name), i.price, 1);
+        });
+        closeProfileModal();
+        openCartModal();
+      }
+    }
+
+    function logoutCustomer() {
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem('kwiky_customer_user');
+        currentUser = null;
+        updateUserUI();
+        closeProfileModal();
+        alert("Logged out successfully.");
+      }
+    }
+
+    // ==================== LIVE TRACKING POLLER ==================== //
     function startTrackingPoll() {
       if (trackPollTimer) clearInterval(trackPollTimer);
       pollTrackingData();
@@ -1128,9 +1323,6 @@
         
         if (ord.riderPhone) {
           document.getElementById('trackRiderCall').href = `tel:${ord.riderPhone}`;
-          document.getElementById('trackRiderCall').style.display = 'inline-flex';
-        } else {
-          document.getElementById('trackRiderCall').style.display = 'none';
         }
 
         const stepPlaced = document.getElementById('stepPlaced');
