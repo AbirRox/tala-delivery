@@ -8,8 +8,6 @@
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#fc8019" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  
-  <!-- Leaflet CSS for Map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
@@ -354,7 +352,7 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* PWA Install Banner */
+    /* PWA Banner */
     .pwa-install-banner {
       position: fixed;
       top: 65px;
@@ -448,7 +446,7 @@
     .tip-pill { flex: 1; padding: 8px 0; border: 1px solid var(--border); border-radius: 10px; font-size: 12px; font-weight: 800; text-align: center; cursor: pointer; background: #f8fafc; }
     .tip-pill.active { background: #fff3e6; border-color: var(--primary); color: var(--primary); }
 
-    /* ================= SWIGGY LIVE MAP & SEARCH CARD ================= */
+    /* Map Card */
     .cart-address-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); position: relative; }
     .map-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .btn-locate-me {
@@ -486,7 +484,6 @@
       font-size: 12px;
     }
 
-    /* Suggestions List */
     .search-suggestions-box {
       position: absolute;
       top: 100%;
@@ -515,7 +512,6 @@
     .suggestion-item:hover { background: #f8fafc; color: var(--primary); }
     .suggestion-item i { margin-top: 2px; color: #94a3b8; font-size: 11px; }
 
-    /* Map Box Container */
     #deliveryMap {
       width: 100%;
       height: 170px;
@@ -564,7 +560,6 @@
     }
     .btn-swiggy-pay:active { background: #519b38; }
 
-    /* Modals */
     .modal-box { background: white; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 20px; max-height: 90vh; overflow-y: auto; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px; }
     .form-group { margin-top: 10px; }
@@ -653,15 +648,12 @@
     </div>
   </nav>
 
-  <!-- Subcategory Bar -->
   <div class="subcategory-bar" id="subcatBar"></div>
 
-  <!-- Search -->
   <div class="search-wrap">
     <input type="text" id="searchInput" class="search-input" placeholder="Search dishes, restaurants, fashion..." onkeyup="handleSearch()" />
   </div>
 
-  <!-- Main Section -->
   <section>
     <div class="section-title-wrap">
       <h3 id="sectionHeading">Top Partner Restaurants</h3>
@@ -674,7 +666,6 @@
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
-  <!-- Floating Cart Bar -->
   <div class="floating-cart-bar" id="floatingCartBar" onclick="openCartModal()">
     <div>
       <strong id="floatingBarItemsText" style="font-size: 14px;">1 ITEM | 220 BDT</strong>
@@ -685,13 +676,12 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="compliance-footer">
     <a href="/rider.html" style="color: var(--primary); text-decoration: none; font-weight: 700;">Delivery Partner Portal</a>
     <p style="margin-top: 8px;">© 2026 Kwiky Online Delivery Platform</p>
   </footer>
 
-  <!-- ==================== SWIGGY REPLICA CART SHEET ==================== -->
+  <!-- SWIGGY REPLICA CART SHEET -->
   <div class="modal-backdrop" id="cartModal">
     <div class="swiggy-cart-sheet">
       <div class="cart-sheet-header">
@@ -747,7 +737,7 @@
           </div>
         </div>
 
-        <!-- ================= DELIVER TO WITH MAP & SEARCH ================= -->
+        <!-- DELIVER TO WITH MAP & SEARCH -->
         <div class="cart-address-card">
           <div class="map-header-row">
             <p style="font-size: 12px; font-weight: 800;"><i class="fa-solid fa-location-dot" style="color: #e74c3c;"></i> Deliver To (Live Map)</p>
@@ -756,7 +746,6 @@
             </button>
           </div>
 
-          <!-- Landmark / Road Search -->
           <div class="map-search-wrapper">
             <i class="fa-solid fa-magnifying-glass map-search-icon"></i>
             <input 
@@ -770,10 +759,8 @@
             <div class="search-suggestions-box" id="mapSuggestions"></div>
           </div>
 
-          <!-- Interactive Leaflet Map -->
           <div id="deliveryMap"></div>
 
-          <!-- Precise House/Floor Note -->
           <input type="text" id="custAddress" class="addr-input" placeholder="House no, Floor, Landmark (Auto-filled from map)" />
         </div>
 
@@ -829,7 +816,6 @@
       <h2 style="font-size: 20px; font-weight: 900;">Order Placed Successfully!</h2>
       <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 14px;">Order <span id="confirmedOrderId" style="font-weight: 800; color: var(--primary);"></span> confirmed!</p>
       
-      <!-- WhatsApp Instant Button -->
       <a href="#" id="btnWhatsAppAlert" target="_blank" class="btn-whatsapp-order">
         <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Send Order Details to Admin WhatsApp
       </a>
@@ -854,7 +840,7 @@
         </div>
         <div style="text-align: right;">
           <p style="font-size: 11px; opacity: 0.85;">DISTANCE</p>
-          <h3 id="trackDist" style="font-size: 16px;">1.8 KM</h3>
+          <h3 id="trackDist" style="font-size: 16px;">-- KM</h3>
         </div>
       </div>
       <div style="padding: 12px; background: #f8fafc; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
@@ -867,11 +853,9 @@
     </div>
   </div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // ==================== PWA INSTALL SETUP ==================== //
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -905,20 +889,19 @@
       });
     }
 
-    // ==================== CATALOG & CART LOGIC ==================== //
     let rawCatalog = [];
     let currentCategory = 'Food';
     let currentSubcategory = 'All Restaurants';
     let selectedRestaurant = null;
     let cart = {};
 
-    // BANGLADESH STANDARD DYNAMIC DELIVERY FEE SETUP
-    // Base hub coordinates (Restaurant / Kitchen Location - e.g., Dhaka/Local Hub)
-    const STORE_LAT = 23.7925;
-    const STORE_LNG = 90.4078;
+    // ==================== STORE HUB COORDINATES ==================== //
+    // আপনার রেস্তোরাঁ বা হাব যেখানে অবস্থিত সেই অক্ষাংশ-দ্রাঘিমাংশ (Latitude, Longitude)
+    let STORE_LAT = 22.5850;
+    let STORE_LNG = 88.4600;
 
-    let dynamicDeliveryFee = 35; // Default Base 35 BDT
-    let calculatedDistanceKm = 1.0;
+    let dynamicDeliveryFee = 35; 
+    let calculatedDistanceKm = 1.5;
     const PLATFORM_FEE = 3;
     let currentTip = 30;
     let couponDiscount = 0;
@@ -928,7 +911,6 @@
     let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
     let trackPollTimer = null;
 
-    // আপনার WhatsApp নম্বর
     const ADMIN_WHATSAPP_NUMBER = "918100002156";
 
     const defaultRestaurants = [
@@ -947,8 +929,19 @@
       Grocery: ["All", "Rice Dal & Flour", "Cooking Oil & Ghee", "Snacks & Biscuits"]
     };
 
-    // Haversine Distance Calculator
-    function calculateDistance(lat1, lon1, lat2, lon2) {
+    // OSRM Driving Distance (আসল রাস্তার ড্রাইভিং দূরত্ব)
+    async function getRealRoadDistance(lat1, lon1, lat2, lon2) {
+      try {
+        const url = `https://router.project-osrm.org/route/v1/driving/${lon1},${lat1};${lon2},${lat2}?overview=false`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data && data.routes && data.routes.length > 0) {
+          const meters = data.routes[0].distance;
+          return parseFloat((meters / 1000).toFixed(1));
+        }
+      } catch (e) {}
+
+      // Fallback Haversine Formula with 1.3 road curvature multiplier
       const R = 6371;
       const dLat = (lat2 - lat1) * (Math.PI / 180);
       const dLon = (lon2 - lon1) * (Math.PI / 180);
@@ -957,14 +950,13 @@
         Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return parseFloat((R * c).toFixed(1));
+      return parseFloat((R * c * 1.3).toFixed(1));
     }
 
-    // Bangladesh Standard Delivery Fee Structure
     function computeBangladeshDeliveryFee(km) {
       const baseKm = 1.5;
-      const baseFee = 35;   // 1.5 KM পর্যন্ত ৩৫ টাকা
-      const perKmRate = 12; // ১.৫ কিমির পর প্রতি কিমিতে ১২ টাকা
+      const baseFee = 35;
+      const perKmRate = 12;
 
       if (km <= baseKm) return baseFee;
       const extraKm = km - baseKm;
@@ -1209,7 +1201,7 @@
       const finalToPay = subtotal > 0 ? Math.max(0, subtotal + deliveryFee + PLATFORM_FEE + taxCharges + currentTip - totalDiscount) : 0;
 
       document.getElementById('billItemTotal').innerText = `${subtotal} BDT`;
-      document.getElementById('billDeliveryLabel').innerHTML = `Delivery Partner Fee <span style="font-size:11px; color:var(--primary);">(${calculatedDistanceKm} KM)</span>`;
+      document.getElementById('billDeliveryLabel').innerHTML = `Delivery Partner Fee <span style="font-size:11px; color:var(--primary); font-weight:bold;">(${calculatedDistanceKm} KM)</span>`;
       document.getElementById('billDeliveryPartnerFee').innerText = `${deliveryFee} BDT`;
       document.getElementById('billTaxCharges').innerText = `${taxCharges} BDT`;
       document.getElementById('billTipAmount').innerText = `${currentTip} BDT`;
@@ -1256,7 +1248,7 @@
       updateCartUI();
     }
 
-    // ==================== LIVE MAP & ADDRESS LOGIC ==================== //
+    // ==================== LIVE MAP & REAL ROAD DISTANCE ==================== //
     let map = null;
     let marker = null;
     let searchDebounceTimer = null;
@@ -1268,17 +1260,12 @@
         return;
       }
 
-      // Default center: Dhaka hub (23.7925, 90.4078)
-      const defaultLat = STORE_LAT;
-      const defaultLng = STORE_LNG;
-
-      map = L.map('deliveryMap', { zoomControl: false }).setView([defaultLat, defaultLng], 14);
+      map = L.map('deliveryMap', { zoomControl: false }).setView([STORE_LAT, STORE_LNG], 13);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap'
       }).addTo(map);
 
-      // Custom Delivery Pin Icon
       const pinIcon = L.divIcon({
         className: 'custom-pin',
         html: `<div style="background:#e74c3c; width:28px; height:28px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); border:2px solid white; box-shadow:0 3px 10px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center;"><div style="width:10px; height:10px; background:white; border-radius:50%;"></div></div>`,
@@ -1286,33 +1273,29 @@
         iconAnchor: [14, 28]
       });
 
-      marker = L.marker([defaultLat, defaultLng], { draggable: true, icon: pinIcon }).addTo(map);
+      marker = L.marker([STORE_LAT, STORE_LNG], { draggable: true, icon: pinIcon }).addTo(map);
 
-      // Drag pin to update address and recalculate dynamic delivery fee
       marker.on('dragend', function (e) {
         const pos = e.target.getLatLng();
         handleLocationSelect(pos.lat, pos.lng);
       });
 
-      // Click map to move pin
       map.on('click', function(e) {
         marker.setLatLng(e.latlng);
         handleLocationSelect(e.latlng.lat, e.latlng.lng);
       });
 
-      // Auto reverse-geocode initial position
-      handleLocationSelect(defaultLat, defaultLng);
+      handleLocationSelect(STORE_LAT, STORE_LNG);
     }
 
-    function handleLocationSelect(lat, lng) {
-      // Calculate dynamic distance and delivery charge
-      calculatedDistanceKm = calculateDistance(STORE_LAT, STORE_LNG, lat, lng);
+    async function handleLocationSelect(lat, lng) {
+      // Calculate real driving road distance
+      calculatedDistanceKm = await getRealRoadDistance(STORE_LAT, STORE_LNG, lat, lng);
       dynamicDeliveryFee = computeBangladeshDeliveryFee(calculatedDistanceKm);
       updateCartUI();
       reverseGeocode(lat, lng);
     }
 
-    // 1-Click GPS Detect Location
     function detectCurrentLocation() {
       if (!navigator.geolocation) return alert("Geolocation not supported by your device.");
       navigator.geolocation.getCurrentPosition(
@@ -1320,7 +1303,7 @@
           const lat = pos.coords.latitude;
           const lng = pos.coords.longitude;
           if (map && marker) {
-            map.setView([lat, lng], 16);
+            map.setView([lat, lng], 15);
             marker.setLatLng([lat, lng]);
             handleLocationSelect(lat, lng);
           }
@@ -1332,7 +1315,6 @@
       );
     }
 
-    // Reverse Geocode via OpenStreetMap Nominatim
     async function reverseGeocode(lat, lng) {
       try {
         const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
@@ -1345,7 +1327,6 @@
       } catch (err) {}
     }
 
-    // Auto-complete Address Search using Photon OSM API
     function handleAddressSearch(query) {
       clearTimeout(searchDebounceTimer);
       const suggestionsBox = document.getElementById('mapSuggestions');
@@ -1393,13 +1374,12 @@
       document.getElementById('mapSuggestions').style.display = 'none';
 
       if (map && marker) {
-        map.setView([lat, lng], 16);
+        map.setView([lat, lng], 15);
         marker.setLatLng([lat, lng]);
       }
       handleLocationSelect(lat, lng);
     }
 
-    // Hide suggestions on outer click
     document.addEventListener('click', function(e) {
       const box = document.getElementById('mapSuggestions');
       const input = document.getElementById('mapSearchInput');
@@ -1417,7 +1397,14 @@
       document.getElementById('cartModal').style.display = 'none';
     }
 
-    function openTrackingModal() { document.getElementById('trackingModal').style.display = 'flex'; }
+    function openTrackingModal() { 
+      document.getElementById('trackingModal').style.display = 'flex'; 
+      // তাৎক্ষণিকভাবে শেষ সংরক্ষিত আসল দূরত্বটি দেখাবে
+      const savedDist = localStorage.getItem('kwiky_last_order_dist') || calculatedDistanceKm;
+      document.getElementById('trackDist').innerText = `${savedDist} KM`;
+      const estMin = Math.max(15, Math.round(savedDist * 3.5));
+      document.getElementById('trackEta').innerText = `${estMin} Mins`;
+    }
     function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
     function openProfileModal() { alert("Customer Profile verified and active."); }
     function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
@@ -1513,6 +1500,8 @@
       const cookingNote = document.getElementById('customCookingNote').value.trim();
       const fullNote = [...selectedInstructions, cookingNote].filter(Boolean).join(' | ');
 
+      localStorage.setItem('kwiky_last_order_dist', calculatedDistanceKm);
+
       try {
         const res = await fetch('/api/orders', {
           method: 'POST',
@@ -1524,6 +1513,7 @@
             items: orderItems,
             total,
             deliveryFee: dynamicDeliveryFee,
+            distanceKm: calculatedDistanceKm,
             paymentMethod: 'COD'
           })
         });
@@ -1533,7 +1523,6 @@
           localStorage.setItem('kwiky_active_order_id', activeOrderId);
           document.getElementById('navTrackBtn').style.display = 'inline-block';
           
-          // Instant WhatsApp Alert Link
           const itemsSummary = orderItems.map(i => `• ${i.name} (৳${i.price})`).join('%0A');
           const waMessage = `*🚨 NEW ORDER PLACED (KWIKY)*%0A%0A*Order ID:* %23${activeOrderId.slice(-6)}%0A*Customer:* ${currentUser.name} (${currentUser.phone})%0A*Address:* ${address}%0A*Distance:* ${calculatedDistanceKm} KM%0A*Delivery Fee:* ৳${dynamicDeliveryFee}%0A*Notes:* ${fullNote || 'None'}%0A%0A*Items Ordered:*%0A${itemsSummary}%0A%0A*Total Bill:* ৳${total} (COD)%0A%0A_Please assign delivery partner!_`;
           
@@ -1570,8 +1559,10 @@
         const data = await res.json();
         if (data.success) {
           const ord = data.order;
-          document.getElementById('trackDist').innerText = `${ord.distanceKm} KM`;
-          document.getElementById('trackEta').innerText = `${ord.etaMinutes} Mins`;
+          const realDist = ord.distanceKm || localStorage.getItem('kwiky_last_order_dist') || calculatedDistanceKm;
+          document.getElementById('trackDist').innerText = `${realDist} KM`;
+          const estMin = Math.max(15, Math.round(realDist * 3.5));
+          document.getElementById('trackEta').innerText = `${estMin} Mins`;
           document.getElementById('trackRiderName').innerText = ord.riderName || "Searching hero...";
           if (ord.riderPhone) document.getElementById('trackRiderCall').href = `tel:${ord.riderPhone}`;
         }
