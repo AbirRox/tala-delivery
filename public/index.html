@@ -22,7 +22,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 90px; }
 
-    /* Header */
+    /* Top Navigation */
     .navbar {
       background: #ffffff;
       position: sticky;
@@ -65,7 +65,7 @@
       cursor: pointer;
     }
 
-    /* 4 Primary Category Tabs */
+    /* 4 Primary Categories */
     .main-category-bar {
       background: #ffffff;
       display: flex;
@@ -158,7 +158,7 @@
       gap: 4px;
     }
 
-    /* Swiggy Style Restaurant Cards */
+    /* Restaurant Listing */
     .restaurants-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -219,7 +219,7 @@
       color: #475569;
     }
 
-    /* Flipkart Style Products Grid */
+    /* Product Cards Grid */
     .items-grid {
       padding: 0 16px;
       display: grid;
@@ -260,7 +260,13 @@
     .prod-subcat { font-size: 10px; color: var(--text-muted); margin-bottom: 6px; }
     .prod-price { font-size: 14px; font-weight: 900; color: var(--primary); margin-bottom: 8px; }
 
+    /* Swiggy Style Interactive Add / Stepper Button */
+    .cart-btn-container {
+      width: 100%;
+    }
+
     .btn-add {
+      width: 100%;
       background: white;
       color: var(--primary);
       border: 1.5px solid var(--primary);
@@ -273,6 +279,36 @@
       transition: all 0.2s;
     }
     .btn-add:active { background: var(--primary); color: white; }
+
+    .stepper-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--primary);
+      color: white;
+      border-radius: 6px;
+      overflow: hidden;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .stepper-btn {
+      background: none;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .stepper-btn:active {
+      background: rgba(0,0,0,0.15);
+    }
+
+    .stepper-count {
+      padding: 0 4px;
+    }
 
     /* Modals & Cart */
     .modal-backdrop {
@@ -411,7 +447,7 @@
 </head>
 <body>
 
-  <!-- Top Navigation -->
+  <!-- Header -->
   <header class="navbar">
     <a href="/" class="brand-box">
       <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
@@ -431,7 +467,7 @@
     </div>
   </header>
 
-  <!-- 4 Main Categories -->
+  <!-- 4 Core Categories -->
   <nav class="main-category-bar">
     <div class="main-cat-item active" onclick="switchMainCategory('Food', this)">
       <i class="fa-solid fa-utensils"></i>
@@ -451,15 +487,15 @@
     </div>
   </nav>
 
-  <!-- Dynamic Subcategory Pills Bar -->
+  <!-- Dynamic Subcategory Pills -->
   <div class="subcategory-bar" id="subcatBar"></div>
 
   <!-- Search -->
   <div class="search-wrap">
-    <input type="text" id="searchInput" class="search-input" placeholder="Search restaurants, dishes, fashion, medicine..." onkeyup="handleSearch()" />
+    <input type="text" id="searchInput" class="search-input" placeholder="Search dishes, restaurants, fashion..." onkeyup="handleSearch()" />
   </div>
 
-  <!-- Main View Container -->
+  <!-- Content Section -->
   <section>
     <div class="section-title-wrap">
       <h3 id="sectionHeading">Top Partner Restaurants</h3>
@@ -468,10 +504,10 @@
       </button>
     </div>
 
-    <!-- Swiggy Restaurant Listing View -->
+    <!-- Restaurant Grid -->
     <div class="restaurants-grid" id="restaurantView"></div>
 
-    <!-- Product Grid View -->
+    <!-- Product Grid -->
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
@@ -487,7 +523,7 @@
     </div>
   </section>
 
-  <!-- Compliance Footer -->
+  <!-- Footer -->
   <footer class="compliance-footer">
     <div class="footer-links-grid">
       <a onclick="showPolicy('terms')">Terms & Conditions</a>
@@ -559,10 +595,11 @@
     let currentCategory = 'Food';
     let currentSubcategory = 'All Restaurants';
     let selectedRestaurant = null;
-    let cart = [];
+    
+    // Cart Data Structure: { id: { id, name, price, qty } }
+    let cart = {};
     const DELIVERY_FEE = 40;
 
-    // Guaranteed Partner Restaurants List with High Quality Photos
     const defaultRestaurants = [
       {
         name: "Sultan's Dine",
@@ -732,8 +769,6 @@
 
     function renderRestaurants() {
       const resView = document.getElementById('restaurantView');
-      
-      // Extract from rawCatalog or use default restaurants
       const foodItems = rawCatalog.filter(i => (i.category || '').toLowerCase() === 'food');
       let storesToRender = [];
 
@@ -784,6 +819,24 @@
       displayCurrentView();
     }
 
+    // Helper: Generate Stepper HTML or + ADD button
+    function getActionButtonHtml(id, rawName, price) {
+      const qty = cart[id] ? cart[id].qty : 0;
+      if (qty > 0) {
+        return `
+          <div class="stepper-box">
+            <button class="stepper-btn" onclick="updateItemQty('${id}', '${rawName}', ${price}, -1)">-</button>
+            <span class="stepper-count">${qty}</span>
+            <button class="stepper-btn" onclick="updateItemQty('${id}', '${rawName}', ${price}, 1)">+</button>
+          </div>
+        `;
+      } else {
+        return `
+          <button class="btn-add" onclick="updateItemQty('${id}', '${rawName}', ${price}, 1)">+ ADD</button>
+        `;
+      }
+    }
+
     function renderProducts() {
       const prodView = document.getElementById('productsView');
       let items = rawCatalog.filter(i => (i.category || '').toLowerCase() === currentCategory.toLowerCase());
@@ -818,7 +871,9 @@
               <div class="prod-subcat">${item.subcategory}</div>
               <div class="prod-price">${item.price} BDT</div>
             </div>
-            <button class="btn-add" onclick="addToCart('${item._id}', '${escape(item.name)}', ${item.price})">+ ADD</button>
+            <div class="cart-btn-container" id="btn-container-${item._id}">
+              ${getActionButtonHtml(item._id, escape(item.name), item.price)}
+            </div>
           </div>
         </div>
       `).join('');
@@ -861,63 +916,95 @@
               <div class="prod-subcat">${item.category} • ${item.subcategory}</div>
               <div class="prod-price">${item.price} BDT</div>
             </div>
-            <button class="btn-add" onclick="addToCart('${item._id}', '${escape(item.name)}', ${item.price})">+ ADD</button>
+            <div class="cart-btn-container" id="btn-container-${item._id}">
+              ${getActionButtonHtml(item._id, escape(item.name), item.price)}
+            </div>
           </div>
         </div>
       `).join('');
     }
 
-    function addToCart(id, rawName, price) {
+    // Dynamic Add / Increase / Decrease Counter
+    function updateItemQty(id, rawName, price, delta) {
       const name = unescape(rawName);
-      cart.push({ id, name, price });
+      if (!cart[id]) {
+        cart[id] = { id, name, price, qty: 0 };
+      }
+
+      cart[id].qty += delta;
+
+      if (cart[id].qty <= 0) {
+        delete cart[id];
+      }
+
+      // Update specific product card button container without full re-render
+      const container = document.getElementById(`btn-container-${id}`);
+      if (container) {
+        container.innerHTML = getActionButtonHtml(id, escape(name), price);
+      }
+
       updateCartUI();
     }
 
     function updateCartUI() {
-      document.getElementById('cartCount').innerText = cart.length;
-      document.getElementById('modalCartCount').innerText = cart.length;
+      const cartItems = Object.values(cart);
+      const totalCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
+
+      document.getElementById('cartCount').innerText = totalCount;
+      document.getElementById('modalCartCount').innerText = totalCount;
 
       const list = document.getElementById('cartItemsList');
-      if (cart.length === 0) {
+      if (cartItems.length === 0) {
         list.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 20px;">Cart is empty</p>`;
       } else {
-        list.innerHTML = cart.map((item, idx) => `
+        list.innerHTML = cartItems.map(item => `
           <div class="cart-row">
             <div>
               <strong>${item.name}</strong>
-              <div style="font-size: 11px; color: var(--text-muted);">${item.price} BDT</div>
+              <div style="font-size: 11px; color: var(--text-muted);">${item.price} BDT × ${item.qty} = ${item.price * item.qty} BDT</div>
             </div>
-            <i class="fa-solid fa-trash" style="color: #ef4444; cursor: pointer;" onclick="removeFromCart(${idx})"></i>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="stepper-box" style="font-size: 11px;">
+                <button class="stepper-btn" style="padding: 3px 8px;" onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, -1)">-</button>
+                <span class="stepper-count">${item.qty}</span>
+                <button class="stepper-btn" style="padding: 3px 8px;" onclick="updateItemQty('${item.id}', '${escape(item.name)}', ${item.price}, 1)">+</button>
+              </div>
+            </div>
           </div>
         `).join('');
       }
 
-      const subtotal = cart.reduce((sum, i) => sum + i.price, 0);
+      const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
       const grandTotal = subtotal > 0 ? subtotal + DELIVERY_FEE : 0;
       document.getElementById('cartSubtotal').innerText = `${subtotal} BDT`;
       document.getElementById('cartGrandTotal').innerText = `${grandTotal} BDT`;
-    }
-
-    function removeFromCart(idx) {
-      cart.splice(idx, 1);
-      updateCartUI();
     }
 
     function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
     function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
     async function submitOrder() {
-      if (cart.length === 0) return alert("Your cart is empty!");
+      const cartItems = Object.values(cart);
+      if (cartItems.length === 0) return alert("Your cart is empty!");
+
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
       const paymentMethod = document.getElementById('custPaymentMethod').value;
       const compliance = document.getElementById('complianceCheck').checked;
 
-      if (!name || !phone || !address) return alert("Please provide Name, Phone, and Address.");
+      if (!name || !phone || !address) return alert("Please fill Name, Phone, and Address.");
       if (!compliance) return alert("Please agree to the Terms & Conditions.");
 
-      const subtotal = cart.reduce((sum, i) => sum + i.price, 0);
+      // Flatten items array for backend orders
+      const orderItems = [];
+      cartItems.forEach(item => {
+        for (let k = 0; k < item.qty; k++) {
+          orderItems.push({ name: item.name, price: item.price });
+        }
+      });
+
+      const subtotal = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
       const total = subtotal + DELIVERY_FEE;
 
       try {
@@ -928,7 +1015,7 @@
             name,
             phone,
             address,
-            items: cart,
+            items: orderItems,
             total,
             paymentMethod,
             storeLat: 22.5726,
@@ -938,8 +1025,9 @@
         const data = await res.json();
         if (data.success) {
           alert(`Order Placed Successfully! Order #${data.order._id.slice(-6)}. A nearby rider is being assigned.`);
-          cart = [];
+          cart = {};
           updateCartUI();
+          displayCurrentView();
           closeCartModal();
         } else {
           alert("Order failed: " + data.message);
