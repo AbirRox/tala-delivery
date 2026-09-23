@@ -18,11 +18,12 @@
       --text-muted: #686b78;
       --border: #e2e8f0;
       --green: #60b244;
+      --whatsapp: #25d366;
       --blue: #0984e3;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 110px; }
+    body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 120px; }
 
     /* Top Navigation */
     .navbar {
@@ -82,9 +83,7 @@
       cursor: pointer;
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .cart-btn-pill.pulse {
-      animation: cartPulse 0.35s ease;
-    }
+    .cart-btn-pill.pulse { animation: cartPulse 0.35s ease; }
     @keyframes cartPulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.18); }
@@ -145,7 +144,6 @@
       font-weight: 600;
       cursor: pointer;
       color: #334155;
-      transition: all 0.2s;
     }
     .subcat-pill.active {
       background: var(--dark);
@@ -163,7 +161,6 @@
       font-size: 13px;
       outline: none;
       background: white;
-      transition: border-color 0.2s;
     }
     .search-input:focus { border-color: var(--primary); }
 
@@ -244,10 +241,6 @@
       flex-direction: column;
       justify-content: space-between;
       box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .product-card:hover {
-      box-shadow: 0 6px 14px rgba(0,0,0,0.07);
     }
     .prod-img-holder { width: 100%; height: 135px; background: #f8fafc; position: relative; }
     .prod-img-holder img { width: 100%; height: 100%; object-fit: cover; }
@@ -268,14 +261,8 @@
     .prod-subcat { font-size: 10px; color: var(--text-muted); margin-bottom: 6px; }
     .prod-price { font-size: 14px; font-weight: 900; color: #1e293b; margin-bottom: 10px; }
 
-    /* ==================== SWIGGY NATURAL ANIMATED STEPPER ==================== */
-    .cart-btn-container {
-      width: 100%;
-      height: 34px;
-      position: relative;
-    }
-
-    /* Natural White + ADD Button */
+    /* Stepper Buttons */
+    .cart-btn-container { width: 100%; height: 34px; position: relative; }
     .btn-add {
       width: 100%;
       height: 100%;
@@ -293,13 +280,8 @@
       align-items: center;
       justify-content: center;
     }
-    .btn-add:active {
-      transform: scale(0.92);
-      background: #f0fdf4;
-      border-color: #60b244;
-    }
+    .btn-add:active { transform: scale(0.92); background: #f0fdf4; border-color: #60b244; }
 
-    /* Swiggy Green Stepper Pill */
     .stepper-box {
       width: 100%;
       height: 100%;
@@ -312,13 +294,7 @@
       overflow: hidden;
       font-weight: 800;
       box-shadow: 0 2px 6px rgba(96, 178, 68, 0.2);
-      animation: popStepper 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    @keyframes popStepper {
-      0% { transform: scale(0.85); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
     .stepper-btn {
       background: none;
       border: none;
@@ -334,10 +310,7 @@
       transition: background 0.15s, transform 0.12s;
       user-select: none;
     }
-    .stepper-btn:active {
-      background: #f0fdf4;
-      transform: scale(0.8);
-    }
+    .stepper-btn:active { background: #f0fdf4; transform: scale(0.8); }
 
     .stepper-count {
       color: #60b244;
@@ -346,17 +319,14 @@
       min-width: 20px;
       text-align: center;
       display: inline-block;
-      transition: transform 0.18s ease;
     }
-    .stepper-count.flip {
-      animation: numberFlip 0.18s ease-out;
-    }
+    .stepper-count.flip { animation: numberFlip 0.18s ease-out; }
     @keyframes numberFlip {
       0% { transform: translateY(-4px) scale(0.9); opacity: 0.5; }
       100% { transform: translateY(0) scale(1); opacity: 1; }
     }
 
-    /* ==================== SWIGGY FLOATING CART BAR (LIVELY) ==================== */
+    /* Floating Cart Bar */
     .floating-cart-bar {
       position: fixed;
       bottom: 14px;
@@ -380,18 +350,37 @@
       from { transform: translateY(100px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
-    .floating-cart-bar .cart-info-strip strong { font-size: 14px; letter-spacing: 0.3px; }
-    .floating-cart-bar .cart-info-strip p { font-size: 11px; opacity: 0.9; }
-    .floating-cart-bar .view-cart-btn {
-      font-size: 13px;
-      font-weight: 900;
-      display: flex;
+
+    /* PWA Install Banner */
+    .pwa-install-banner {
+      position: fixed;
+      top: 65px;
+      left: 14px;
+      right: 14px;
+      max-width: 480px;
+      margin: 0 auto;
+      background: #1e293b;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 12px;
+      display: none;
       align-items: center;
-      gap: 6px;
-      text-transform: uppercase;
+      justify-content: space-between;
+      z-index: 210;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .pwa-btn-install {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
-    /* ==================== SWIGGY CART SHEET ==================== */
+    /* Cart Sheet */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -428,49 +417,20 @@
       align-items: center;
       border-bottom: 1px solid var(--border);
     }
-    .cart-sheet-content {
-      padding: 14px 16px 100px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .cart-store-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border: 1px solid var(--border);
-    }
+    .cart-sheet-content { padding: 14px 16px 100px; display: flex; flex-direction: column; gap: 14px; }
+    .cart-store-card { background: #ffffff; border-radius: 16px; padding: 14px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); }
     .cart-store-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
     .cart-items-card { background: #ffffff; border-radius: 16px; padding: 14px; border: 1px solid var(--border); }
     
-    .cart-item-row-swiggy {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px dashed #e2e8f0;
-    }
+    .cart-item-row-swiggy { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #e2e8f0; }
     .cart-item-row-swiggy:last-child { border-bottom: none; }
-
     .item-meta { display: flex; align-items: center; gap: 8px; }
     .veg-icon { width: 14px; height: 14px; border: 1.5px solid #2ecc71; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
     .veg-dot { width: 6px; height: 6px; background: #2ecc71; border-radius: 50%; }
     .nonveg-icon { width: 14px; height: 14px; border: 1.5px solid #e74c3c; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
     .nonveg-dot { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid #e74c3c; }
 
-    .swiggy-mini-stepper {
-      display: flex;
-      align-items: center;
-      border: 1px solid #60b244;
-      border-radius: 6px;
-      overflow: hidden;
-      background: white;
-      height: 30px;
-    }
+    .swiggy-mini-stepper { display: flex; align-items: center; border: 1px solid #60b244; border-radius: 6px; overflow: hidden; background: white; height: 30px; }
     .swiggy-mini-stepper button { background: none; border: none; width: 28px; height: 100%; font-size: 14px; font-weight: 800; color: #60b244; cursor: pointer; }
     .swiggy-mini-stepper span { font-size: 12px; font-weight: 800; padding: 0 4px; color: #60b244; }
 
@@ -522,21 +482,51 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: background 0.2s;
     }
     .btn-swiggy-pay:active { background: #519b38; }
 
-    /* Modals & Tracking */
+    /* Modals */
     .modal-box { background: white; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 20px; max-height: 90vh; overflow-y: auto; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px; }
     .form-group { margin-top: 10px; }
     .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
     .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
     .btn-checkout { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; }
+    
+    .btn-whatsapp-order {
+      width: 100%;
+      background: var(--whatsapp);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+
     .compliance-footer { background: var(--dark); color: #94a3b8; padding: 24px 16px; font-size: 12px; text-align: center; }
   </style>
 </head>
 <body>
+
+  <!-- PWA Install Banner -->
+  <div class="pwa-install-banner" id="pwaBanner">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <i class="fa-solid fa-mobile-screen-button" style="color: var(--primary);"></i>
+      <span style="font-size: 12px; font-weight: 700;">Install Kwiky App on Phone</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button class="pwa-btn-install" id="installPwaBtn">Install</button>
+      <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 14px;" onclick="closePwaBanner()"></i>
+    </div>
+  </div>
 
   <!-- Top Navigation -->
   <header class="navbar">
@@ -605,13 +595,13 @@
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
-  <!-- Lively Floating Bottom Cart Pill (Swiggy Signature) -->
+  <!-- Floating Cart Bar -->
   <div class="floating-cart-bar" id="floatingCartBar" onclick="openCartModal()">
-    <div class="cart-info-strip">
-      <strong id="floatingBarItemsText">1 ITEM | 220 BDT</strong>
-      <p id="floatingBarStoreText">From Sultan's Dine</p>
+    <div>
+      <strong id="floatingBarItemsText" style="font-size: 14px;">1 ITEM | 220 BDT</strong>
+      <p id="floatingBarStoreText" style="font-size: 11px; opacity: 0.9;">From Sultan's Dine</p>
     </div>
-    <div class="view-cart-btn">
+    <div style="font-size: 13px; font-weight: 900; display: flex; align-items: center; gap: 6px;">
       View Cart <i class="fa-solid fa-arrow-right"></i>
     </div>
   </div>
@@ -636,9 +626,9 @@
       <div class="cart-sheet-content" id="cartSheetContent">
         <div class="cart-store-card" id="cartStoreHeader">
           <img class="cart-store-img" id="cartStoreImg" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300" alt="Restaurant" />
-          <div class="cart-store-info">
+          <div>
             <h4 id="cartStoreTitle">Sultan's Dine</h4>
-            <p><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> 30-35 mins instant delivery</p>
+            <p style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> 30-35 mins instant delivery</p>
           </div>
         </div>
 
@@ -653,15 +643,15 @@
             <div class="inst-chip" onclick="toggleInstruction(this, 'Leave at door')"><i class="fa-solid fa-door-open"></i> Leave at door</div>
             <div class="inst-chip" onclick="toggleInstruction(this, 'Send cutlery')"><i class="fa-solid fa-utensils"></i> Add cutlery</div>
           </div>
-          <input type="text" id="customCookingNote" class="instruction-input" placeholder="Write instructions for restaurant (e.g. less spicy)..." />
+          <input type="text" id="customCookingNote" class="form-control" placeholder="Write cooking instructions (e.g. less spicy)..." />
         </div>
 
         <div class="cart-coupon-card" onclick="applySwiggyCoupon()">
-          <div class="coupon-left">
-            <i class="fa-solid fa-percent"></i>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-percent" style="font-size: 18px; color: var(--primary);"></i>
             <div>
-              <strong id="couponStatusText">Apply Coupon Code</strong>
-              <p>Save 50 BDT on orders above 200</p>
+              <strong id="couponStatusText" style="font-size: 13px;">Apply Coupon Code</strong>
+              <p style="font-size: 10px; color: var(--text-muted);">Save 50 BDT on orders above 200</p>
             </div>
           </div>
           <span id="couponActionBtn" style="font-size: 12px; font-weight: 900; color: var(--primary);">APPLY</span>
@@ -669,7 +659,7 @@
 
         <div class="cart-tip-card">
           <p style="font-size: 13px; font-weight: 800;">Tip your delivery hero</p>
-          <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Thank your partner for fast delivery.</p>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Thank your partner for quick delivery.</p>
           <div class="tip-pills-row">
             <div class="tip-pill" onclick="selectTip(0, this)">No Tip</div>
             <div class="tip-pill" onclick="selectTip(20, this)">20 BDT</div>
@@ -728,13 +718,21 @@
     </div>
   </div>
 
-  <!-- Order Success Modal -->
+  <!-- ==================== SWIGGY ORDER SUCCESS & WHATSAPP MODAL ==================== -->
   <div class="modal-backdrop" id="orderSuccessModal" style="align-items: center;">
     <div class="modal-box" style="border-radius: 20px; max-width: 480px; text-align: center;">
       <div style="width: 65px; height: 65px; background: #eafaf1; color: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 12px;"><i class="fa-solid fa-check"></i></div>
       <h2 style="font-size: 20px; font-weight: 900;">Order Placed Successfully!</h2>
-      <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 16px;">Order <span id="confirmedOrderId" style="font-weight: 800; color: var(--primary);"></span> has been sent to the store.</p>
-      <button class="btn-checkout" onclick="goToTrackingFromSuccess()"><i class="fa-solid fa-motorcycle"></i> Track Live Order</button>
+      <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 14px;">Order <span id="confirmedOrderId" style="font-weight: 800; color: var(--primary);"></span> confirmed!</p>
+      
+      <!-- WhatsApp Instant Order Confirmation Button -->
+      <a href="#" id="btnWhatsAppAlert" target="_blank" class="btn-whatsapp-order">
+        <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Send Order Details to Admin WhatsApp
+      </a>
+
+      <button class="btn-checkout" style="margin-top: 12px;" onclick="goToTrackingFromSuccess()">
+        <i class="fa-solid fa-motorcycle"></i> Track Live Order
+      </button>
     </div>
   </div>
 
@@ -766,6 +764,36 @@
   </div>
 
   <script>
+    // ==================== PWA INSTALL SETUP ==================== //
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('pwaBanner').style.display = 'flex';
+    });
+
+    document.getElementById('installPwaBtn').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          document.getElementById('pwaBanner').style.display = 'none';
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    function closePwaBanner() {
+      document.getElementById('pwaBanner').style.display = 'none';
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+
+    // ==================== CATALOG & CART LOGIC ==================== //
     let rawCatalog = [];
     let currentCategory = 'Food';
     let currentSubcategory = 'All Restaurants';
@@ -781,6 +809,9 @@
     let currentUser = JSON.parse(localStorage.getItem('kwiky_customer_user')) || null;
     let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
     let trackPollTimer = null;
+
+    // আপনার যে WhatsApp নম্বরে অর্ডার যাবে সেটি এখানে বসান (Country Code সহ)
+    const ADMIN_WHATSAPP_NUMBER = "=918100002156";
 
     const defaultRestaurants = [
       { name: "Sultan's Dine", cuisine: "Kacchi Biryani, Mutton Rezala", rating: "4.8", time: "30-35 mins", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600" },
@@ -826,7 +857,6 @@
       selectedRestaurant = null;
       document.querySelectorAll('.main-cat-item').forEach(i => i.classList.remove('active'));
       el.classList.add('active');
-
       renderSubcategoryTabs();
       displayCurrentView();
     }
@@ -862,7 +892,6 @@
       } else {
         resView.style.display = 'none';
         prodView.style.display = 'grid';
-
         if (selectedRestaurant) {
           heading.innerText = `${selectedRestaurant} (Menu)`;
           backBtn.style.display = 'inline-flex';
@@ -920,16 +949,13 @@
     function renderProducts() {
       const prodView = document.getElementById('productsView');
       let items = rawCatalog.filter(i => (i.category || '').toLowerCase() === currentCategory.toLowerCase());
-
       if (selectedRestaurant) {
         items = items.filter(i => (i.storeName || '').toLowerCase() === selectedRestaurant.toLowerCase());
       }
-
       if (items.length === 0) {
         prodView.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No items found.</p>`;
         return;
       }
-
       prodView.innerHTML = items.map(item => `
         <div class="product-card">
           <div class="prod-img-holder">
@@ -950,28 +976,16 @@
       `).join('');
     }
 
-    /* ==================== NATURAL TACTILE ANIMATION HANDLER ==================== */
     function animateUpdateQty(id, rawName, price, rawStore, delta, btnElement) {
-      // 1. Subtle Haptic Scale Down on Click
-      if (btnElement) {
-        btnElement.style.transform = 'scale(0.82)';
-      }
-
-      // 2. 90ms Organic Delay to simulate natural physical touch
+      if (btnElement) btnElement.style.transform = 'scale(0.82)';
       setTimeout(() => {
-        if (btnElement) {
-          btnElement.style.transform = 'scale(1)';
-        }
-
+        if (btnElement) btnElement.style.transform = 'scale(1)';
         const name = unescape(rawName);
         const storeName = rawStore ? unescape(rawStore) : 'Kwiky Store';
 
         if (!cart[id]) cart[id] = { id, name, price, storeName, qty: 0 };
         cart[id].qty += delta;
-
-        if (cart[id].qty <= 0) {
-          delete cart[id];
-        }
+        if (cart[id].qty <= 0) delete cart[id];
 
         const container = document.getElementById(`btn-container-${id}`);
         if (container) {
@@ -983,13 +997,11 @@
           }
         }
 
-        // Cart pulse animation
         const navCart = document.getElementById('navCartBtn');
         if (navCart) {
           navCart.classList.add('pulse');
           setTimeout(() => navCart.classList.remove('pulse'), 350);
         }
-
         updateCartUI();
       }, 90);
     }
@@ -1001,7 +1013,6 @@
       document.getElementById('cartCount').innerText = totalCount;
       document.getElementById('cartItemsCountText').innerText = `${totalCount} item${totalCount !== 1 ? 's' : ''} in your cart`;
 
-      // Swiggy Lively Floating Cart Bar Handler
       const floatBar = document.getElementById('floatingCartBar');
       if (totalCount > 0) {
         floatBar.style.display = 'flex';
@@ -1022,7 +1033,7 @@
         document.getElementById('cartStoreTitle').innerText = primaryStore;
 
         list.innerHTML = cartItems.map(item => {
-          const isVeg = item.name.toLowerCase().includes('veg') || item.name.toLowerCase().includes('paneer') || item.name.toLowerCase().includes('dal');
+          const isVeg = item.name.toLowerCase().includes('veg') || item.name.toLowerCase().includes('paneer');
           const badgeHtml = isVeg
             ? `<div class="veg-icon"><div class="veg-dot"></div></div>`
             : `<div class="nonveg-icon"><div class="nonveg-dot"></div></div>`;
@@ -1036,7 +1047,6 @@
                   <div style="font-size: 12px; font-weight: 800; color: #334155; margin-top: 2px;">${item.price} BDT</div>
                 </div>
               </div>
-
               <div style="display: flex; align-items: center; gap: 14px;">
                 <div class="swiggy-mini-stepper">
                   <button onclick="animateUpdateQty('${item.id}', '${escape(item.name)}', ${item.price}, '${escape(item.storeName)}', -1, this)">−</button>
@@ -1112,13 +1122,11 @@
     function handleCheckoutClick() {
       const cartItems = Object.values(cart);
       if (cartItems.length === 0) return alert("Your cart is empty!");
-
       if (!currentUser) {
         document.getElementById('cartModal').style.display = 'none';
         document.getElementById('loginModal').style.display = 'flex';
         return;
       }
-
       submitOrder();
     }
 
@@ -1200,6 +1208,12 @@
           localStorage.setItem('kwiky_active_order_id', activeOrderId);
           document.getElementById('navTrackBtn').style.display = 'inline-block';
           
+          // Generate Instant WhatsApp Message
+          const itemsSummary = orderItems.map(i => `• ${i.name} (₹${i.price})`).join('%0A');
+          const waMessage = `*🚨 NEW ORDER PLACED (KWIKY)*%0A%0A*Order ID:* %23${activeOrderId.slice(-6)}%0A*Customer:* ${currentUser.name} (${currentUser.phone})%0A*Address:* ${address}%0A*Notes:* ${fullNote || 'None'}%0A%0A*Items Ordered:*%0A${itemsSummary}%0A%0A*Total Bill:* ₹${total} (COD)%0A%0A_Please assign delivery partner!_`;
+          
+          document.getElementById('btnWhatsAppAlert').href = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${waMessage}`;
+
           cart = {};
           updateCartUI();
           closeCartModal();
