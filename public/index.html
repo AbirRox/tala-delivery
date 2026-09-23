@@ -581,7 +581,25 @@
       margin-top: 10px;
     }
 
-    /* ==================== SWIGGY REPLICA PROFILE & SUB-PAGES ==================== */
+    .btn-email-support {
+      width: 100%;
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+
+    /* Customer Profile Drawer */
     .profile-sheet {
       background: #f8fafc;
       width: 100%;
@@ -624,7 +642,6 @@
       border: 2px solid var(--primary);
     }
 
-    /* Subpage Views Container */
     .profile-body-container {
       flex: 1;
       overflow-y: auto;
@@ -661,7 +678,6 @@
     .profile-row-title { font-size: 13px; font-weight: 800; color: #1e293b; }
     .profile-row-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
 
-    /* Sub-page Card View */
     .subpage-panel {
       display: none;
       animation: fadeIn 0.2s ease;
@@ -687,7 +703,6 @@
       font-size: 13px;
     }
 
-    /* Past Order Card */
     .past-order-card {
       background: white;
       border-radius: 14px;
@@ -730,6 +745,8 @@
     .track-rider-bar { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border); }
 
     .compliance-footer { background: var(--dark); color: #94a3b8; padding: 24px 16px; font-size: 12px; text-align: center; }
+    .footer-support-links { margin-top: 10px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .footer-support-links a { color: #38bdf8; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
   </style>
 </head>
 <body>
@@ -825,19 +842,21 @@
   <!-- Footer -->
   <footer class="compliance-footer">
     <a href="/rider.html" style="color: var(--primary); text-decoration: none; font-weight: 700;">Delivery Partner Portal</a>
-    <p style="margin-top: 8px;">© 2026 Kwiky Online Delivery Platform</p>
+    <div class="footer-support-links">
+      <a href="https://wa.me/918100002156" target="_blank"><i class="fa-brands fa-whatsapp" style="color: #25d366;"></i> WhatsApp: +91 8100002156</a>
+      <a href="mailto:mynameisabirroy@gmail.com"><i class="fa-regular fa-envelope"></i> mynameisabirroy@gmail.com</a>
+    </div>
+    <p style="margin-top: 10px;">© 2026 Kwiky Online Delivery Platform</p>
   </footer>
 
   <!-- ==================== SWIGGY REPLICA CUSTOMER PROFILE DRAWER ==================== -->
   <div class="modal-backdrop" id="profileModal">
     <div class="profile-sheet">
-      <!-- Profile Drawer Header -->
       <div class="profile-header">
         <strong style="font-size: 16px; font-weight: 900;">My Account</strong>
         <i class="fa-solid fa-xmark" style="font-size: 22px; cursor: pointer; color: #64748b;" onclick="closeProfileModal()"></i>
       </div>
 
-      <!-- User Info Top Banner -->
       <div class="profile-user-card">
         <div class="user-avatar-circle" id="profileAvatarLetter">U</div>
         <div style="flex: 1;">
@@ -849,7 +868,6 @@
         </button>
       </div>
 
-      <!-- Main Profile Screen & Sub-pages Container -->
       <div class="profile-body-container">
         
         <!-- 1. MAIN PROFILE MENU -->
@@ -894,8 +912,8 @@
               <div class="profile-row-left">
                 <div class="profile-row-icon" style="background: #f1f5f9; color: #475569;"><i class="fa-solid fa-headset"></i></div>
                 <div>
-                  <div class="profile-row-title">Help & WhatsApp Support</div>
-                  <div class="profile-row-sub">FAQs, live chat & issue resolution</div>
+                  <div class="profile-row-title">Help, WhatsApp & Mail Support</div>
+                  <div class="profile-row-sub">Instant delivery queries & 24/7 helpdesk</div>
                 </div>
               </div>
               <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 12px;"></i>
@@ -948,18 +966,23 @@
           </div>
         </div>
 
-        <!-- 5. SUBPAGE: HELP & SUPPORT -->
+        <!-- 5. SUBPAGE: HELP & SUPPORT WITH WHATSAPP + EMAIL -->
         <div id="subpageHelp" class="subpage-panel">
           <div class="subpage-top-bar">
             <button class="subpage-back-btn" onclick="openSubpage('main')"><i class="fa-solid fa-arrow-left"></i></button>
-            <h3 style="font-size: 15px; font-weight: 900;">Customer Support</h3>
+            <h3 style="font-size: 15px; font-weight: 900;">Help & Support Desk</h3>
           </div>
-          <div style="background: white; padding: 16px; border-radius: 14px; border: 1px solid var(--border); text-align: center;">
-            <i class="fa-solid fa-headset" style="font-size: 32px; color: var(--primary); margin-bottom: 8px;"></i>
-            <h4 style="font-size: 14px; font-weight: 900;">Need help with an ongoing order?</h4>
-            <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 14px;">Connect with our 24/7 dedicated support desk via WhatsApp.</p>
-            <a href="https://wa.me/919876543210?text=Hello%20Kwiky%20Support,%20I%20need%20help%20with%20my%20order." target="_blank" class="btn-whatsapp-order">
-              <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Chat on WhatsApp
+          <div style="background: white; padding: 18px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+            <i class="fa-solid fa-headset" style="font-size: 34px; color: var(--primary); margin-bottom: 8px;"></i>
+            <h4 style="font-size: 15px; font-weight: 900;">Need instant order or delivery support?</h4>
+            <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 16px;">Directly reach our operations team via WhatsApp or Official Email.</p>
+            
+            <a href="https://wa.me/918100002156?text=Hello%20Kwiky%20Team,%20I%20have%20a%20query%20about%20an%20order/delivery." target="_blank" class="btn-whatsapp-order">
+              <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> WhatsApp: +91 8100002156
+            </a>
+
+            <a href="mailto:mynameisabirroy@gmail.com?subject=Kwiky%20Customer%20Query" class="btn-email-support">
+              <i class="fa-solid fa-envelope" style="font-size: 16px;"></i> Email: mynameisabirroy@gmail.com
             </a>
           </div>
         </div>
@@ -1104,7 +1127,7 @@
       <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 14px;">Order <span id="confirmedOrderId" style="font-weight: 800; color: var(--primary);"></span> confirmed!</p>
       
       <a href="#" id="btnWhatsAppAlert" target="_blank" class="btn-whatsapp-order">
-        <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Send Order Details to Admin WhatsApp
+        <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Send Order Details to Admin WhatsApp (+91 8100002156)
       </a>
 
       <button class="btn-checkout" style="margin-top: 12px;" onclick="goToTrackingFromSuccess()">
@@ -1150,7 +1173,7 @@
               </p>
             </div>
           </div>
-          <a href="tel:01700000000" id="trackRiderCall" style="background: var(--green); color: white; padding: 9px 16px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+          <a href="tel:+918100002156" id="trackRiderCall" style="background: var(--green); color: white; padding: 9px 16px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 12px; display: flex; align-items: center; gap: 6px;">
             <i class="fa-solid fa-phone"></i> Call
           </a>
         </div>
@@ -1215,7 +1238,9 @@
     let currentUser = JSON.parse(localStorage.getItem('kwiky_customer_user')) || null;
     let activeOrderId = localStorage.getItem('kwiky_active_order_id') || null;
 
+    // OFFICIAL UPDATED WHATSAPP & SUPPORT CREDENTIALS
     const ADMIN_WHATSAPP_NUMBER = "918100002156";
+    const OFFICIAL_SUPPORT_EMAIL = "mynameisabirroy@gmail.com";
 
     const defaultRestaurants = [
       { name: "Sultan's Dine", cuisine: "Kacchi Biryani, Mutton Rezala", rating: "4.8", time: "30-35 mins", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600" },
@@ -1304,14 +1329,12 @@
         if (btnLogout) btnLogout.style.display = 'none';
       }
 
-      // Update saved address
       const savedAddr = localStorage.getItem('kwiky_saved_address');
       if (savedAddr) {
         document.getElementById('savedAddressTextDisplay').innerText = savedAddr;
       }
     }
 
-    // ==================== PROFILE DRAWER & SUBPAGE CONTROLLER ==================== //
     function handleAccountClick() {
       if (!currentUser) {
         document.getElementById('loginModal').style.display = 'flex';
@@ -1998,7 +2021,6 @@
       localStorage.setItem('kwiky_cust_lng', CUSTOMER_LNG);
       localStorage.setItem('kwiky_saved_address', address);
 
-      // Save into Local Order History
       const orderHistory = JSON.parse(localStorage.getItem('kwiky_order_history')) || [];
       const newOrderEntry = {
         id: 'ORD' + Date.now().toString().slice(-6),
@@ -2065,3 +2087,4 @@
   </script>
 </body>
 </html>
+
