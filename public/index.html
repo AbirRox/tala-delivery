@@ -22,7 +22,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: var(--light-gray); color: var(--dark); padding-bottom: 90px; }
 
-    /* Top Navigation Bar */
+    /* Header */
     .navbar {
       background: #ffffff;
       position: sticky;
@@ -34,7 +34,6 @@
       justify-content: space-between;
       align-items: center;
     }
-
     .brand-box { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
     .brand-logo {
       background: var(--primary);
@@ -77,7 +76,6 @@
       top: 60px;
       z-index: 150;
     }
-
     .main-cat-item {
       text-align: center;
       cursor: pointer;
@@ -99,7 +97,7 @@
     }
     .main-cat-item.active i { color: var(--primary); }
 
-    /* Subcategory Pills Bar */
+    /* Subcategory Pills Bar (10 Options per Category) */
     .subcategory-bar {
       display: flex;
       gap: 8px;
@@ -128,7 +126,7 @@
       border-color: var(--dark);
     }
 
-    /* Search Bar */
+    /* Search */
     .search-wrap { padding: 12px 16px; }
     .search-input {
       width: 100%;
@@ -148,14 +146,13 @@
     }
     .section-title-wrap h3 { font-size: 15px; font-weight: 900; }
 
-    /* Swiggy Style Restaurant Grid */
+    /* Swiggy Restaurant Grid */
     .restaurants-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 14px;
       padding: 0 16px 16px;
     }
-
     .restaurant-card {
       background: white;
       border-radius: 14px;
@@ -178,7 +175,6 @@
       grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
       gap: 12px;
     }
-
     .product-card {
       background: white;
       border-radius: 12px;
@@ -188,7 +184,6 @@
       flex-direction: column;
       justify-content: space-between;
     }
-
     .prod-img-holder {
       width: 100%;
       height: 135px;
@@ -196,7 +191,6 @@
       position: relative;
     }
     .prod-img-holder img { width: 100%; height: 100%; object-fit: cover; }
-
     .store-badge {
       position: absolute;
       top: 6px;
@@ -227,7 +221,7 @@
     }
     .btn-add:active { background: var(--primary); color: white; }
 
-    /* Modals & Cart Drawer */
+    /* Modals & Cart */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -254,7 +248,6 @@
       padding-bottom: 12px;
       margin-bottom: 12px;
     }
-
     .cart-row {
       display: flex;
       justify-content: space-between;
@@ -308,7 +301,7 @@
       cursor: pointer;
     }
 
-    /* Trust Badges & Compliance Footer */
+    /* Trust Footer */
     .payment-trust-bar {
       margin-top: 30px;
       padding: 20px 16px;
@@ -365,7 +358,7 @@
 </head>
 <body>
 
-  <!-- Top App Bar -->
+  <!-- Top App Navbar -->
   <header class="navbar">
     <a href="/" class="brand-box">
       <div class="brand-logo"><i class="fa-solid fa-bolt"></i></div>
@@ -405,12 +398,12 @@
     </div>
   </nav>
 
-  <!-- Dynamic Subcategory Pills -->
+  <!-- Dynamic Subcategory Pills (10 Options Each) -->
   <div class="subcategory-bar" id="subcatBar"></div>
 
   <!-- Search Box -->
   <div class="search-wrap">
-    <input type="text" id="searchInput" class="search-input" placeholder="Search delicious dishes, clothes, medicine..." onkeyup="handleSearch()" />
+    <input type="text" id="searchInput" class="search-input" placeholder="Search 400+ items across all categories..." onkeyup="handleSearch()" />
   </div>
 
   <!-- Content Section -->
@@ -419,10 +412,10 @@
       <h3 id="sectionHeading">Top Partner Restaurants</h3>
     </div>
 
-    <!-- Swiggy-Style Restaurant Listing -->
+    <!-- Swiggy-Style Restaurant Listing (For Food Category) -->
     <div class="restaurants-grid" id="restaurantView"></div>
 
-    <!-- Flipkart-Style Products Grid -->
+    <!-- Flipkart-Style Products Grid (For Fashion, Medicine, Grocery & Food Dishes) -->
     <main class="items-grid" id="productsView" style="display: none;"></main>
   </section>
 
@@ -513,11 +506,60 @@
     let cart = [];
     const DELIVERY_FEE = 40;
 
+    // 10 Options for each Category
     const subcategoryMap = {
-      Food: ["All Restaurants", "Biryani & Polao", "Burgers & Fast Food", "Kebabs & Tandoor", "Curry & Gravy", "Drinks & Desserts"],
-      Fashion: ["All", "Men's Wear", "Women's Ethnic", "Women's Western", "Footwear", "Accessories"],
-      Medicine: ["All", "OTC & Daily Care", "First Aid & Devices", "Vitamins & Supplements", "Baby & Mom Care"],
-      Grocery: ["All", "Daily Staples", "Snacks & Drinks"]
+      Food: [
+        "All Restaurants",
+        "Biryani & Polao",
+        "Burgers & Sandwiches",
+        "Kebabs & Tandoor",
+        "Bengali Curries",
+        "Chinese & Chowmein",
+        "Pizza & Pasta",
+        "Desserts & Sweets",
+        "Juices & Shakes",
+        "Tea & Coffee",
+        "Rolls & Street Food"
+      ],
+      Fashion: [
+        "All",
+        "Men's Casual Shirts",
+        "Men's T-Shirts",
+        "Men's Jeans & Trousers",
+        "Women's Sarees & Kurtis",
+        "Women's Western Dresses",
+        "Winter Wear & Jackets",
+        "Footwear & Sneakers",
+        "Formal Leather Shoes",
+        "Bags & Backpacks",
+        "Watches & Accessories"
+      ],
+      Medicine: [
+        "All",
+        "Fever & Pain Relief",
+        "Gastric & Digestion",
+        "Cough Cold & Allergy",
+        "First Aid & Antiseptics",
+        "Vitamins & Minerals",
+        "Diabetes & Blood Pressure",
+        "Baby Care Essentials",
+        "Skin & Hair Care",
+        "Medical Equipment & Devices",
+        "Eye & Dental Care"
+      ],
+      Grocery: [
+        "All",
+        "Rice Dal & Flour",
+        "Cooking Oil & Ghee",
+        "Spices & Masala",
+        "Dairy Milk & Eggs",
+        "Fresh Vegetables & Potatoes",
+        "Breakfast & Cereals",
+        "Tea Coffee & Sugar",
+        "Snacks & Biscuits",
+        "Soft Drinks & Beverages",
+        "Cleaning & Household"
+      ]
     };
 
     async function initCatalog() {
@@ -531,7 +573,7 @@
         document.getElementById('productsView').innerHTML = `
           <div style="grid-column: 1/-1; text-align: center; padding: 30px;">
             <p style="color: #ef4444;">Could not load items.</p>
-            <a href="/api/seed-now" style="display:inline-block; margin-top:10px; background:var(--primary); color:white; padding:8px 16px; border-radius:6px; text-decoration:none;">Seed All Categories Now</a>
+            <a href="/api/seed-now" style="display:inline-block; margin-top:10px; background:var(--primary); color:white; padding:8px 16px; border-radius:6px; text-decoration:none;">Seed 400 Items Now</a>
           </div>
         `;
       }
@@ -595,7 +637,10 @@
       const storeBanners = {
         "Sultan's Dine": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500",
         "Takeout Burgers": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500",
-        "Star Kabab & Restaurant": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=500"
+        "Star Kabab & Restaurant": "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=500",
+        "Chillox": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=500",
+        "Kacchi Bhai": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500",
+        "Kasturi Kitchen": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500"
       };
 
       resView.innerHTML = uniqueStores.map(store => `
@@ -625,7 +670,7 @@
       }
 
       if (items.length === 0) {
-        prodView.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No items available in this category.</p>`;
+        prodView.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No items found in this section.</p>`;
         return;
       }
 
@@ -649,6 +694,11 @@
 
     function handleSearch() {
       const query = document.getElementById('searchInput').value.toLowerCase();
+      if (!query) {
+        displayCurrentView();
+        return;
+      }
+
       const filtered = rawCatalog.filter(i => 
         i.name.toLowerCase().includes(query) ||
         (i.category && i.category.toLowerCase().includes(query)) ||
@@ -659,7 +709,7 @@
       document.getElementById('restaurantView').style.display = 'none';
       const prodView = document.getElementById('productsView');
       prodView.style.display = 'grid';
-      document.getElementById('sectionHeading').innerText = `Search results for "${query}"`;
+      document.getElementById('sectionHeading').innerText = `Search results for "${query}" (${filtered.length})`;
 
       prodView.innerHTML = filtered.map(item => `
         <div class="product-card">
@@ -764,7 +814,7 @@
     const policyContent = {
       terms: {
         title: "Terms & Conditions",
-        body: `<p>1. Orders are processed instantly. Deliveries take standard 30-45 mins.</p><p>2. Pricing includes applicable government taxes.</p>`
+        body: `<p>1. Orders are processed instantly. Deliveries take standard 30-45 mins.</p><p>2. Pricing includes applicable taxes.</p>`
       },
       privacy: {
         title: "Privacy Policy",
